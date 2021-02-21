@@ -15,13 +15,14 @@ export interface ChartProps<T extends Array<SeriesProps>> {
 
 export interface ChartActionResult<T extends Array<SeriesProps>> {
     update(props: ChartProps<T>): void;
+
     destroy(): void;
 }
 
 export function chart<T extends Array<SeriesProps>>(node: HTMLElement, props: ChartProps<T>): ChartActionResult<T> {
-    const { series } = props;
+    const {series} = props;
 
-    let { options, reference } = props;
+    let {options, reference} = props;
     let width = options?.width ?? 0;
     let height = options?.height ?? 0;
 
@@ -31,8 +32,6 @@ export function chart<T extends Array<SeriesProps>>(node: HTMLElement, props: Ch
     if (series !== undefined) {
         for (const current of series) {
             const api = createSeries(chart, current);
-            api.setData(current.data);
-
             apis.push(api);
         }
     }
@@ -41,7 +40,7 @@ export function chart<T extends Array<SeriesProps>>(node: HTMLElement, props: Ch
 
     return {
         update(nextProps: ChartProps<T>): void {
-            const { options: nextOptions, reference: nextReference } = nextProps;
+            const {options: nextOptions, reference: nextReference} = nextProps;
 
             if (nextReference !== reference) {
                 reference?.(null);
@@ -72,12 +71,37 @@ export function chart<T extends Array<SeriesProps>>(node: HTMLElement, props: Ch
     }
 }
 
-function createSeries<T extends SeriesProps>(api: IChartApi, props: SeriesProps): ISeriesApi<T["type"]> {
+function createSeries<T extends SeriesProps>(api: IChartApi, props: SeriesProps): ISeriesApi<T['type']> {
     switch (props.type) {
-        case 'Area': return api.addAreaSeries(props.options);
-        case 'Bar': return api.addBarSeries(props.options);
-        case 'Candlestick': return api.addCandlestickSeries(props.options);
-        case 'Histogram': return api.addHistogramSeries(props.options);
-        case 'Line': return api.addLineSeries(props.options);
+        case 'Area': {
+            const series = api.addAreaSeries(props.options);
+            series.setData(props.data);
+            props.reference?.(series);
+            return series;
+        }
+        case 'Bar': {
+            const series = api.addBarSeries(props.options);
+            series.setData(props.data);
+            props.reference?.(series);
+            return series;
+        }
+        case 'Candlestick': {
+            const series = api.addCandlestickSeries(props.options);
+            series.setData(props.data);
+            props.reference?.(series);
+            return series;
+        }
+        case 'Histogram': {
+            const series = api.addHistogramSeries(props.options);
+            series.setData(props.data);
+            props.reference?.(series);
+            return series;
+        }
+        case 'Line': {
+            const series = api.addLineSeries(props.options);
+            series.setData(props.data);
+            props.reference?.(series);
+            return series;
+        }
     }
 }

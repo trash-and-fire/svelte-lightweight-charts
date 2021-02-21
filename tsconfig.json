@@ -17,6 +17,11 @@
     "types": [
       "svelte"
     ],
+    "lib": [
+      "dom",
+      "esnext"
+    ],
+    "module": "esnext",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": false,
@@ -26,14 +31,13 @@
     "noImplicitReturns": true,
     "noUnusedLocals": true,
     "resolveJsonModule": true,
-    "importHelpers": true
+    "importHelpers": true,
+    "rootDir": "./src"
   },
   "include": [
-    "src/**/*",
-    "src/node_modules/**/*"
+    "src/**/*"
   ],
   "exclude": [
-    "node_modules/*",
-    "static/*"
+    "node_modules/*"
   ]
 }
