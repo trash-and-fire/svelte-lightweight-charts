@@ -11,6 +11,8 @@
     "eslint": "7.20.0",
     "eslint-plugin-node": "11.1.0",
     "eslint-plugin-svelte3": "3.1.1",
+    "husky": "4.3.8",
+    "lint-staged": "10.5.4",
     "mini-css-extract-plugin": "1.3.4",
     "svelte": "3.31.2",
     "svelte-check": "1.0.46",
@@ -30,5 +32,13 @@
   },
   "dependencies": {
     "lightweight-charts": "3.3.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "svelte-check && lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js|*.ts|*.svelte": "eslint --cache --fix"
   }
 }

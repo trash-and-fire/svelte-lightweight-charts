@@ -1,31 +1,24 @@
 import {
-    AreaSeriesOptions,
     ChartOptions,
     createChart,
     DeepPartial,
     IChartApi,
-    ISeriesApi,
-    LineData,
-    WhitespaceData
+    ISeriesApi, SeriesType,
 } from 'lightweight-charts';
+import type {SeriesProps} from './types';
 
-export interface ChartProps {
+export interface ChartProps<T extends Array<SeriesProps>> {
     options?: DeepPartial<ChartOptions>;
-    series?: SeriesProps[];
+    series?: T;
     reference?: (api: IChartApi | null) => void;
 }
 
-export interface SeriesProps {
-    options: AreaSeriesOptions;
-    data: (LineData | WhitespaceData)[];
-}
-
-export interface ChartActionResult {
-    update(props: ChartProps): void;
+export interface ChartActionResult<T extends Array<SeriesProps>> {
+    update(props: ChartProps<T>): void;
     destroy(): void;
 }
 
-export function chart(node: HTMLElement, props: ChartProps): ChartActionResult {
+export function chart<T extends Array<SeriesProps>>(node: HTMLElement, props: ChartProps<T>): ChartActionResult<T> {
     const { series } = props;
 
     let { options, reference } = props;
@@ -33,11 +26,11 @@ export function chart(node: HTMLElement, props: ChartProps): ChartActionResult {
     let height = options?.height ?? 0;
 
     const chart = createChart(node, options);
-    const apis: ISeriesApi<'Area'>[] = [];
+    const apis: ISeriesApi<SeriesType>[] = [];
 
     if (series !== undefined) {
         for (const current of series) {
-            const api = chart.addAreaSeries(current.options);
+            const api = createSeries(chart, current);
             api.setData(current.data);
 
             apis.push(api);
@@ -47,7 +40,7 @@ export function chart(node: HTMLElement, props: ChartProps): ChartActionResult {
     reference?.(chart);
 
     return {
-        update(nextProps: ChartProps): void {
+        update(nextProps: ChartProps<T>): void {
             const { options: nextOptions, reference: nextReference } = nextProps;
 
             if (nextReference !== reference) {
@@ -76,5 +69,15 @@ export function chart(node: HTMLElement, props: ChartProps): ChartActionResult {
             }
             chart.remove();
         }
+    }
+}
+
+function createSeries<T extends SeriesProps>(api: IChartApi, props: SeriesProps): ISeriesApi<T["type"]> {
+    switch (props.type) {
+        case 'Area': return api.addAreaSeries(props.options);
+        case 'Bar': return api.addBarSeries(props.options);
+        case 'Candlestick': return api.addCandlestickSeries(props.options);
+        case 'Histogram': return api.addHistogramSeries(props.options);
+        case 'Line': return api.addLineSeries(props.options);
     }
 }

@@ -1,6 +1,6 @@
 <script lang="ts">
     import {chart} from '.';
-    import type {IChartApi} from 'lightweight-charts';
+    import type {SeriesProps} from './types';
 
     let width = 400;
     let height = 300;
@@ -23,7 +23,21 @@
         {time: '2019-04-20', value: 74.43},
     ];
 
-    function handleReference(ref: IChartApi | null): void {
+    const area: SeriesProps = {
+        id: 'main',
+        type: 'Area',
+        data: data,
+        reference: handleReference,
+    }
+
+    const histogram: SeriesProps = {
+        id: 'volume',
+        type: 'Histogram',
+        data: data.map(<T extends { value: number }>(item: T) => ({ ...item, value: (item.value - Math.random() * 10 - 10)/ 2 })),
+        reference: handleReference,
+    }
+
+    function handleReference<T>(ref: T | null): void {
         // eslint-disable-next-line no-console
         console.log(ref);
     }
@@ -41,7 +55,7 @@
         {height}
     </label>
 </form>
-<main use:chart={{ options, series: [{ data }], reference: handleReference }}>
+<main use:chart={{ options, series: [area, histogram], reference: handleReference }}>
 
 </main>
 
