@@ -103,24 +103,31 @@
 </script>
 
 <form>
-    <label>
-        Width:
-        <input type="range" bind:value={width} name="width" id="width" min="100" max="1000" step="50">
-        {width}
-    </label>
-    <label>
-        Height:
-        <input type="range" bind:value={height} name="height" id="height" min="100" max="1000" step="50">
-        {height}
-    </label>
-    <label>
-        Intraday <input type="checkbox" name="intraday" id="intraday" bind:checked={intraday}>
-    </label>
-    <button on:click={handleTicker} type="button">{ ticker ? 'Stop' : 'Start' }</button>
+    <fieldset name="size">
+        <legend>Size options:</legend>
+        <label>
+            Width:
+            <input type="range" bind:value={width} name="width" id="width" min="100" max="1000" step="50">
+            {width}
+        </label>
+        <label>
+            Height:
+            <input type="range" bind:value={height} name="height" id="height" min="100" max="1000" step="50">
+            {height}
+        </label>
+    </fieldset>
+    <fieldset name="controller">
+        <legend>Controller options:</legend>
+        <label>
+            Intraday <input type="checkbox" name="intraday" id="intraday" bind:checked={intraday}>
+        </label>
+        <button on:click={handleTicker} type="button">{ ticker ? 'Stop' : 'Start' }</button>
+    </fieldset>
+    <fieldset name="chart">
+        <legend>Chart:</legend>
+        <section use:chart={{ options, series: [area, histogram], reference: handleReference }}></section>
+    </fieldset>
 </form>
-<main use:chart={{ options, series: [area, histogram], reference: handleReference }}>
-
-</main>
 
 
 <style>
