@@ -18,6 +18,34 @@ module.exports = {
     {
       parser: '@typescript-eslint/parser',
       plugins: [
+        '@typescript-eslint',
+      ],
+      extends: [
+        'eslint:recommended',
+        'plugin:@typescript-eslint/recommended',
+      ],
+      files: ['**/*.ts'],
+      env: {
+        browser: true,
+        node: false
+      },
+      rules: {
+        "no-console": "error",
+        "@typescript-eslint/explicit-function-return-type": "error",
+        "@typescript-eslint/typedef": [
+          "error",
+          {
+              arrowParameter: true,
+              memberVariableDeclaration: true,
+              parameter: true,
+              propertyDeclaration: true,
+          }
+        ],
+      },
+    },
+    {
+      parser: '@typescript-eslint/parser',
+      plugins: [
         'svelte3',
         '@typescript-eslint',
       ],
@@ -26,7 +54,7 @@ module.exports = {
         'eslint:recommended',
         'plugin:@typescript-eslint/recommended',
       ],
-      files: ['**/*.ts', '**/*.svelte'],
+      files: ['**/*.svelte'],
       env: {
         browser: true,
         node: false
@@ -47,6 +75,6 @@ module.exports = {
       settings: {
         'svelte3/typescript': require('typescript'),
       }
-    },
+    }
   ]
 };
