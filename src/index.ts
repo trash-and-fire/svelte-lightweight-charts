@@ -26,7 +26,9 @@ export interface ChartActionResult {
 }
 
 export function chart(node: HTMLElement, props: ChartProps): ChartActionResult {
-    let { options, series, reference } = props;
+    const { series } = props;
+
+    let { options, reference } = props;
     let width = options?.width ?? 0;
     let height = options?.height ?? 0;
 
@@ -60,7 +62,9 @@ export function chart(node: HTMLElement, props: ChartProps): ChartActionResult {
                 if (nextOptions.width !== undefined && nextOptions.width !== width
                     || nextOptions.height !== undefined && nextOptions.height !== height
                 ) {
-                    chart.resize(nextOptions.width ?? width, nextOptions.height ?? height, true);
+                    width = nextOptions.width ?? width;
+                    height = nextOptions.height ?? height;
+                    chart.resize(width, height, true);
                 }
 
                 options = nextOptions;
