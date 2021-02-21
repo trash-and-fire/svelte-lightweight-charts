@@ -3,7 +3,8 @@ import {
     createChart,
     DeepPartial,
     IChartApi,
-    ISeriesApi, SeriesType,
+    ISeriesApi,
+    SeriesType,
 } from 'lightweight-charts';
 import type {SeriesProps} from './types';
 
@@ -15,8 +16,12 @@ export interface ChartProps<T extends Array<SeriesProps>> {
 
 export interface ChartActionResult<T extends Array<SeriesProps>> {
     update(props: ChartProps<T>): void;
-
     destroy(): void;
+}
+
+interface SeriesEntry {
+    props: SeriesProps;
+    ref: ISeriesApi<SeriesType>;
 }
 
 export function chart<T extends Array<SeriesProps>>(node: HTMLElement, props: ChartProps<T>): ChartActionResult<T> {
@@ -27,12 +32,15 @@ export function chart<T extends Array<SeriesProps>>(node: HTMLElement, props: Ch
     let height = options?.height ?? 0;
 
     const chart = createChart(node, options);
-    const apis = new Map<string, ISeriesApi<SeriesType>>();
+    const apis = new Map<string, SeriesEntry>();
 
     if (series !== undefined) {
         for (const current of series) {
             const api = createSeries(chart, current);
-            apis.set(current.id, api);
+            apis.set(current.id, {
+                props: current,
+                ref: api,
+            });
         }
     }
 
@@ -68,7 +76,7 @@ export function chart<T extends Array<SeriesProps>>(node: HTMLElement, props: Ch
         },
         destroy(): void {
             for (const current of apis.values()) {
-                chart.removeSeries(current);
+                chart.removeSeries(current.ref);
             }
             chart.remove();
         }
@@ -111,13 +119,19 @@ function createSeries<T extends SeriesProps>(api: IChartApi, props: SeriesProps)
 }
 
 // TODO: data and other complex things should also be migrated
-function migrateSeries(chart: IChartApi, map: Map<string, ISeriesApi<SeriesType>>, props: SeriesProps[]): void {
+function migrateSeries(
+    chart: IChartApi,
+    map: Map<string, SeriesEntry>,
+    props: SeriesProps[]
+): void {
     const existing = new Set(map.keys());
     const next = new Map(props.map((item: SeriesProps) => [item.id, item]));
 
     for (const id of existing) {
         if (!next.has(id)) {
-            chart.removeSeries(ensure(map.get(id)));
+            const entry = ensure(map.get(id))
+            entry.props.reference?.(null);
+            chart.removeSeries(entry.ref);
             map.delete(id);
         }
     }
@@ -125,19 +139,26 @@ function migrateSeries(chart: IChartApi, map: Map<string, ISeriesApi<SeriesType>
     for (const [id, entry] of next.entries()) {
         let api = map.get(id);
         if (api === undefined) {
-            api = createSeries(chart, entry);
+            api = {
+                props: entry,
+                ref: createSeries(chart, entry)
+            };
             map.set(id, api);
         } else {
-            if (entry.type !== api.seriesType()) {
-                chart.removeSeries(api);
-                api = createSeries(chart, entry);
+            if (entry.type !== api.ref.seriesType()) {
+                chart.removeSeries(api.ref);
+                api.props.reference?.(null);
+                api = {
+                    props: entry,
+                    ref: createSeries(chart, entry)
+                };
                 map.set(id, api);
             } else {
                 // TODO: strictly compare series and props types (logically it is already the same)
                 // TODO: change eslint ban types rule
-                // if (entry.options) {
-                //     api.applyOptions(entry.options as Record<string, never>);
-                // }
+                if (entry.options) {
+                    api.ref.applyOptions(entry.options as Record<string, never>);
+                }
             }
         }
     }
