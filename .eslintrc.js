@@ -42,6 +42,11 @@ module.exports = {
           }
         ],
       }
+    },
+    {
+      plugins: ['svelte3'],
+      files: ['*.svelte'],
+      processor: 'svelte3/svelte3',
     }
   ]
 };
