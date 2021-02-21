@@ -30,6 +30,7 @@ module.exports = {
         node: false
       },
       rules: {
+        "no-console": "error",
         "@typescript-eslint/explicit-function-return-type": "error",
         "@typescript-eslint/typedef": [
           "error",
