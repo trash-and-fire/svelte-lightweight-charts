@@ -11,7 +11,8 @@ module.exports = {
 	},
 	resolve: {
 		alias: {
-			svelte: path.dirname(require.resolve('svelte/package.json'))
+			svelte: path.dirname(require.resolve('svelte/package.json')),
+			'lightweight-charts': 'lightweight-charts/dist/lightweight-charts.esm.development.js'
 		},
 		extensions: ['.mjs', '.js', '.ts', '.svelte'],
 		mainFields: ['svelte', 'browser', 'module', 'main']

@@ -4,6 +4,14 @@
     import {chart} from '.';
     import {BAR_DATA, HISTOGRAM_DATA, LINE_DATA} from './data-series';
 
+    type EverySeriesApi =
+        | ISeriesApi<'Area'>
+        | ISeriesApi<'Bar'>
+        | ISeriesApi<'Histogram'>
+        | ISeriesApi<'Candlestick'>
+        | ISeriesApi<'Line'>
+    ;
+
     const SERIES_TYPES: SeriesType[] = ['Area', 'Bar', 'Histogram', 'Candlestick', 'Line'];
 
     let width = 400;
@@ -19,7 +27,7 @@
 
     $: mainProps = createMainSeriesProps(seriesType);
 
-    let mainSeries: ISeriesApi<'Area'> | ISeriesApi<'Bar'> | ISeriesApi<'Histogram'> | ISeriesApi<'Candlestick'> | ISeriesApi<'Line'> | null = null;
+    let mainSeries: EverySeriesApi | null = null;
     let volume: ISeriesApi<'Histogram'> | null = null;
 
     let ticker: number | null = null;
@@ -30,7 +38,9 @@
     };
 
     $: {
-        mainSeries?.update({ time: day.toISOString().slice(0, 10), value: 90 - 20 * Math.random() });
+        if (mainSeries !== null) {
+            updateSeriesData(mainSeries, day);
+        }
         volume?.update({ time: day.toISOString().slice(0, 10), value: (20097125.00 - Math.random() * 10000000) });
     }
 
@@ -148,6 +158,39 @@
                 }
             default: throw new Error();
         }
+    }
+
+    function updateSeriesData(api: EverySeriesApi | null, date: Date): void {
+        if (api === null) {
+            return
+        }
+        if (containsLineData(api)) {
+            api.update({ time: date.toISOString().slice(0, 10), value: 90 - 20 * Math.random() })
+        }
+        if (containsBarData(api)) {
+            api.update({
+                time: date.toISOString().slice(0, 10),
+                open: 194.38 - 20 * Math.random(),
+                high: 196.47 - 20 * Math.random(),
+                low: 193.75 - 20 * Math.random(),
+                close: 194.08 - 20 * Math.random()
+            });
+        }
+        if (containsHistogramData(api)) {
+            api.update({ time: date.toISOString().slice(0, 10), value: 90 - 20 * Math.random() })
+        }
+    }
+
+    function containsLineData(api: EverySeriesApi): api is ISeriesApi<'Line'> | ISeriesApi<'Area'> {
+        return api.seriesType() === 'Line' || api.seriesType() === 'Area';
+    }
+
+    function containsBarData(api: EverySeriesApi): api is ISeriesApi<'Bar'> | ISeriesApi<'Candlestick'> {
+        return api.seriesType() === 'Bar' || api.seriesType() === 'Candlestick';
+    }
+
+    function containsHistogramData(api: EverySeriesApi): api is ISeriesApi<'Histogram'> {
+        return api.seriesType() === 'Histogram';
     }
 </script>
 
