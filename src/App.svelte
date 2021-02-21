@@ -1,3 +1,5 @@
+<svelte:options immutable={true}/>
+
 <script lang="ts">
     import type {ISeriesApi, SeriesType} from 'lightweight-charts';
     import type {SeriesProps} from './types';
@@ -17,53 +19,37 @@
     let width = 400;
     let height = 300;
 
-    let seriesType: SeriesType = 'Area';
-
-    let intraday = false;
-
-    let day = new Date(2019, 5, 28);
-
-    let mainProps: SeriesProps;
-
-    $: mainProps = createMainSeriesProps(seriesType);
-
-    let mainSeries: EverySeriesApi | null = null;
-    let volume: ISeriesApi<'Histogram'> | null = null;
-
-    let ticker: number | null = null;
-
     $: options = {
         width,
         height,
     };
 
+    let seriesType: SeriesType = 'Area';
+
+    let start: Date;
+    let day: Date;
+    let mainProps: SeriesProps;
+    let volumeProps: SeriesProps;
+
     $: {
-        if (mainSeries !== null) {
-            updateSeriesData(mainSeries, day);
-        }
-        volume?.update({ time: day.toISOString().slice(0, 10), value: (20097125.00 - Math.random() * 10000000) });
+        mainProps = createMainSeriesProps(seriesType);
+        volumeProps = createVolumeProps();
+        start = day = new Date(2019, 5, 29);
     }
+
+    let mainSeries: EverySeriesApi | null = null;
+    let volume: ISeriesApi<'Histogram'> | null = null;
+
+    $: if (start !== day) {
+        updateSeriesData(mainSeries, day);
+        updateVolumeData(volume, day);
+    }
+
+    let intraday = false;
+    let ticker: number | null = null;
 
     $: if (ticker !== null) {
         setupTicker(!intraday);
-    }
-
-    const histogram: SeriesProps = {
-        id: 'volume',
-        type: 'Histogram',
-        options: {
-            color: '#26a69a',
-            priceFormat: {
-                type: 'volume',
-            },
-            priceScaleId: '',
-            scaleMargins: {
-                top: 0.8,
-                bottom: 0,
-            },
-        },
-        data: HISTOGRAM_DATA,
-        reference: (ref: ISeriesApi<'Histogram'> | null) => volume = ref,
     }
 
     function handleReference<T>(ref: T | null): void {
@@ -160,6 +146,26 @@
         }
     }
 
+    function createVolumeProps(): SeriesProps {
+        return {
+            id: 'volume-' + performance.now(),
+            type: 'Histogram',
+            options: {
+                color: '#26a69a',
+                priceFormat: {
+                    type: 'volume',
+                },
+                priceScaleId: '',
+                scaleMargins: {
+                    top: 0.8,
+                    bottom: 0,
+                },
+            },
+            data: HISTOGRAM_DATA,
+            reference: (ref: ISeriesApi<'Histogram'> | null) => volume = ref,
+        }
+    }
+
     function updateSeriesData(api: EverySeriesApi | null, date: Date): void {
         if (api === null) {
             return
@@ -191,6 +197,10 @@
 
     function containsHistogramData(api: EverySeriesApi): api is ISeriesApi<'Histogram'> {
         return api.seriesType() === 'Histogram';
+    }
+
+    function updateVolumeData(api: ISeriesApi<'Histogram'> | null, date: Date): void {
+        api?.update({ time: date.toISOString().slice(0, 10), value: (20097125.00 - Math.random() * 10000000) });
     }
 </script>
 
@@ -225,7 +235,7 @@
     </fieldset>
     <fieldset name="chart">
         <legend>Chart:</legend>
-        <section use:chart={{ options, series: [mainProps, histogram], reference: handleReference }}></section>
+        <section use:chart={{ options, series: [mainProps, volumeProps], reference: handleReference }}></section>
     </fieldset>
 </form>
 
