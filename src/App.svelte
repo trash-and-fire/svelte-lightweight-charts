@@ -6,6 +6,8 @@
     let width = 400;
     let height = 300;
 
+    let intraday = false;
+
     let day = new Date(2019, 4, 20);
     let main: ISeriesApi<'Area'> | null = null;
     let volume: ISeriesApi<'Histogram'> | null = null;
@@ -19,7 +21,11 @@
 
     $: {
         main?.update({ time: day.toISOString().slice(0, 10), value: 90 - 20 * Math.random() });
-        volume?.update({ time: day.toISOString().slice(0, 10), value: (90 - Math.random() * 10 - 10)/ 2 });
+        volume?.update({ time: day.toISOString().slice(0, 10), value: (90 - Math.random() * 45)/ 2 });
+    }
+
+    $: if (ticker !== null) {
+        setupTicker(!intraday);
     }
 
     const data = [
@@ -45,7 +51,10 @@
     const histogram: SeriesProps = {
         id: 'volume',
         type: 'Histogram',
-        data: data.map(<T extends { value: number }>(item: T) => ({ ...item, value: (item.value - Math.random() * 10 - 10)/ 2 })),
+        data: data.map(<T extends { value: number }>(item: T) => ({
+            ...item,
+            value: (item.value - Math.random() * 10 - 10)/ 2
+        })),
         reference: (ref: ISeriesApi<'Histogram'> | null) => volume = ref,
     }
 
@@ -56,15 +65,38 @@
 
     function handleTicker(): void {
         if (ticker !== null) {
+            clearTicker();
+        } else {
+            setupTicker(!intraday);
+        }
+    }
+
+    function clearTicker(): void {
+        if (ticker !== null) {
             clearInterval(ticker);
             ticker = null;
-        } else {
+        }
+    }
+
+    function setupTicker(daily: boolean = true): void {
+        if (ticker !== null) {
+            clearTicker();
+        }
+        if (daily) {
             ticker = setInterval(
                 () => {
                     day.setDate(day.getDate() + 1);
                     day = new Date(day);
                 },
                 1000
+            );
+        } else {
+            ticker = setInterval(
+                () => {
+                    day.setHours(day.getHours() + 6);
+                    day = new Date(day);
+                },
+                250
             );
         }
     }
@@ -80,6 +112,9 @@
         Height:
         <input type="range" bind:value={height} name="height" id="height" min="100" max="1000" step="50">
         {height}
+    </label>
+    <label>
+        Intraday <input type="checkbox" name="intraday" id="intraday" bind:checked={intraday}>
     </label>
     <button on:click={handleTicker} type="button">{ ticker ? 'Stop' : 'Start' }</button>
 </form>

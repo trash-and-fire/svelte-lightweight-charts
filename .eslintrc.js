@@ -32,6 +32,7 @@ module.exports = {
       rules: {
         "no-console": "error",
         "@typescript-eslint/explicit-function-return-type": "error",
+        "@typescript-eslint/no-inferrable-types": "off",
         "@typescript-eslint/typedef": [
           "error",
           {
@@ -62,6 +63,7 @@ module.exports = {
       rules: {
         "no-console": "error",
         "@typescript-eslint/explicit-function-return-type": "error",
+        "@typescript-eslint/no-inferrable-types": "off",
         "@typescript-eslint/typedef": [
           "error",
           {
