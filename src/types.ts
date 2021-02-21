@@ -1,51 +1,46 @@
 import type {
-    AreaSeriesPartialOptions,
-    BarSeriesPartialOptions,
-    CandlestickSeriesPartialOptions,
-    HistogramSeriesPartialOptions,
     ISeriesApi,
-    LineData,
-    LineSeriesPartialOptions,
-    WhitespaceData
+    SeriesDataItemTypeMap,
+    SeriesPartialOptionsMap, SeriesType
 } from 'lightweight-charts';
 
 export interface AreaSeriesProps {
     id: string;
     type: 'Area';
-    options?: AreaSeriesPartialOptions;
-    data: (LineData | WhitespaceData)[];
+    options?: SeriesPartialOptionsMap['Area'];
+    data: SeriesDataItemTypeMap['Area'][];
     reference?: (api: ISeriesApi<'Area'> | null) => void;
 }
 
 export interface BarSeriesProps {
     id: string;
     type: 'Bar';
-    options?: BarSeriesPartialOptions;
-    data: (LineData | WhitespaceData)[];
+    options?: SeriesPartialOptionsMap['Bar'];
+    data: SeriesDataItemTypeMap['Bar'][];
     reference?: (api: ISeriesApi<'Bar'> | null) => void;
 }
 
 export interface CandlestickSeriesProps {
     id: string;
     type: 'Candlestick';
-    options?: CandlestickSeriesPartialOptions;
-    data: (LineData | WhitespaceData)[];
+    options?: SeriesPartialOptionsMap['Candlestick'];
+    data: SeriesDataItemTypeMap['Candlestick'][];
     reference?: (api: ISeriesApi<'Candlestick'> | null) => void;
 }
 
 export interface HistogramSeriesProps {
     id: string;
     type: 'Histogram';
-    options?: HistogramSeriesPartialOptions;
-    data: (LineData | WhitespaceData)[];
+    options?: SeriesPartialOptionsMap['Histogram'];
+    data: SeriesDataItemTypeMap['Histogram'][];
     reference?: (api: ISeriesApi<'Histogram'> | null) => void;
 }
 
 export interface LineSeriesProps {
     id: string;
     type: 'Line';
-    options?: LineSeriesPartialOptions;
-    data: (LineData | WhitespaceData)[];
+    options?: SeriesPartialOptionsMap['Line'];
+    data: SeriesDataItemTypeMap['Line'][];
     reference?: (api: ISeriesApi<'Line'> | null) => void;
 }
 
@@ -55,3 +50,11 @@ export type SeriesProps =
     | CandlestickSeriesProps
     | HistogramSeriesProps
     | LineSeriesProps
+
+export interface SeriesPropsMap extends Record<SeriesType, unknown> {
+    Area: AreaSeriesProps;
+    Bar: BarSeriesProps;
+    Candlestick: CandlestickSeriesProps;
+    Histogram: HistogramSeriesProps;
+    Line: LineSeriesProps;
+}

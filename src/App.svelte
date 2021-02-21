@@ -1,15 +1,25 @@
 <script lang="ts">
-    import type {ISeriesApi} from 'lightweight-charts';
+    import type {ISeriesApi, SeriesType} from 'lightweight-charts';
     import type {SeriesProps} from './types';
     import {chart} from '.';
+    import {BAR_DATA, HISTOGRAM_DATA, LINE_DATA} from './data-series';
+
+    const SERIES_TYPES: SeriesType[] = ['Area', 'Bar', 'Histogram', 'Candlestick', 'Line'];
 
     let width = 400;
     let height = 300;
 
+    let seriesType: SeriesType = 'Area';
+
     let intraday = false;
 
-    let day = new Date(2019, 4, 20);
-    let main: ISeriesApi<'Area'> | null = null;
+    let day = new Date(2019, 5, 28);
+
+    let mainProps: SeriesProps;
+
+    $: mainProps = createMainSeriesProps(seriesType);
+
+    let mainSeries: ISeriesApi<'Area'> | ISeriesApi<'Bar'> | ISeriesApi<'Histogram'> | ISeriesApi<'Candlestick'> | ISeriesApi<'Line'> | null = null;
     let volume: ISeriesApi<'Histogram'> | null = null;
 
     let ticker: number | null = null;
@@ -20,41 +30,29 @@
     };
 
     $: {
-        main?.update({ time: day.toISOString().slice(0, 10), value: 90 - 20 * Math.random() });
-        volume?.update({ time: day.toISOString().slice(0, 10), value: (90 - Math.random() * 45)/ 2 });
+        mainSeries?.update({ time: day.toISOString().slice(0, 10), value: 90 - 20 * Math.random() });
+        volume?.update({ time: day.toISOString().slice(0, 10), value: (20097125.00 - Math.random() * 10000000) });
     }
 
     $: if (ticker !== null) {
         setupTicker(!intraday);
     }
 
-    const data = [
-        {time: '2019-04-11', value: 80.01},
-        {time: '2019-04-12', value: 96.63},
-        {time: '2019-04-13', value: 76.64},
-        {time: '2019-04-14', value: 81.89},
-        {time: '2019-04-15', value: 74.43},
-        {time: '2019-04-16', value: 80.01},
-        {time: '2019-04-17', value: 96.63},
-        {time: '2019-04-18', value: 76.64},
-        {time: '2019-04-19', value: 81.89},
-        {time: '2019-04-20', value: 74.43},
-    ];
-
-    const area: SeriesProps = {
-        id: 'main',
-        type: 'Area',
-        data: data,
-        reference: (ref: ISeriesApi<'Area'> | null) => main = ref,
-    }
-
     const histogram: SeriesProps = {
         id: 'volume',
         type: 'Histogram',
-        data: data.map(<T extends { value: number }>(item: T) => ({
-            ...item,
-            value: (item.value - Math.random() * 10 - 10)/ 2
-        })),
+        options: {
+            color: '#26a69a',
+            priceFormat: {
+                type: 'volume',
+            },
+            priceScaleId: '',
+            scaleMargins: {
+                top: 0.8,
+                bottom: 0,
+            },
+        },
+        data: HISTOGRAM_DATA,
         reference: (ref: ISeriesApi<'Histogram'> | null) => volume = ref,
     }
 
@@ -100,6 +98,57 @@
             );
         }
     }
+
+    function createMainSeriesProps(type: SeriesType): SeriesProps {
+        switch (type) {
+            case 'Area':
+                return {
+                    id: 'main',
+                    type,
+                    data: LINE_DATA,
+                    reference: (ref: ISeriesApi<'Area'> | null) => {
+                        mainSeries = ref;
+                    }
+                }
+            case 'Line':
+                return {
+                    id: 'main',
+                    type,
+                    data: LINE_DATA,
+                    reference: (ref: ISeriesApi<'Line'> | null) => {
+                        mainSeries = ref;
+                    }
+                }
+            case 'Bar':
+                return {
+                    id: 'main',
+                    type,
+                    data: BAR_DATA,
+                    reference: (ref: ISeriesApi<'Bar'> | null) => {
+                        mainSeries = ref;
+                    },
+                }
+            case 'Candlestick':
+                return {
+                    id: 'main',
+                    type,
+                    data: BAR_DATA,
+                    reference: (ref: ISeriesApi<'Candlestick'> | null) => {
+                        mainSeries = ref;
+                    },
+                }
+            case 'Histogram':
+                return {
+                    id: 'main',
+                    type,
+                    data: HISTOGRAM_DATA,
+                    reference: (ref: ISeriesApi<'Histogram'> | null) => {
+                        mainSeries = ref;
+                    },
+                }
+            default: throw new Error();
+        }
+    }
 </script>
 
 <form>
@@ -116,16 +165,24 @@
             {height}
         </label>
     </fieldset>
+    <fieldset name="series">
+        <legend>Main Series type:</legend>
+        {#each SERIES_TYPES as type (type) }
+            <label>
+                <input type="radio" name="series-type" value={type} bind:group={seriesType}> {type}
+            </label>
+        {/each}
+    </fieldset>
     <fieldset name="controller">
         <legend>Controller options:</legend>
         <label>
-            Intraday <input type="checkbox" name="intraday" id="intraday" bind:checked={intraday}>
+            <input type="checkbox" name="intraday" id="intraday" bind:checked={intraday}> Intraday
         </label>
         <button on:click={handleTicker} type="button">{ ticker ? 'Stop' : 'Start' }</button>
     </fieldset>
     <fieldset name="chart">
         <legend>Chart:</legend>
-        <section use:chart={{ options, series: [area, histogram], reference: handleReference }}></section>
+        <section use:chart={{ options, series: [mainProps, histogram], reference: handleReference }}></section>
     </fieldset>
 </form>
 

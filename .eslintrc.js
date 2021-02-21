@@ -31,15 +31,20 @@ module.exports = {
       },
       rules: {
         "no-console": "error",
-        "@typescript-eslint/explicit-function-return-type": "error",
+        "@typescript-eslint/explicit-function-return-type": [
+          "error",
+          {
+            "allowExpressions": true,
+          }
+        ],
         "@typescript-eslint/no-inferrable-types": "off",
         "@typescript-eslint/typedef": [
           "error",
           {
-              arrowParameter: true,
-              memberVariableDeclaration: true,
-              parameter: true,
-              propertyDeclaration: true,
+            arrowParameter: true,
+            memberVariableDeclaration: true,
+            parameter: true,
+            propertyDeclaration: true,
           }
         ],
       },
@@ -62,15 +67,20 @@ module.exports = {
       },
       rules: {
         "no-console": "error",
-        "@typescript-eslint/explicit-function-return-type": "error",
+        "@typescript-eslint/explicit-function-return-type": [
+          "error",
+          {
+            "allowExpressions": true,
+          }
+        ],
         "@typescript-eslint/no-inferrable-types": "off",
         "@typescript-eslint/typedef": [
           "error",
           {
-              arrowParameter: true,
-              memberVariableDeclaration: true,
-              parameter: true,
-              propertyDeclaration: true,
+            arrowParameter: true,
+            memberVariableDeclaration: true,
+            parameter: true,
+            propertyDeclaration: true,
           }
         ],
       },
