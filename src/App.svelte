@@ -1,5 +1,6 @@
 <script lang="ts">
     import {chart} from '.';
+    import type {IChartApi} from 'lightweight-charts';
 
     let width = 400;
     let height = 300;
@@ -21,6 +22,11 @@
         {time: '2019-04-19', value: 81.89},
         {time: '2019-04-20', value: 74.43},
     ];
+
+    function handleReference(ref: IChartApi | null): void {
+        // eslint-disable-next-line no-console
+        console.log(ref);
+    }
 </script>
 
 <form>
@@ -35,7 +41,7 @@
         {height}
     </label>
 </form>
-<main use:chart={{ options, series: [{ data }]}}>
+<main use:chart={{ options, series: [{ data }], reference: handleReference }}>
 
 </main>
 

@@ -18,13 +18,15 @@ module.exports = {
     {
       parser: '@typescript-eslint/parser',
       plugins: [
+        'svelte3',
         '@typescript-eslint',
       ],
+      processor: 'svelte3/svelte3',
       extends: [
         'eslint:recommended',
         'plugin:@typescript-eslint/recommended',
       ],
-      files: ['**/*.ts'],
+      files: ['**/*.ts', '**/*.svelte'],
       env: {
         browser: true,
         node: false
@@ -41,12 +43,10 @@ module.exports = {
               propertyDeclaration: true,
           }
         ],
+      },
+      settings: {
+        'svelte3/typescript': require('typescript'),
       }
     },
-    {
-      plugins: ['svelte3'],
-      files: ['*.svelte'],
-      processor: 'svelte3/svelte3',
-    }
   ]
 };
