@@ -25,26 +25,24 @@ interface SeriesEntry {
 }
 
 export function chart<T extends Array<SeriesProps>>(node: HTMLElement, props: ChartProps<T>): ChartActionResult<T> {
-    const {series} = props;
-
     let {options, reference} = props;
+
     let width = options?.width ?? 0;
     let height = options?.height ?? 0;
 
     const chart = createChart(node, options);
-    const apis = new Map<string, SeriesEntry>();
+    reference?.(chart);
 
+    const {series} = props;
+    const seriesCollection = new Map<string, SeriesEntry>();
     if (series !== undefined) {
         for (const current of series) {
-            const api = createSeries(chart, current);
-            apis.set(current.id, {
+            seriesCollection.set(current.id, {
                 props: current,
-                ref: api,
+                ref: createSeries(chart, current),
             });
         }
     }
-
-    reference?.(chart);
 
     return {
         update(nextProps: ChartProps<T>): void {
@@ -71,11 +69,11 @@ export function chart<T extends Array<SeriesProps>>(node: HTMLElement, props: Ch
             }
 
             if (nextSeries) {
-                migrateSeries(chart, apis, nextSeries);
+                migrateSeries(chart, seriesCollection, nextSeries);
             }
         },
         destroy(): void {
-            for (const current of apis.values()) {
+            for (const current of seriesCollection.values()) {
                 chart.removeSeries(current.ref);
             }
             chart.remove();
@@ -83,34 +81,37 @@ export function chart<T extends Array<SeriesProps>>(node: HTMLElement, props: Ch
     }
 }
 
-function createSeries<T extends SeriesProps>(api: IChartApi, props: SeriesProps): ISeriesApi<T['type']> {
+function createSeries<T extends SeriesProps>(
+    chart: IChartApi,
+    props: SeriesProps
+): ISeriesApi<T['type']> {
     switch (props.type) {
         case 'Area': {
-            const series = api.addAreaSeries(props.options);
+            const series = chart.addAreaSeries(props.options);
             series.setData(props.data);
             props.reference?.(series);
             return series;
         }
         case 'Bar': {
-            const series = api.addBarSeries(props.options);
+            const series = chart.addBarSeries(props.options);
             series.setData(props.data);
             props.reference?.(series);
             return series;
         }
         case 'Candlestick': {
-            const series = api.addCandlestickSeries(props.options);
+            const series = chart.addCandlestickSeries(props.options);
             series.setData(props.data);
             props.reference?.(series);
             return series;
         }
         case 'Histogram': {
-            const series = api.addHistogramSeries(props.options);
+            const series = chart.addHistogramSeries(props.options);
             series.setData(props.data);
             props.reference?.(series);
             return series;
         }
         case 'Line': {
-            const series = api.addLineSeries(props.options);
+            const series = chart.addLineSeries(props.options);
             series.setData(props.data);
             props.reference?.(series);
             return series;
@@ -118,46 +119,47 @@ function createSeries<T extends SeriesProps>(api: IChartApi, props: SeriesProps)
     }
 }
 
-// TODO: data and other complex things should also be migrated
 function migrateSeries(
     chart: IChartApi,
-    map: Map<string, SeriesEntry>,
+    collection: Map<string, SeriesEntry>,
     props: SeriesProps[]
 ): void {
-    const existing = new Set(map.keys());
+    const existing = new Set(collection.keys());
     const next = new Map(props.map((item: SeriesProps) => [item.id, item]));
 
     for (const id of existing) {
         if (!next.has(id)) {
-            const entry = ensure(map.get(id))
+            const entry = ensure(collection.get(id))
             entry.props.reference?.(null);
             chart.removeSeries(entry.ref);
-            map.delete(id);
+            collection.delete(id);
         }
     }
 
-    for (const [id, entry] of next.entries()) {
-        let api = map.get(id);
-        if (api === undefined) {
-            api = {
-                props: entry,
-                ref: createSeries(chart, entry)
+    for (const [id, options] of next.entries()) {
+        let entry = collection.get(id);
+        if (entry === undefined) {
+            const ref = createSeries(chart, options);
+            entry = {
+                props: options,
+                ref: ref,
             };
-            map.set(id, api);
+            collection.set(id, entry);
         } else {
-            if (entry.type !== api.ref.seriesType()) {
-                chart.removeSeries(api.ref);
-                api.props.reference?.(null);
-                api = {
-                    props: entry,
-                    ref: createSeries(chart, entry)
-                };
-                map.set(id, api);
+            if (options.type !== entry.ref.seriesType()) {
+                chart.removeSeries(entry.ref);
+                entry.props.reference?.(null);
+
+                collection.set(id, {
+                    props: options,
+                    ref: createSeries(chart, options)
+                });
             } else {
-                // TODO: strictly compare series and props types (logically it is already the same)
-                // TODO: change eslint ban types rule
-                if (entry.options) {
-                    api.ref.applyOptions(entry.options as Record<string, never>);
+                // There is no way to strictly match types of ISeriesApi<T> and options
+                // But they are both have the same SeriesType relation in this branch
+                // TODO: think about it
+                if (options.options) {
+                    entry.ref.applyOptions(options.options as object);
                 }
             }
         }
