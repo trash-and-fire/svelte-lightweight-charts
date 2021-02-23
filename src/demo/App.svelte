@@ -2,7 +2,8 @@
 
 <script lang="ts">
     import type {ISeriesApi, SeriesType} from 'lightweight-charts';
-    import type {SeriesActionParams} from '../types';
+    import type {HistogramSeriesParams, SeriesActionParams} from '../types';
+    import type {ChartActionParams} from '../index';
     import {chart} from '../index';
     import {BAR_DATA, HISTOGRAM_DATA, LINE_DATA} from '../data-series';
 
@@ -29,7 +30,7 @@
     let start: Date;
     let day: Date;
     let mainProps: SeriesActionParams;
-    let volumeProps: SeriesActionParams;
+    let volumeProps: HistogramSeriesParams;
 
     $: {
         mainProps = createMainSeriesProps(seriesType);
@@ -50,6 +51,26 @@
 
     $: if (ticker !== null) {
         setupTicker(!intraday);
+    }
+
+    let params: ChartActionParams<[SeriesActionParams, HistogramSeriesParams]>;
+
+    $: params = {
+        options,
+        series: [mainProps, volumeProps],
+        reference: handleReference,
+        onClick: handleClick,
+        onCrosshairMove: handleCrosshairMove,
+    };
+
+    function handleClick(): void {
+        // eslint-disable-next-line no-console
+        console.log('click');
+    }
+
+    function handleCrosshairMove(): void {
+        // eslint-disable-next-line no-console
+        console.log('move');
     }
 
     function handleReference<T>(ref: T | null): void {
@@ -146,7 +167,7 @@
         }
     }
 
-    function createVolumeProps(): SeriesActionParams {
+    function createVolumeProps(): HistogramSeriesParams {
         return {
             id: 'volume-' + performance.now(),
             type: 'Histogram',
@@ -235,7 +256,7 @@
     </fieldset>
     <fieldset name="chart">
         <legend>Chart:</legend>
-        <section use:chart={{ options, series: [mainProps, volumeProps], reference: handleReference }}></section>
+        <section use:chart={params}></section>
     </fieldset>
 </form>
 

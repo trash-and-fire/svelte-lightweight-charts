@@ -2,7 +2,7 @@ import {
     ChartOptions,
     createChart,
     DeepPartial,
-    IChartApi,
+    IChartApi, MouseEventHandler,
 } from 'lightweight-charts';
 import type {ActionResult, SeriesActionParams} from './types';
 import {seriesCollection} from './series';
@@ -11,13 +11,20 @@ export interface ChartActionParams<T extends Array<SeriesActionParams>> {
     options?: DeepPartial<ChartOptions>;
     series?: T;
     reference?: (api: IChartApi | null) => void;
+    onClick?: MouseEventHandler;
+    onCrosshairMove?: MouseEventHandler;
 }
 
 export function chart<T extends Array<SeriesActionParams>>(
     node: HTMLElement,
     params: ChartActionParams<T>
 ): ActionResult<ChartActionParams<T>> {
-    let {options, reference} = params;
+    let {
+        options,
+        reference,
+        onClick,
+        onCrosshairMove,
+    } = params;
 
     let width = options?.width ?? 0;
     let height = options?.height ?? 0;
@@ -27,9 +34,22 @@ export function chart<T extends Array<SeriesActionParams>>(
 
     const series = seriesCollection(chart, params.series);
 
+    if (onClick) {
+        chart.subscribeClick(onClick);
+    }
+
+    if (onCrosshairMove) {
+        chart.subscribeCrosshairMove(onCrosshairMove);
+    }
+
     return {
         update(nextParams: ChartActionParams<T>): void {
-            const {options: nextOptions, reference: nextReference} = nextParams;
+            const {
+                options: nextOptions,
+                reference: nextReference,
+                onClick: nextOnClick,
+                onCrosshairMove: nextOnCrosshairMove,
+            } = nextParams;
 
             if (nextReference !== reference) {
                 reference?.(null);
@@ -52,9 +72,35 @@ export function chart<T extends Array<SeriesActionParams>>(
             }
 
             series.update(nextParams.series);
+
+            if (nextOnClick !== onClick) {
+                if (onClick) {
+                    chart.unsubscribeCrosshairMove(onClick);
+                }
+                onClick = nextOnClick;
+                if (onClick) {
+                    chart.subscribeCrosshairMove(onClick);
+                }
+            }
+
+            if (nextOnCrosshairMove !== onCrosshairMove) {
+                if (onCrosshairMove) {
+                    chart.unsubscribeCrosshairMove(onCrosshairMove);
+                }
+                onCrosshairMove = nextOnCrosshairMove;
+                if (onCrosshairMove) {
+                    chart.subscribeCrosshairMove(onCrosshairMove);
+                }
+            }
         },
         destroy(): void {
             series.destroy();
+            if (onClick) {
+                chart.unsubscribeCrosshairMove(onClick);
+            }
+            if (onCrosshairMove) {
+                chart.unsubscribeCrosshairMove(onCrosshairMove);
+            }
             chart.remove();
             reference?.(null);
         }

@@ -12,7 +12,7 @@ export interface ActionResult<T> {
 
 export type Action<TTarget extends Element, TParams> = (target: TTarget, params: TParams) => ActionResult<TParams>
 
-export interface AreaSeriesProps {
+export interface AreaSeriesParams {
     id: string;
     type: 'Area';
     options?: SeriesPartialOptionsMap['Area'];
@@ -20,7 +20,7 @@ export interface AreaSeriesProps {
     reference?: (api: ISeriesApi<'Area'> | null) => void;
 }
 
-export interface BarSeriesProps {
+export interface BarSeriesParams {
     id: string;
     type: 'Bar';
     options?: SeriesPartialOptionsMap['Bar'];
@@ -28,7 +28,7 @@ export interface BarSeriesProps {
     reference?: (api: ISeriesApi<'Bar'> | null) => void;
 }
 
-export interface CandlestickSeriesProps {
+export interface CandlestickSeriesParams {
     id: string;
     type: 'Candlestick';
     options?: SeriesPartialOptionsMap['Candlestick'];
@@ -36,7 +36,7 @@ export interface CandlestickSeriesProps {
     reference?: (api: ISeriesApi<'Candlestick'> | null) => void;
 }
 
-export interface HistogramSeriesProps {
+export interface HistogramSeriesParams {
     id: string;
     type: 'Histogram';
     options?: SeriesPartialOptionsMap['Histogram'];
@@ -44,7 +44,7 @@ export interface HistogramSeriesProps {
     reference?: (api: ISeriesApi<'Histogram'> | null) => void;
 }
 
-export interface LineSeriesProps {
+export interface LineSeriesParams {
     id: string;
     type: 'Line';
     options?: SeriesPartialOptionsMap['Line'];
@@ -53,16 +53,16 @@ export interface LineSeriesProps {
 }
 
 export type SeriesActionParams =
-    | AreaSeriesProps
-    | BarSeriesProps
-    | CandlestickSeriesProps
-    | HistogramSeriesProps
-    | LineSeriesProps
+    | AreaSeriesParams
+    | BarSeriesParams
+    | CandlestickSeriesParams
+    | HistogramSeriesParams
+    | LineSeriesParams
 
-export interface SeriesPropsMap extends Record<SeriesType, unknown> {
-    Area: AreaSeriesProps;
-    Bar: BarSeriesProps;
-    Candlestick: CandlestickSeriesProps;
-    Histogram: HistogramSeriesProps;
-    Line: LineSeriesProps;
+export interface SeriesParamsMap extends Record<SeriesType, unknown> {
+    Area: AreaSeriesParams;
+    Bar: BarSeriesParams;
+    Candlestick: CandlestickSeriesParams;
+    Histogram: HistogramSeriesParams;
+    Line: LineSeriesParams;
 }
