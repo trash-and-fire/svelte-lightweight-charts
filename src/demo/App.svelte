@@ -1,7 +1,7 @@
 <svelte:options immutable={true}/>
 
 <script lang="ts">
-    import type {ISeriesApi, SeriesType} from 'lightweight-charts';
+    import type {IChartApi, ISeriesApi, SeriesType} from 'lightweight-charts';
     import type {HistogramSeriesParams, SeriesActionParams} from '../types';
     import type {ChartActionParams} from '../index';
     import {chart} from '../index';
@@ -63,6 +63,8 @@
         onCrosshairMove: handleCrosshairMove,
     };
 
+    let api: IChartApi | null = null;
+
     function handleClick(): void {
         // eslint-disable-next-line no-console
         console.log('click');
@@ -73,9 +75,12 @@
         console.log('move');
     }
 
-    function handleReference<T>(ref: T | null): void {
-        // eslint-disable-next-line no-console
-        console.log(ref);
+    function handleReference(ref: IChartApi | null): void {
+        api = ref;
+    }
+
+    function handleFitContent(): void {
+        api?.timeScale().fitContent();
     }
 
     function handleTicker(): void {
@@ -253,6 +258,7 @@
             <input type="checkbox" name="intraday" id="intraday" bind:checked={intraday}> Intraday
         </label>
         <button on:click={handleTicker} type="button">{ ticker ? 'Stop' : 'Start' }</button>
+        <button on:click={handleFitContent} type="button">Fit content</button>
     </fieldset>
     <fieldset name="chart">
         <legend>Chart:</legend>
