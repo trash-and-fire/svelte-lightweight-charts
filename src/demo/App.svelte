@@ -2,9 +2,9 @@
 
 <script lang="ts">
     import type {ISeriesApi, SeriesType} from 'lightweight-charts';
-    import type {SeriesActionParams} from './types';
-    import {chart} from '.';
-    import {BAR_DATA, HISTOGRAM_DATA, LINE_DATA} from './data-series';
+    import type {SeriesActionParams} from '../types';
+    import {chart} from '../index';
+    import {BAR_DATA, HISTOGRAM_DATA, LINE_DATA} from '../data-series';
 
     type EverySeriesApi =
         | ISeriesApi<'Area'>
