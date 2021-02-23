@@ -28,8 +28,8 @@ export function chart<T extends Array<SeriesActionParams>>(
     const series = seriesCollection(chart, params.series);
 
     return {
-        update(nextProps: ChartActionParams<T>): void {
-            const {options: nextOptions, reference: nextReference} = nextProps;
+        update(nextParams: ChartActionParams<T>): void {
+            const {options: nextOptions, reference: nextReference} = nextParams;
 
             if (nextReference !== reference) {
                 reference?.(null);
@@ -51,7 +51,7 @@ export function chart<T extends Array<SeriesActionParams>>(
                 options = nextOptions;
             }
 
-            series.update(nextProps.series);
+            series.update(nextParams.series);
         },
         destroy(): void {
             series.destroy();
