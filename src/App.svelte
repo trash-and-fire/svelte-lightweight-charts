@@ -2,7 +2,7 @@
 
 <script lang="ts">
     import type {ISeriesApi, SeriesType} from 'lightweight-charts';
-    import type {SeriesProps} from './types';
+    import type {SeriesActionParams} from './types';
     import {chart} from '.';
     import {BAR_DATA, HISTOGRAM_DATA, LINE_DATA} from './data-series';
 
@@ -28,8 +28,8 @@
 
     let start: Date;
     let day: Date;
-    let mainProps: SeriesProps;
-    let volumeProps: SeriesProps;
+    let mainProps: SeriesActionParams;
+    let volumeProps: SeriesActionParams;
 
     $: {
         mainProps = createMainSeriesProps(seriesType);
@@ -95,7 +95,7 @@
         }
     }
 
-    function createMainSeriesProps(type: SeriesType): SeriesProps {
+    function createMainSeriesProps(type: SeriesType): SeriesActionParams {
         switch (type) {
             case 'Area':
                 return {
@@ -146,7 +146,7 @@
         }
     }
 
-    function createVolumeProps(): SeriesProps {
+    function createVolumeProps(): SeriesActionParams {
         return {
             id: 'volume-' + performance.now(),
             type: 'Histogram',

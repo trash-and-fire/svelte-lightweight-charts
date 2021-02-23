@@ -1,8 +1,16 @@
 import type {
     ISeriesApi,
     SeriesDataItemTypeMap,
-    SeriesPartialOptionsMap, SeriesType
+    SeriesPartialOptionsMap,
+    SeriesType
 } from 'lightweight-charts';
+
+export interface ActionResult<T> {
+    update(params: T): void;
+    destroy(): void;
+}
+
+export type Action<TTarget extends Element, TParams> = (target: TTarget, params: TParams) => ActionResult<TParams>
 
 export interface AreaSeriesProps {
     id: string;
@@ -44,7 +52,7 @@ export interface LineSeriesProps {
     reference?: (api: ISeriesApi<'Line'> | null) => void;
 }
 
-export type SeriesProps =
+export type SeriesActionParams =
     | AreaSeriesProps
     | BarSeriesProps
     | CandlestickSeriesProps
