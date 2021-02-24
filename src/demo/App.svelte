@@ -1,11 +1,13 @@
 <svelte:options immutable={true}/>
 
 <script lang="ts">
-    import type {IChartApi, ISeriesApi, SeriesType} from 'lightweight-charts';
+    import type {IChartApi, ISeriesApi, MouseEventParams, PriceLineOptions, SeriesType} from 'lightweight-charts';
     import type {HistogramSeriesParams, SeriesActionParams} from '../types';
     import type {ChartActionParams} from '../index';
     import {chart} from '../index';
     import {BAR_DATA, HISTOGRAM_DATA, LINE_DATA} from '../data-series';
+    import {LineStyle} from 'lightweight-charts';
+    import {onMount} from 'svelte';
 
     type EverySeriesApi =
         | ISeriesApi<'Area'>
@@ -13,7 +15,7 @@
         | ISeriesApi<'Histogram'>
         | ISeriesApi<'Candlestick'>
         | ISeriesApi<'Line'>
-    ;
+        ;
 
     const SERIES_TYPES: SeriesType[] = ['Area', 'Bar', 'Histogram', 'Candlestick', 'Line'];
 
@@ -64,10 +66,45 @@
     };
 
     let api: IChartApi | null = null;
+    let drawMode: 'draw-priceline' | null = null;
 
-    function handleClick(): void {
-        // eslint-disable-next-line no-console
-        console.log('click');
+    onMount(() => {
+        window.addEventListener('mousedown', handleClickStart, true);
+        window.addEventListener('mouseup', handleClickEnd);
+        return () => {
+            window.removeEventListener('mousedown', handleClickStart, true);
+            window.removeEventListener('mouseup', handleClickEnd);
+        }
+    })
+
+    function handleClick(e: MouseEventParams): void {
+        const { point } = e;
+        if (point === undefined) {
+            return;
+        }
+        if (mainSeries === null) {
+            return;
+        }
+        const price = mainSeries.coordinateToPrice(point.y);
+        if (price === null) {
+            return;
+        }
+
+        switch (drawMode) {
+            case 'draw-priceline': {
+                const line: PriceLineOptions =  {
+                    price: price,
+                    color: '#be1238',
+                    lineWidth: 2,
+                    lineStyle: LineStyle.Solid,
+                    axisLabelVisible: true,
+                    title: 'limit',
+                };
+                mainProps = shallowCopy(mainProps)
+                mainProps.priceLines = [line];
+                break;
+            }
+        }
     }
 
     function handleCrosshairMove(): void {
@@ -81,6 +118,14 @@
 
     function handleFitContent(): void {
         api?.timeScale().fitContent();
+    }
+
+    function handleClickStart(e: MouseEvent): void {
+        drawMode = e.ctrlKey ? 'draw-priceline' : null;
+    }
+
+    function handleClickEnd(): void {
+        drawMode = null;
     }
 
     function handleTicker(): void {
@@ -168,7 +213,8 @@
                         mainSeries = ref;
                     },
                 }
-            default: throw new Error();
+            default:
+                throw new Error();
         }
     }
 
@@ -197,7 +243,7 @@
             return
         }
         if (containsLineData(api)) {
-            api.update({ time: date.toISOString().slice(0, 10), value: 90 - 20 * Math.random() })
+            api.update({time: date.toISOString().slice(0, 10), value: 90 - 20 * Math.random()})
         }
         if (containsBarData(api)) {
             api.update({
@@ -209,7 +255,7 @@
             });
         }
         if (containsHistogramData(api)) {
-            api.update({ time: date.toISOString().slice(0, 10), value: 90 - 20 * Math.random() })
+            api.update({time: date.toISOString().slice(0, 10), value: 90 - 20 * Math.random()})
         }
     }
 
@@ -226,7 +272,11 @@
     }
 
     function updateVolumeData(api: ISeriesApi<'Histogram'> | null, date: Date): void {
-        api?.update({ time: date.toISOString().slice(0, 10), value: (20097125.00 - Math.random() * 10000000) });
+        api?.update({time: date.toISOString().slice(0, 10), value: (20097125.00 - Math.random() * 10000000)});
+    }
+
+    function shallowCopy<T extends object>(value: T): T {
+        return { ...value };
     }
 </script>
 

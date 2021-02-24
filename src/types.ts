@@ -1,5 +1,5 @@
 import type {
-    ISeriesApi,
+    ISeriesApi, PriceLineOptions,
     SeriesDataItemTypeMap,
     SeriesPartialOptionsMap,
     SeriesType
@@ -18,6 +18,7 @@ export interface AreaSeriesParams {
     options?: SeriesPartialOptionsMap['Area'];
     data: SeriesDataItemTypeMap['Area'][];
     reference?: (api: ISeriesApi<'Area'> | null) => void;
+    priceLines?: PriceLineOptions[];
 }
 
 export interface BarSeriesParams {
@@ -26,6 +27,7 @@ export interface BarSeriesParams {
     options?: SeriesPartialOptionsMap['Bar'];
     data: SeriesDataItemTypeMap['Bar'][];
     reference?: (api: ISeriesApi<'Bar'> | null) => void;
+    priceLines?: PriceLineOptions[];
 }
 
 export interface CandlestickSeriesParams {
@@ -34,6 +36,7 @@ export interface CandlestickSeriesParams {
     options?: SeriesPartialOptionsMap['Candlestick'];
     data: SeriesDataItemTypeMap['Candlestick'][];
     reference?: (api: ISeriesApi<'Candlestick'> | null) => void;
+    priceLines?: PriceLineOptions[];
 }
 
 export interface HistogramSeriesParams {
@@ -42,6 +45,7 @@ export interface HistogramSeriesParams {
     options?: SeriesPartialOptionsMap['Histogram'];
     data: SeriesDataItemTypeMap['Histogram'][];
     reference?: (api: ISeriesApi<'Histogram'> | null) => void;
+    priceLines?: PriceLineOptions[];
 }
 
 export interface LineSeriesParams {
@@ -50,6 +54,7 @@ export interface LineSeriesParams {
     options?: SeriesPartialOptionsMap['Line'];
     data: SeriesDataItemTypeMap['Line'][];
     reference?: (api: ISeriesApi<'Line'> | null) => void;
+    priceLines?: PriceLineOptions[];
 }
 
 export type SeriesActionParams =
