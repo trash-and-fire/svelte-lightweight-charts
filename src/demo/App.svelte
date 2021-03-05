@@ -2,12 +2,18 @@
 
 <script lang="ts">
     import type {IChartApi, ISeriesApi, MouseEventParams, PriceLineOptions, SeriesType} from 'lightweight-charts';
-    import type {HistogramSeriesParams, SeriesActionParams} from '../types';
+    import type {
+        HistogramSeriesParams,
+        SeriesActionParams
+    } from '../types';
     import type {ChartActionParams} from '../index';
     import {chart} from '../index';
     import {BAR_DATA, HISTOGRAM_DATA, LINE_DATA} from '../data-series';
     import {LineStyle} from 'lightweight-charts';
     import {onMount} from 'svelte';
+
+    import Chart from '../components/chart.svelte';
+    import LineSeries from '../components/line-series.svelte';
 
     type EverySeriesApi =
         | ISeriesApi<'Area'>
@@ -27,7 +33,7 @@
         height,
     };
 
-    let seriesType: SeriesType = 'Area';
+    let seriesType: SeriesType = 'Line';
 
     let start: Date;
     let day: Date;
@@ -310,9 +316,17 @@
         <button on:click={handleTicker} type="button">{ ticker ? 'Stop' : 'Start' }</button>
         <button on:click={handleFitContent} type="button">Fit content</button>
     </fieldset>
-    <fieldset name="chart">
-        <legend>Chart:</legend>
+    <fieldset name="chart-action">
+        <legend>Chart action:</legend>
         <section use:chart={params}></section>
+    </fieldset>
+    <fieldset name="chart-component">
+        <legend>Chart component:</legend>
+        <Chart {...(params.options ?? {})}>
+            {#if mainProps.type === 'Line' }
+                <LineSeries {...(mainProps.options ?? {})} data={mainProps.data}/>
+            {/if}
+        </Chart>
     </fieldset>
 </form>
 
