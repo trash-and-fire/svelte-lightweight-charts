@@ -1,15 +1,23 @@
 <svelte:options immutable={true}/>
 
 <script lang="ts">
-    import type {IChartApi, ISeriesApi, MouseEventParams, PriceLineOptions, SeriesType} from 'lightweight-charts';
+    import type {
+        IChartApi,
+        ISeriesApi,
+        MouseEventParams,
+        PriceLineOptions,
+        SeriesType,
+        ChartOptions,
+        DeepPartial,
+    } from 'lightweight-charts';
     import type {
         HistogramSeriesParams,
         SeriesActionParams
     } from '../types';
+    import {LineStyle} from 'lightweight-charts';
     import type {ChartActionParams} from '../index';
     import {chart} from '../index';
     import {BAR_DATA, HISTOGRAM_DATA, LINE_DATA} from '../data-series';
-    import {LineStyle} from 'lightweight-charts';
     import {onMount} from 'svelte';
 
     import Chart from '../components/chart.svelte';
@@ -32,6 +40,7 @@
     let width = 400;
     let height = 300;
 
+    let options: DeepPartial<ChartOptions>;
     $: options = {
         width,
         height,
@@ -53,9 +62,15 @@
     let mainSeries: EverySeriesApi | null = null;
     let volume: ISeriesApi<'Histogram'> | null = null;
 
+    let mainSeriesComponent: EverySeriesApi | null = null;
+    let volumeComponent: ISeriesApi<'Histogram'> | null = null;
+
     $: if (start !== day) {
         updateSeriesData(mainSeries, day);
         updateVolumeData(volume, day);
+
+        updateSeriesData(mainSeriesComponent, day);
+        updateVolumeData(volumeComponent, day);
     }
 
     let intraday = false;
@@ -88,7 +103,7 @@
     })
 
     function handleClick(e: MouseEventParams): void {
-        const { point } = e;
+        const {point} = e;
         if (point === undefined) {
             return;
         }
@@ -102,7 +117,7 @@
 
         switch (drawMode) {
             case 'draw-priceline': {
-                const line: PriceLineOptions =  {
+                const line: PriceLineOptions = {
                     price: price,
                     color: '#be1238',
                     lineWidth: 2,
@@ -286,7 +301,15 @@
     }
 
     function shallowCopy<T extends object>(value: T): T {
-        return { ...value };
+        return {...value};
+    }
+
+    function handleMainComponentReference(ref: EverySeriesApi | null): void {
+        mainSeriesComponent = ref;
+    }
+
+    function handleVolumeComponentReference(ref: ISeriesApi<'Histogram'> | null): void {
+        volumeComponent = ref;
     }
 </script>
 
@@ -328,21 +351,45 @@
         <legend>Chart component:</legend>
         <Chart {...(params.options ?? {})}>
             {#if mainProps.type === 'Area' }
-                <AreaSeries {...(mainProps.options ?? {})} data={mainProps.data}/>
+                <AreaSeries
+                    {...(mainProps.options ?? {})}
+                    data={mainProps.data}
+                    ref={handleMainComponentReference}
+                />
             {/if}
             {#if mainProps.type === 'Line' }
-                <LineSeries {...(mainProps.options ?? {})} data={mainProps.data}/>
+                <LineSeries
+                    {...(mainProps.options ?? {})}
+                    data={mainProps.data}
+                    ref={handleMainComponentReference}
+                />
             {/if}
             {#if mainProps.type === 'Histogram'}
-                <HistogramSeries {...(mainProps.options ?? {})} data={mainProps.data}/>
+                <HistogramSeries
+                    {...(mainProps.options ?? {})}
+                    data={mainProps.data}
+                    ref={handleMainComponentReference}
+                />
             {/if}
             {#if mainProps.type === 'Bar'}
-                <BarSeries {...(mainProps.options ?? {})} data={mainProps.data}/>
+                <BarSeries
+                    {...(mainProps.options ?? {})}
+                    data={mainProps.data}
+                    ref={handleMainComponentReference}
+                />
             {/if}
             {#if mainProps.type === 'Candlestick'}
-                <CandlestickSeries {...(mainProps.options ?? {})} data={mainProps.data}/>
+                <CandlestickSeries
+                    {...(mainProps.options ?? {})}
+                    data={mainProps.data}
+                    ref={handleMainComponentReference}
+                />
             {/if}
-            <HistogramSeries {...(volumeProps.options ?? {})} data={volumeProps.data}/>
+            <HistogramSeries
+                {...(volumeProps.options ?? {})}
+                data={volumeProps.data}
+                ref={handleVolumeComponentReference}
+            />
         </Chart>
     </fieldset>
 </form>

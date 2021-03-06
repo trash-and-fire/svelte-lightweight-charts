@@ -3,8 +3,10 @@
 <script lang="ts">
     import type {
         HistogramSeriesPartialOptions,
-        SeriesDataItemTypeMap
+        SeriesDataItemTypeMap,
+        ISeriesApi,
     } from 'lightweight-charts';
+    import type {Reference} from '../types';
     import {series} from '../series';
     import {context} from './utils';
     import {onDestroy} from 'svelte';
@@ -44,6 +46,8 @@
     export let color: string | undefined = undefined;
     export let base: number | undefined = undefined;
 
+    export let ref: Reference<ISeriesApi<'Histogram'>> | undefined = undefined;
+
     export let data: SeriesDataItemTypeMap['Histogram'][] = [];
 
     let options: HistogramSeriesPartialOptions;
@@ -74,6 +78,7 @@
         type: 'Histogram',
         options,
         data,
+        reference: ref,
     });
 
     $: subject.update({
@@ -81,6 +86,7 @@
         type: 'Histogram',
         options,
         data,
+        reference: ref,
     });
 
     onDestroy(() => {

@@ -17,7 +17,7 @@ export interface AreaSeriesParams {
     type: 'Area';
     options?: SeriesPartialOptionsMap['Area'];
     data: SeriesDataItemTypeMap['Area'][];
-    reference?: (api: ISeriesApi<'Area'> | null) => void;
+    reference?: Reference<ISeriesApi<'Area'>>;
     priceLines?: PriceLineOptions[];
 }
 
@@ -26,7 +26,7 @@ export interface BarSeriesParams {
     type: 'Bar';
     options?: SeriesPartialOptionsMap['Bar'];
     data: SeriesDataItemTypeMap['Bar'][];
-    reference?: (api: ISeriesApi<'Bar'> | null) => void;
+    reference?: Reference<ISeriesApi<'Bar'>>;
     priceLines?: PriceLineOptions[];
 }
 
@@ -35,7 +35,7 @@ export interface CandlestickSeriesParams {
     type: 'Candlestick';
     options?: SeriesPartialOptionsMap['Candlestick'];
     data: SeriesDataItemTypeMap['Candlestick'][];
-    reference?: (api: ISeriesApi<'Candlestick'> | null) => void;
+    reference?: Reference<ISeriesApi<'Candlestick'>>;
     priceLines?: PriceLineOptions[];
 }
 
@@ -44,7 +44,7 @@ export interface HistogramSeriesParams {
     type: 'Histogram';
     options?: SeriesPartialOptionsMap['Histogram'];
     data: SeriesDataItemTypeMap['Histogram'][];
-    reference?: (api: ISeriesApi<'Histogram'> | null) => void;
+    reference?: Reference<ISeriesApi<'Histogram'>>;
     priceLines?: PriceLineOptions[];
 }
 
@@ -53,7 +53,7 @@ export interface LineSeriesParams {
     type: 'Line';
     options?: SeriesPartialOptionsMap['Line'];
     data: SeriesDataItemTypeMap['Line'][];
-    reference?: (api: ISeriesApi<'Line'> | null) => void;
+    reference?: Reference<ISeriesApi<'Line'>>;
     priceLines?: PriceLineOptions[];
 }
 
@@ -71,3 +71,5 @@ export interface SeriesParamsMap extends Record<SeriesType, unknown> {
     Histogram: HistogramSeriesParams;
     Line: LineSeriesParams;
 }
+
+export type Reference<T> = (ref: T | null) => void;

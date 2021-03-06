@@ -3,8 +3,10 @@
 <script lang="ts">
     import type {
         BarSeriesPartialOptions,
-        SeriesDataItemTypeMap
+        SeriesDataItemTypeMap,
+        ISeriesApi,
     } from 'lightweight-charts';
+    import type {Reference} from '../types';
     import {series} from '../series';
     import {context} from './utils';
     import {onDestroy} from 'svelte';
@@ -46,6 +48,8 @@
     export let openVisible: boolean | undefined = undefined;
     export let thinBars: boolean | undefined = undefined;
 
+    export let ref: Reference<ISeriesApi<'Bar'>> | undefined = undefined;
+
     export let data: SeriesDataItemTypeMap['Bar'][] = [];
 
     let options: BarSeriesPartialOptions;
@@ -78,6 +82,7 @@
         type: 'Bar',
         options,
         data,
+        reference: ref,
     });
 
     $: subject.update({
@@ -85,6 +90,7 @@
         type: 'Bar',
         options,
         data,
+        reference: ref,
     });
 
     onDestroy(() => {

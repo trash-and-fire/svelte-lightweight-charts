@@ -6,8 +6,10 @@
         LineStyle,
         LineType,
         LineWidth,
-        SeriesDataItemTypeMap
+        SeriesDataItemTypeMap,
+        ISeriesApi,
     } from 'lightweight-charts';
+    import type {Reference} from '../types';
     import {series} from '../series';
     import {context} from './utils';
     import {onDestroy} from 'svelte';
@@ -55,6 +57,8 @@
     export let crosshairMarkerBorderColor: string | undefined = undefined;
     export let crosshairMarkerBackgroundColor: string | undefined = undefined;
 
+    export let ref: Reference<ISeriesApi<'Area'>> | undefined = undefined;
+
     export let data: SeriesDataItemTypeMap['Area'][] = [];
 
     let options: AreaSeriesPartialOptions;
@@ -93,6 +97,7 @@
         type: 'Area',
         options,
         data,
+        reference: ref,
     });
 
     $: subject.update({
@@ -100,6 +105,7 @@
         type: 'Area',
         options,
         data,
+        reference: ref,
     });
 
     onDestroy(() => {

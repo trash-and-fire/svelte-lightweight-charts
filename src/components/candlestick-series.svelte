@@ -3,8 +3,10 @@
 <script lang="ts">
     import type {
         CandlestickSeriesPartialOptions,
-        SeriesDataItemTypeMap
+        ISeriesApi,
+        SeriesDataItemTypeMap,
     } from 'lightweight-charts';
+    import type {Reference} from '../types';
     import {series} from '../series';
     import {context} from './utils';
     import {onDestroy} from 'svelte';
@@ -68,6 +70,8 @@
     /** Color of falling candlestick wicks. Ignored if wickVisible == false or wickColor is specified */
     export let wickDownColor: string | undefined = undefined;
 
+    export let ref: Reference<ISeriesApi<'Candlestick'>> | undefined = undefined;
+
     export let data: SeriesDataItemTypeMap['Candlestick'][] = [];
 
     let options: CandlestickSeriesPartialOptions;
@@ -106,6 +110,7 @@
         type: 'Candlestick',
         options,
         data,
+        reference: ref,
     });
 
     $: subject.update({
@@ -113,6 +118,7 @@
         type: 'Candlestick',
         options,
         data,
+        reference: ref,
     });
 
     onDestroy(() => {

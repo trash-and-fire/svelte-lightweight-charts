@@ -6,8 +6,10 @@
         LineStyle,
         LineType,
         LineWidth,
-        SeriesDataItemTypeMap
+        SeriesDataItemTypeMap,
+        ISeriesApi,
     } from 'lightweight-charts';
+    import type {Reference} from '../types';
     import {series} from '../series';
     import {context} from './utils';
     import {onDestroy} from 'svelte';
@@ -52,6 +54,9 @@
     export let crosshairMarkerRadius: number | undefined = undefined;
     export let crosshairMarkerBorderColor: string | undefined = undefined;
     export let crosshairMarkerBackgroundColor: string | undefined = undefined;
+
+    export let ref: Reference<ISeriesApi<'Line'>> | undefined = undefined;
+
     export let data: SeriesDataItemTypeMap['Line'][] = [];
 
     let options: LineSeriesPartialOptions;
@@ -88,6 +93,7 @@
         type: 'Line',
         options,
         data,
+        reference: ref,
     });
 
     $: subject.update({
@@ -95,6 +101,7 @@
         type: 'Line',
         options,
         data,
+        reference: ref,
     });
 
     onDestroy(() => {

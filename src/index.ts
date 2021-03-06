@@ -2,15 +2,16 @@ import {
     ChartOptions,
     createChart,
     DeepPartial,
-    IChartApi, MouseEventHandler,
+    IChartApi,
+    MouseEventHandler,
 } from 'lightweight-charts';
-import type {ActionResult, SeriesActionParams} from './types';
+import type {ActionResult, Reference, SeriesActionParams} from './types';
 import {seriesCollection} from './series';
 
 export interface ChartActionParams<T extends Array<SeriesActionParams>> {
     options?: DeepPartial<ChartOptions>;
     series?: T;
-    reference?: (api: IChartApi | null) => void;
+    reference?: Reference<IChartApi>;
     onClick?: MouseEventHandler;
     onCrosshairMove?: MouseEventHandler;
 }
