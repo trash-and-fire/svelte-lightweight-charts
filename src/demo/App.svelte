@@ -14,6 +14,10 @@
 
     import Chart from '../components/chart.svelte';
     import LineSeries from '../components/line-series.svelte';
+    import AreaSeries from '../components/area-series.svelte';
+    import HistogramSeries from '../components/histogram-series.svelte';
+    import BarSeries from '../components/bar-series.svelte';
+    import CandlestickSeries from '../components/candlestick-series.svelte';
 
     type EverySeriesApi =
         | ISeriesApi<'Area'>
@@ -33,7 +37,7 @@
         height,
     };
 
-    let seriesType: SeriesType = 'Line';
+    let seriesType: SeriesType = 'Area';
 
     let start: Date;
     let day: Date;
@@ -323,9 +327,22 @@
     <fieldset name="chart-component">
         <legend>Chart component:</legend>
         <Chart {...(params.options ?? {})}>
+            {#if mainProps.type === 'Area' }
+                <AreaSeries {...(mainProps.options ?? {})} data={mainProps.data}/>
+            {/if}
             {#if mainProps.type === 'Line' }
                 <LineSeries {...(mainProps.options ?? {})} data={mainProps.data}/>
             {/if}
+            {#if mainProps.type === 'Histogram'}
+                <HistogramSeries {...(mainProps.options ?? {})} data={mainProps.data}/>
+            {/if}
+            {#if mainProps.type === 'Bar'}
+                <BarSeries {...(mainProps.options ?? {})} data={mainProps.data}/>
+            {/if}
+            {#if mainProps.type === 'Candlestick'}
+                <CandlestickSeries {...(mainProps.options ?? {})} data={mainProps.data}/>
+            {/if}
+            <HistogramSeries {...(volumeProps.options ?? {})} data={volumeProps.data}/>
         </Chart>
     </fieldset>
 </form>

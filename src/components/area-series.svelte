@@ -2,7 +2,7 @@
 
 <script lang="ts">
     import type {
-        LineSeriesPartialOptions,
+        AreaSeriesPartialOptions,
         LineStyle,
         LineType,
         LineWidth,
@@ -13,38 +13,40 @@
     import {onDestroy} from 'svelte';
 
     /** Visibility of the label with the latest visible price on the price scale */
-    export let lastValueVisible: LineSeriesPartialOptions['lastValueVisible'] | undefined = undefined;
+    export let lastValueVisible: AreaSeriesPartialOptions['lastValueVisible'] | undefined = undefined;
     /** Title of the series. This label is placed with price axis label */
-    export let title: LineSeriesPartialOptions['title'] | undefined = undefined;
+    export let title: AreaSeriesPartialOptions['title'] | undefined = undefined;
     /** Target price scale to bind new series to */
-    export let priceScaleId: LineSeriesPartialOptions['priceScaleId'] | undefined = undefined;
+    export let priceScaleId: AreaSeriesPartialOptions['priceScaleId'] | undefined = undefined;
     /** Visibility of series. */
-    export let visible: LineSeriesPartialOptions['visible'] | undefined = undefined;
+    export let visible: AreaSeriesPartialOptions['visible'] | undefined = undefined;
     /** Visibility of the price line. Price line is a horizontal line indicating the last price of the series */
-    export let priceLineVisible: LineSeriesPartialOptions['priceLineVisible'] | undefined = undefined;
+    export let priceLineVisible: AreaSeriesPartialOptions['priceLineVisible'] | undefined = undefined;
     /** Enum of possible modes of priceLine source */
-    export let priceLineSource: LineSeriesPartialOptions['priceLineSource'] | undefined = undefined;
+    export let priceLineSource: AreaSeriesPartialOptions['priceLineSource'] | undefined = undefined;
     /** Width of the price line. Ignored if priceLineVisible is false */
-    export let priceLineWidth: LineSeriesPartialOptions['priceLineWidth'] | undefined = undefined;
+    export let priceLineWidth: AreaSeriesPartialOptions['priceLineWidth'] | undefined = undefined;
     /** Color of the price line. Ignored if priceLineVisible is false */
-    export let priceLineColor: LineSeriesPartialOptions['priceLineColor'] | undefined = undefined;
+    export let priceLineColor: AreaSeriesPartialOptions['priceLineColor'] | undefined = undefined;
     /** Price line style. Suitable for percentage and indexedTo100 scales */
-    export let priceLineStyle: LineSeriesPartialOptions['priceLineStyle'] | undefined = undefined;
+    export let priceLineStyle: AreaSeriesPartialOptions['priceLineStyle'] | undefined = undefined;
     /** Formatting settings associated with the series */
-    export let priceFormat: LineSeriesPartialOptions['priceFormat'] | undefined = undefined;
+    export let priceFormat: AreaSeriesPartialOptions['priceFormat'] | undefined = undefined;
     /** Visibility of base line. Suitable for percentage and indexedTo100 scales */
-    export let baseLineVisible: LineSeriesPartialOptions['baseLineVisible'] | undefined = undefined;
+    export let baseLineVisible: AreaSeriesPartialOptions['baseLineVisible'] | undefined = undefined;
     /** Color of the base line in IndexedTo100 mode */
-    export let baseLineColor: LineSeriesPartialOptions['baseLineColor'] | undefined = undefined;
+    export let baseLineColor: AreaSeriesPartialOptions['baseLineColor'] | undefined = undefined;
     /** Base line width. Suitable for percentage and indexedTo100 scales. Ignored if baseLineVisible is not set */
-    export let baseLineWidth: LineSeriesPartialOptions['baseLineWidth'] | undefined = undefined;
+    export let baseLineWidth: AreaSeriesPartialOptions['baseLineWidth'] | undefined = undefined;
     /** Base line style. Suitable for percentage and indexedTo100 scales. Ignored if baseLineVisible is not set */
-    export let baseLineStyle: LineSeriesPartialOptions['baseLineStyle'] | undefined = undefined;
+    export let baseLineStyle: AreaSeriesPartialOptions['baseLineStyle'] | undefined = undefined;
     /** function that overrides calculating of visible prices range */
-    export let autoscaleInfoProvider: LineSeriesPartialOptions['autoscaleInfoProvider'] | undefined = undefined;
-    export let scaleMargins: LineSeriesPartialOptions['scaleMargins'] | undefined = undefined;
+    export let autoscaleInfoProvider: AreaSeriesPartialOptions['autoscaleInfoProvider'] | undefined = undefined;
+    export let scaleMargins: AreaSeriesPartialOptions['scaleMargins'] | undefined = undefined;
 
-    export let color: string | undefined = undefined;
+    export let topColor: string | undefined = undefined;
+    export let bottomColor: string | undefined = undefined;
+    export let lineColor: string | undefined = undefined;
     export let lineStyle: LineStyle | undefined = undefined;
     export let lineWidth: LineWidth | undefined = undefined;
     export let lineType: LineType | undefined = undefined;
@@ -52,9 +54,10 @@
     export let crosshairMarkerRadius: number | undefined = undefined;
     export let crosshairMarkerBorderColor: string | undefined = undefined;
     export let crosshairMarkerBackgroundColor: string | undefined = undefined;
-    export let data: SeriesDataItemTypeMap['Line'][] = [];
 
-    let options: LineSeriesPartialOptions;
+    export let data: SeriesDataItemTypeMap['Area'][] = [];
+
+    let options: AreaSeriesPartialOptions;
     $: options = {
         lastValueVisible,
         title,
@@ -72,7 +75,9 @@
         baseLineStyle,
         autoscaleInfoProvider,
         scaleMargins,
-        color,
+        topColor,
+        bottomColor,
+        lineColor,
         lineStyle,
         lineWidth,
         lineType,
@@ -85,14 +90,14 @@
     const id = performance.now().toString();
     const subject = series(context(), {
         id,
-        type: 'Line',
+        type: 'Area',
         options,
         data,
     });
 
     $: subject.update({
         id,
-        type: 'Line',
+        type: 'Area',
         options,
         data,
     });
