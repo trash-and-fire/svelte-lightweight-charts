@@ -7,7 +7,8 @@ const prod = mode === 'production';
 
 module.exports = {
     entry: {
-        'build/bundle': ['./src/demo']
+        'build/bundle': ['./src/demo'],
+        'build/official-samples': ['./src/demo/official-samples'],
     },
     resolve: {
         alias: {
