@@ -12,7 +12,8 @@ module.exports = {
     },
     resolve: {
         alias: {
-            'lightweight-charts': 'lightweight-charts/dist/lightweight-charts.esm.development.js'
+            'lightweight-charts': 'lightweight-charts/dist/lightweight-charts.esm.development.js',
+            'svelte-lightweight-charts': './src/package/'
         },
         extensions: ['.mjs', '.js', '.ts', '.svelte'],
     },

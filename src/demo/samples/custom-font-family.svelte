@@ -11,8 +11,8 @@
 </Chart>
 
 <script>
-    import Chart from '../../components/chart.svelte';
-    import AreaSeries from '../../components/area-series.svelte';
+    import Chart from '../../package/components/chart.svelte';
+    import AreaSeries from '../../package/components/area-series.svelte';
     import Switcher from '../components/switcher.svelte';
 
     const AVAILABLE_FONTS = ['Courier New', 'Arial', 'Times New Roman']

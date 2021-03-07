@@ -6,8 +6,8 @@
 
 <script>
     import Switcher from '../components/switcher.svelte';
-    import Chart from '../../components/chart.svelte';
-    import LineSeries from '../../components/line-series.svelte';
+    import Chart from '../../package/components/chart.svelte';
+    import LineSeries from '../../package/components/line-series.svelte';
 
     const AVAILABLE_LOCALES = ['es-ES', 'en-US', 'ja-JP'];
 

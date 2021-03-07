@@ -1,7 +1,7 @@
 <svelte:options immutable={true}/>
 
 <script context="module" lang="ts">
-    import {chart} from '..';
+    import {chart} from '../index';
 </script>
 <script lang="ts">
     import type {ChartOptions, IChartApi, DeepPartial, MouseEventParams} from 'lightweight-charts';
