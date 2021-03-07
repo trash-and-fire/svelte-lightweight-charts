@@ -1,3 +1,4 @@
+<h1>Bar Chart</h1>
 <Chart {...options}>
     <BarSeries thinBars={true} downColor="#000" upColor="#000" data={data}/>
 </Chart>

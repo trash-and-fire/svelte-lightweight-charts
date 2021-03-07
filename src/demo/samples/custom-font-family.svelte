@@ -1,3 +1,4 @@
+<h1>Custom Font Family</h1>
 <Chart {...options} layout={layout}>
     <AreaSeries
         data={data}

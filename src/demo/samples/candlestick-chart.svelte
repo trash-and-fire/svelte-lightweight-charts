@@ -1,3 +1,4 @@
+<h1>Candlestick Chart</h1>
 <Chart {...options}>
     <CandlestickSeries
         data={data}
