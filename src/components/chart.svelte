@@ -4,8 +4,16 @@
     import {chart} from '..';
 </script>
 <script lang="ts">
-    import type {ChartOptions, IChartApi, DeepPartial} from 'lightweight-charts';
+    import type {ChartOptions, IChartApi, DeepPartial, MouseEventParams} from 'lightweight-charts';
+    import {createEventDispatcher} from 'svelte';
     import {context} from './utils';
+
+    interface Events {
+        crosshairMove: MouseEventParams,
+        click: MouseEventParams,
+    }
+
+    const dispatch = createEventDispatcher<Events>();
 
     /** Height of the chart */
     export let width: DeepPartial<DeepPartial<ChartOptions['width']>> = 0;
@@ -60,10 +68,20 @@
     function handleReference(ref: IChartApi | null): void {
         reference = ref;
     }
+
+    function handleCrosshairMove(params: MouseEventParams): void {
+        dispatch('crosshairMove', params);
+    }
+
+    function handleClick(params: MouseEventParams): void {
+        dispatch('click', params);
+    }
 </script>
 
 <div use:chart={{
     options,
+    onCrosshairMove: handleCrosshairMove,
+    onClick: handleClick,
     reference: handleReference,
 }}>
     {#if reference !== null}<slot/>{/if}

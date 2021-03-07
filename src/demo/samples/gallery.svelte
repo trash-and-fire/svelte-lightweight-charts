@@ -5,6 +5,8 @@
     import CustomPriceFormatter from './custom-price-formatter.svelte';
     import CustomLocale from './custom-locale.svelte';
     import CustomThemes from './custom-themes.svelte';
+    import CustomWatermark from './custom-watermark.svelte';
+    import Legend from './legend.svelte';
 
     const components = [
         BarChart,
@@ -13,6 +15,8 @@
         CustomPriceFormatter,
         CustomLocale,
         CustomThemes,
+        CustomWatermark,
+        Legend,
     ];
 </script>
 
