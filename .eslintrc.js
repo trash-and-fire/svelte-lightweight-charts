@@ -70,10 +70,14 @@ module.exports = {
                 "eslint:recommended",
                 "plugin:node/recommended"
             ],
-            files: ['.eslintrc.js', 'webpack.config.js'],
+            files: ['.eslintrc.js', 'webpack.config.js', 'gulpfile.js'],
+            parserOptions: {
+                "ecmaVersion": 2017
+            },
             env: {
                 node: true,
-                browser: false
+                browser: false,
+                es6: true
             },
             rules: {
                 "node/no-unpublished-require": "off",

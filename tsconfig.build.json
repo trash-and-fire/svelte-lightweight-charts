@@ -1,0 +1,18 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "target": "es6",
+    "rootDir": "./src/package",
+    "sourceMap": false,
+    "declaration": true,
+    "noEmitOnError": true,
+    "outDir": "./src/package/dist"
+  },
+  "include": [
+    "src/package/**/*"
+  ],
+  "exclude": [
+    "node_modules/**/*",
+    "src/package/dist/**/*"
+  ]
+}

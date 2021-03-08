@@ -14,6 +14,7 @@
     "husky": "4.3.8",
     "lint-staged": "10.5.4",
     "mini-css-extract-plugin": "1.3.4",
+    "plugin-error": "1.0.1",
     "svelte": "3.31.2",
     "svelte-check": "1.0.46",
     "svelte-loader": "3.0.0",
@@ -27,11 +28,12 @@
     "webpack-dev-server": "3.11.2"
   },
   "scripts": {
-    "build": "cross-env NODE_ENV=production webpack",
+    "build": "cross-env NODE_ENV=production tsc --project tsconfig.build.json && gulp build",
     "start": "webpack serve --content-base public",
     "validate": "svelte-check"
   },
   "dependencies": {
+    "gulp-typescript": "6.0.0-alpha.1",
     "lightweight-charts": "3.3.0"
   },
   "husky": {
@@ -41,5 +43,8 @@
   },
   "lint-staged": {
     "*.js|*.ts|*.svelte": "eslint --cache --fix"
+  },
+  "engines": {
+    "node": ">=10.3.0"
   }
 }
