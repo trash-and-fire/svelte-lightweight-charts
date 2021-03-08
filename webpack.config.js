@@ -1,4 +1,5 @@
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const path = require('path');
 const sveltePreprocess = require('svelte-preprocess');
 
@@ -13,7 +14,7 @@ module.exports = {
     resolve: {
         alias: {
             'lightweight-charts': 'lightweight-charts/dist/lightweight-charts.esm.development.js',
-            'svelte-lightweight-charts': path.resolve(__dirname,'./src/package/'),
+            'svelte-lightweight-charts': path.resolve(__dirname,'./src/package/dist'),
         },
         extensions: ['.mjs', '.js', '.ts', '.svelte'],
     },
@@ -27,6 +28,9 @@ module.exports = {
             {
                 test: /\.ts$/,
                 loader: 'ts-loader',
+                options: {
+                    transpileOnly: true,
+                },
                 exclude: /node_modules/
             },
             {
@@ -63,7 +67,14 @@ module.exports = {
     plugins: [
         new MiniCssExtractPlugin({
             filename: '[name].css'
-        })
+        }),
+        new ForkTsCheckerWebpackPlugin({
+            typescript: {
+                configOverwrite: {
+                    skipLibCheck: false,
+                }
+            }
+        }),
     ],
     devtool: prod ? false : 'source-map',
     devServer: {

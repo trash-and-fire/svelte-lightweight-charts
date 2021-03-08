@@ -14,9 +14,7 @@
      */
     "sourceMap": true,
     /** Requests the runtime types from the svelte modules by default. Needed for TS files or else you get errors. */
-    "types": [
-      "svelte"
-    ],
+    "types": [],
     "lib": [
       "DOM",
       "ES2015",
@@ -34,7 +32,11 @@
     "noUnusedLocals": true,
     "resolveJsonModule": true,
     "importHelpers": true,
-    "rootDir": "./src"
+    "rootDir": "./src",
+    "baseUrl": "./",
+    "paths": {
+      "svelte-lightweight-charts/*": ["./src/package/dist/*"],
+    }
   },
   "include": [
     "src/**/*"

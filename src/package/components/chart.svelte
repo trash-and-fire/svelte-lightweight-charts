@@ -1,46 +1,40 @@
 <svelte:options immutable={true}/>
 
-<script context="module" lang="ts">
-    import {chart} from '../index';
-</script>
 <script lang="ts">
     import type {ChartOptions, IChartApi, DeepPartial, MouseEventParams} from 'lightweight-charts';
+    import type {$$EVENTS, $$PROPS} from './chart.interface';
     import {createEventDispatcher} from 'svelte';
     import {context} from './utils';
+    import {chart} from '../index';
 
-    interface Events {
-        crosshairMove: MouseEventParams,
-        click: MouseEventParams,
-    }
-
-    const dispatch = createEventDispatcher<Events>();
+    const dispatch = createEventDispatcher<$$EVENTS>();
 
     /** Height of the chart */
-    export let width: DeepPartial<DeepPartial<ChartOptions['width']>> = 0;
+    export let width: $$PROPS['width'] = 0;
     /** Width of the chart */
-    export let height: DeepPartial<ChartOptions['height']> = 0;
+    export let height: $$PROPS['height'] = 0;
     /** Structure with watermark options */
-    export let watermark: DeepPartial<ChartOptions['watermark']> | undefined = undefined;
+    export let watermark: $$PROPS['watermark'] = undefined;
     /** Structure with layout options */
-    export let layout: DeepPartial<ChartOptions['layout']> | undefined = undefined;
+    export let layout: $$PROPS['layout'] = undefined;
     /** Structure with price scale option for left price scale */
-    export let leftPriceScale: DeepPartial<ChartOptions['leftPriceScale']> | undefined = undefined;
+    export let leftPriceScale: $$PROPS['leftPriceScale'] = undefined;
     /** Structure with price scale option for right price scale */
-    export let rightPriceScale: DeepPartial<ChartOptions['rightPriceScale']> | undefined = undefined;
+    export let rightPriceScale: $$PROPS['rightPriceScale'] = undefined;
     /** Structure describing default price scale options for overlays */
-    export let overlayPriceScales: DeepPartial<ChartOptions['overlayPriceScales']> | undefined = undefined;
+    export let overlayPriceScales: $$PROPS['overlayPriceScales'] = undefined;
     /** Structure with time scale options */
-    export let timeScale: DeepPartial<ChartOptions['timeScale']> | undefined = undefined;
+    export let timeScale: $$PROPS['timeScale'] = undefined;
     /** Structure with crosshair options */
-    export let crosshair: DeepPartial<ChartOptions['crosshair']> | undefined = undefined;
+    export let crosshair: $$PROPS['crosshair'] = undefined;
     /** Structure with grid options */
-    export let grid: DeepPartial<ChartOptions['grid']> | undefined = undefined;
+    export let grid: $$PROPS['grid'] = undefined;
     /** Structure with localization options */
-    export let localization: DeepPartial<ChartOptions['localization']> | undefined = undefined;
+    export let localization: $$PROPS['localization'] = undefined;
     /** Structure that describes scrolling behavior or boolean flag that disables/enables all kinds of scrolls */
-    export let handleScroll: DeepPartial<ChartOptions['handleScroll']> | undefined = undefined;
+    export let handleScroll: $$PROPS['handleScroll'] = undefined;
     /** Structure that describes scaling behavior or boolean flag that disables/enables all kinds of scales */
-    export let handleScale: DeepPartial<ChartOptions['handleScale']> | undefined = undefined;
+    export let handleScale: $$PROPS['handleScale'] = undefined;
 
     let options: DeepPartial<ChartOptions> | undefined = undefined;
     $: options = {
