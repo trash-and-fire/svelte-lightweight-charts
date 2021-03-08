@@ -13,8 +13,8 @@
 
 <script>
     import {CrosshairMode} from 'lightweight-charts';
-    import Chart from '../../package/components/chart.svelte';
-    import CandlestickSeries from '../../package/components/candlestick-series.svelte';
+    import Chart from 'svelte-lightweight-charts/components/chart.svelte';
+    import CandlestickSeries from 'svelte-lightweight-charts/components/candlestick-series.svelte';
 
     const options = {
         width: 600,

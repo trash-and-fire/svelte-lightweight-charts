@@ -10,8 +10,8 @@
 </Chart>
 
 <script>
-    import Chart from '../../package/components/chart.svelte';
-    import AreaSeries from '../../package/components/area-series.svelte';
+    import Chart from 'svelte-lightweight-charts/components/chart.svelte';
+    import AreaSeries from 'svelte-lightweight-charts/components/area-series.svelte';
 
     const watermark = {
         visible: true,

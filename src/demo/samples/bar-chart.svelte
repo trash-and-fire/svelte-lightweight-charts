@@ -5,8 +5,8 @@
 
 <script>
     import {CrosshairMode} from 'lightweight-charts';
-    import Chart from '../../package/components/chart.svelte';
-    import BarSeries from '../../package/components/bar-series.svelte';
+    import Chart from 'svelte-lightweight-charts/components/chart.svelte';
+    import BarSeries from 'svelte-lightweight-charts/components/bar-series.svelte';
 
     const options = {
         width: 600,

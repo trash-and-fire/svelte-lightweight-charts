@@ -13,7 +13,7 @@ module.exports = {
     resolve: {
         alias: {
             'lightweight-charts': 'lightweight-charts/dist/lightweight-charts.esm.development.js',
-            'svelte-lightweight-charts': './src/package/'
+            'svelte-lightweight-charts': path.resolve(__dirname,'./src/package/'),
         },
         extensions: ['.mjs', '.js', '.ts', '.svelte'],
     },
