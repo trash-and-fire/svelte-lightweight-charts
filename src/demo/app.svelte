@@ -20,12 +20,12 @@
     import {BAR_DATA, HISTOGRAM_DATA, LINE_DATA} from '../package/data-series';
     import {onMount} from 'svelte';
 
-    import Chart from '../package/components/chart.svelte';
-    import LineSeries from '../package/components/line-series.svelte';
-    import AreaSeries from '../package/components/area-series.svelte';
-    import HistogramSeries from '../package/components/histogram-series.svelte';
-    import BarSeries from '../package/components/bar-series.svelte';
-    import CandlestickSeries from '../package/components/candlestick-series.svelte';
+    import Chart from 'svelte-lightweight-charts/components/chart.svelte';
+    import LineSeries from 'svelte-lightweight-charts/components/line-series.svelte';
+    import AreaSeries from 'svelte-lightweight-charts/components/area-series.svelte';
+    import HistogramSeries from 'svelte-lightweight-charts/components/histogram-series.svelte';
+    import BarSeries from 'svelte-lightweight-charts/components/bar-series.svelte';
+    import CandlestickSeries from 'svelte-lightweight-charts/components/candlestick-series.svelte';
 
     type EverySeriesApi =
         | ISeriesApi<'Area'>
