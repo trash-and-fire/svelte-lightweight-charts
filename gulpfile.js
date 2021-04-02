@@ -52,7 +52,7 @@ async function applyPreprocess(content, file) {
 }
 
 function svelte() {
-    return src(['./src/package/**/*.svelte'])
+    return src(['./src/package/[!dist]**/*.svelte'])
         .pipe(transform('utf8', applyPreprocess))
         .pipe(dest('./src/package/dist'));
 }
