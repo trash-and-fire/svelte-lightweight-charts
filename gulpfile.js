@@ -3,6 +3,8 @@ const {src, dest, parallel} = require('gulp');
 const rename = require('gulp-rename');
 const transform = require('gulp-transform');
 const {preprocess} = require('svelte/compiler');
+const camelize = require('lodash/camelCase');
+const upper = require('lodash/upperFirst')
 
 // const tsProject = typescript.createProject('tsconfig.build.json');
 
@@ -15,7 +17,8 @@ const {preprocess} = require('svelte/compiler');
 function convertToTypings(content, file) {
     const filename = file.basename[0].toUpperCase() + file.basename.slice(1);
     const header = `import { SvelteComponentTyped } from 'svelte';`;
-    const trailer = `export default class ${filename.replace(/\.interface.ts$/, '')}__SvelteComponent extends SvelteComponentTyped<$$PROPS, $$EVENTS> {}`;
+    const name = upper(camelize(filename.replace(/\.interface.ts$/, '')));
+    const trailer = `export default class ${name} extends SvelteComponentTyped<$$PROPS, $$EVENTS> {}`;
 
     return [header, content, trailer].join('\n');
 }
