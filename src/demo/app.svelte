@@ -73,6 +73,10 @@
         updateVolumeData(volumeComponent, day);
     }
 
+    let action = true;
+    let components = true;
+
+    let showVolume = true;
     let intraday = false;
     let ticker: number | null = null;
 
@@ -80,11 +84,11 @@
         setupTicker(!intraday);
     }
 
-    let params: ChartActionParams<[SeriesActionParams, HistogramSeriesParams]>;
+    let params: ChartActionParams<[SeriesActionParams, HistogramSeriesParams] | [SeriesActionParams]>;
 
     $: params = {
         options,
-        series: [mainProps, volumeProps],
+        series: showVolume ? [mainProps, volumeProps] : [mainProps],
         reference: handleReference,
         onClick: handleClick,
         onCrosshairMove: handleCrosshairMove,
@@ -197,7 +201,7 @@
                 return {
                     id: 'main',
                     type,
-                    data: LINE_DATA,
+                    data: [...LINE_DATA],
                     reference: (ref: ISeriesApi<'Area'> | null) => {
                         mainSeries = ref;
                     }
@@ -206,7 +210,7 @@
                 return {
                     id: 'main',
                     type,
-                    data: LINE_DATA,
+                    data: [...LINE_DATA],
                     reference: (ref: ISeriesApi<'Line'> | null) => {
                         mainSeries = ref;
                     }
@@ -215,7 +219,7 @@
                 return {
                     id: 'main',
                     type,
-                    data: BAR_DATA,
+                    data: [...BAR_DATA],
                     reference: (ref: ISeriesApi<'Bar'> | null) => {
                         mainSeries = ref;
                     },
@@ -224,7 +228,7 @@
                 return {
                     id: 'main',
                     type,
-                    data: BAR_DATA,
+                    data: [...BAR_DATA],
                     reference: (ref: ISeriesApi<'Candlestick'> | null) => {
                         mainSeries = ref;
                     },
@@ -233,7 +237,7 @@
                 return {
                     id: 'main',
                     type,
-                    data: HISTOGRAM_DATA,
+                    data: [...HISTOGRAM_DATA],
                     reference: (ref: ISeriesApi<'Histogram'> | null) => {
                         mainSeries = ref;
                     },
@@ -258,7 +262,7 @@
                     bottom: 0,
                 },
             },
-            data: HISTOGRAM_DATA,
+            data: [...HISTOGRAM_DATA],
             reference: (ref: ISeriesApi<'Histogram'> | null) => volume = ref,
         }
     }
@@ -316,7 +320,7 @@
 <form>
     <fieldset name="navigation">
         <legend>Navigation:</legend>
-        <a href="/official-samples.html">Official samples gallery</a>
+        <a href="official-samples.html">Official samples gallery</a>
     </fieldset>
     <fieldset name="size">
         <legend>Size options:</legend>
@@ -339,63 +343,83 @@
             </label>
         {/each}
     </fieldset>
+    <fieldset name="views">
+        <legend>Views:</legend>
+        <label>
+            <input type="checkbox" name="action" bind:checked={action}> Action
+        </label>
+        <label>
+            <input type="checkbox" name="action" bind:checked={components}> Component
+        </label>
+    </fieldset>
     <fieldset name="controller">
         <legend>Controller options:</legend>
+        <label>
+            <input type="checkbox" name="show-volume" id="show-volume" bind:checked={showVolume}> Show Volume
+        </label>
         <label>
             <input type="checkbox" name="intraday" id="intraday" bind:checked={intraday}> Intraday
         </label>
         <button on:click={handleTicker} type="button">{ ticker ? 'Stop' : 'Start' }</button>
         <button on:click={handleFitContent} type="button">Fit content</button>
     </fieldset>
-    <fieldset name="chart-action">
-        <legend>Chart action:</legend>
-        <section use:chart={params}></section>
-    </fieldset>
-    <fieldset name="chart-component">
-        <legend>Chart component:</legend>
-        <Chart {...(params.options ?? {})}>
-            {#if mainProps.type === 'Area' }
-                <AreaSeries
-                    {...(mainProps.options ?? {})}
-                    data={mainProps.data}
-                    ref={handleMainComponentReference}
-                />
-            {/if}
-            {#if mainProps.type === 'Line' }
-                <LineSeries
-                    {...(mainProps.options ?? {})}
-                    data={mainProps.data}
-                    ref={handleMainComponentReference}
-                />
-            {/if}
-            {#if mainProps.type === 'Histogram'}
-                <HistogramSeries
-                    {...(mainProps.options ?? {})}
-                    data={mainProps.data}
-                    ref={handleMainComponentReference}
-                />
-            {/if}
-            {#if mainProps.type === 'Bar'}
-                <BarSeries
-                    {...(mainProps.options ?? {})}
-                    data={mainProps.data}
-                    ref={handleMainComponentReference}
-                />
-            {/if}
-            {#if mainProps.type === 'Candlestick'}
-                <CandlestickSeries
-                    {...(mainProps.options ?? {})}
-                    data={mainProps.data}
-                    ref={handleMainComponentReference}
-                />
-            {/if}
-            <HistogramSeries
-                {...(volumeProps.options ?? {})}
-                data={volumeProps.data}
-                ref={handleVolumeComponentReference}
-            />
-        </Chart>
-    </fieldset>
+    {#if action}
+        <fieldset name="chart-action">
+            <legend>Chart action:</legend>
+            <section use:chart={params}></section>
+        </fieldset>
+    {/if}
+    {#if components}
+        <fieldset name="chart-component">
+            <legend>Chart component:</legend>
+            <Chart {...(params.options ?? {})}>
+                {#if mainProps.type === 'Area' }
+                    <AreaSeries
+                        {...(mainProps.options ?? {})}
+                        data={mainProps.data}
+                        ref={handleMainComponentReference}
+                    />
+                {/if}
+                {#if mainProps.type === 'Line' }
+                    <LineSeries
+                        {...(mainProps.options ?? {})}
+                        data={mainProps.data}
+                        ref={handleMainComponentReference}
+                    />
+                {/if}
+                {#if mainProps.type === 'Histogram'}
+                    <HistogramSeries
+                        {...(mainProps.options ?? {})}
+                        data={mainProps.data}
+                        ref={handleMainComponentReference}
+                    />
+                {/if}
+                {#if mainProps.type === 'Bar'}
+                    <BarSeries
+                        {...(mainProps.options ?? {})}
+                        data={mainProps.data}
+                        ref={handleMainComponentReference}
+                    />
+                {/if}
+                {#if mainProps.type === 'Candlestick'}
+                    <CandlestickSeries
+                        {...(mainProps.options ?? {})}
+                        data={mainProps.data}
+                        ref={handleMainComponentReference}
+                    />
+                {/if}
+                {#if showVolume}
+                    {#key volumeProps.id}
+                        <HistogramSeries
+                            {...(volumeProps.options ?? {})}
+                            data={volumeProps.data}
+                            ref={handleVolumeComponentReference}
+                        />
+                    {/key}
+                {/if}
+            </Chart>
+        </fieldset>
+    {/if}
 </form>
 
 
