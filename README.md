@@ -2,16 +2,18 @@ This package is a Svelte wrapper for [lightweight-charts](https://github.com/tra
 
 The package is under development.
 
-#Installing
+# Installing
+
 ```bash
 npm install lightweight-charts svelte-lightweight-charts
 ```
 
-#Usage
+# Usage
+
 There are two ways to use this package:
 - As set of components
 
-```js
+```sveltehtml
 <script>
     import Chart from "svelte-lightweight-charts/components/chart.svelte";
     import LineSeries from "svelte-lightweight-charts/components/line-series.svelte";
@@ -34,7 +36,7 @@ There are two ways to use this package:
 ```
 
 - As action
-```js
+```sveltehtml
 <script>
     import chart from "svelte-lightweight-charts";
     const data = [
