@@ -13,19 +13,19 @@
     import type {
         HistogramSeriesParams,
         SeriesActionParams
-    } from '../types';
+    } from '../package/types';
     import {LineStyle} from 'lightweight-charts';
-    import type {ChartActionParams} from '../index';
-    import {chart} from '../index';
-    import {BAR_DATA, HISTOGRAM_DATA, LINE_DATA} from '../data-series';
+    import type {ChartActionParams} from '../package';
+    import {chart} from '../package';
+    import {BAR_DATA, HISTOGRAM_DATA, LINE_DATA} from '../package/data-series';
     import {onMount} from 'svelte';
 
-    import Chart from '../components/chart.svelte';
-    import LineSeries from '../components/line-series.svelte';
-    import AreaSeries from '../components/area-series.svelte';
-    import HistogramSeries from '../components/histogram-series.svelte';
-    import BarSeries from '../components/bar-series.svelte';
-    import CandlestickSeries from '../components/candlestick-series.svelte';
+    import Chart from 'svelte-lightweight-charts/components/chart.svelte';
+    import LineSeries from 'svelte-lightweight-charts/components/line-series.svelte';
+    import AreaSeries from 'svelte-lightweight-charts/components/area-series.svelte';
+    import HistogramSeries from 'svelte-lightweight-charts/components/histogram-series.svelte';
+    import BarSeries from 'svelte-lightweight-charts/components/bar-series.svelte';
+    import CandlestickSeries from 'svelte-lightweight-charts/components/candlestick-series.svelte';
 
     type EverySeriesApi =
         | ISeriesApi<'Area'>

@@ -1,78 +1,74 @@
 <svelte:options immutable={true}/>
 
 <script lang="ts">
-    import type {
-        CandlestickSeriesPartialOptions,
-        ISeriesApi,
-        SeriesDataItemTypeMap,
-    } from 'lightweight-charts';
-    import type {Reference} from '../types';
+    import type {CandlestickSeriesPartialOptions} from 'lightweight-charts';
+    import type {$$PROPS} from './candlestick-series.interface';
     import {series} from '../series';
     import {context} from './utils';
     import {onDestroy} from 'svelte';
 
     /** Visibility of the label with the latest visible price on the price scale */
-    export let lastValueVisible: CandlestickSeriesPartialOptions['lastValueVisible'] | undefined = undefined;
+    export let lastValueVisible: $$PROPS['lastValueVisible'] = undefined;
     /** Title of the series. This label is placed with price axis label */
-    export let title: CandlestickSeriesPartialOptions['title'] | undefined = undefined;
+    export let title: $$PROPS['title'] = undefined;
     /** Target price scale to bind new series to */
-    export let priceScaleId: CandlestickSeriesPartialOptions['priceScaleId'] | undefined = undefined;
+    export let priceScaleId: $$PROPS['priceScaleId'] = undefined;
     /** Visibility of series. */
-    export let visible: CandlestickSeriesPartialOptions['visible'] | undefined = undefined;
+    export let visible: $$PROPS['visible'] = undefined;
     /** Visibility of the price line. Price line is a horizontal line indicating the last price of the series */
-    export let priceLineVisible: CandlestickSeriesPartialOptions['priceLineVisible'] | undefined = undefined;
+    export let priceLineVisible: $$PROPS['priceLineVisible'] = undefined;
     /** Enum of possible modes of priceLine source */
-    export let priceLineSource: CandlestickSeriesPartialOptions['priceLineSource'] | undefined = undefined;
+    export let priceLineSource: $$PROPS['priceLineSource'] = undefined;
     /** Width of the price line. Ignored if priceLineVisible is false */
-    export let priceLineWidth: CandlestickSeriesPartialOptions['priceLineWidth'] | undefined = undefined;
+    export let priceLineWidth: $$PROPS['priceLineWidth'] = undefined;
     /** Color of the price line. Ignored if priceLineVisible is false */
-    export let priceLineColor: CandlestickSeriesPartialOptions['priceLineColor'] | undefined = undefined;
+    export let priceLineColor: $$PROPS['priceLineColor'] = undefined;
     /** Price line style. Suitable for percentage and indexedTo100 scales */
-    export let priceLineStyle: CandlestickSeriesPartialOptions['priceLineStyle'] | undefined = undefined;
+    export let priceLineStyle: $$PROPS['priceLineStyle'] = undefined;
     /** Formatting settings associated with the series */
-    export let priceFormat: CandlestickSeriesPartialOptions['priceFormat'] | undefined = undefined;
+    export let priceFormat: $$PROPS['priceFormat'] = undefined;
     /** Visibility of base line. Suitable for percentage and indexedTo100 scales */
-    export let baseLineVisible: CandlestickSeriesPartialOptions['baseLineVisible'] | undefined = undefined;
+    export let baseLineVisible: $$PROPS['baseLineVisible'] = undefined;
     /** Color of the base line in IndexedTo100 mode */
-    export let baseLineColor: CandlestickSeriesPartialOptions['baseLineColor'] | undefined = undefined;
+    export let baseLineColor: $$PROPS['baseLineColor'] = undefined;
     /** Base line width. Suitable for percentage and indexedTo100 scales. Ignored if baseLineVisible is not set */
-    export let baseLineWidth: CandlestickSeriesPartialOptions['baseLineWidth'] | undefined = undefined;
+    export let baseLineWidth: $$PROPS['baseLineWidth'] = undefined;
     /** Base line style. Suitable for percentage and indexedTo100 scales. Ignored if baseLineVisible is not set */
-    export let baseLineStyle: CandlestickSeriesPartialOptions['baseLineStyle'] | undefined = undefined;
+    export let baseLineStyle: $$PROPS['baseLineStyle'] = undefined;
     /** function that overrides calculating of visible prices range */
-    export let autoscaleInfoProvider: CandlestickSeriesPartialOptions['autoscaleInfoProvider'] | undefined = undefined;
-    export let scaleMargins: CandlestickSeriesPartialOptions['scaleMargins'] | undefined = undefined;
+    export let autoscaleInfoProvider: $$PROPS['autoscaleInfoProvider'] = undefined;
+    export let scaleMargins: $$PROPS['scaleMargins'] = undefined;
 
     /** Color of rising candlesticks */
-    export let upColor: string | undefined = undefined;
+    export let upColor: $$PROPS['upColor'] = undefined;
     /** Color of falling candlesticks */
-    export let downColor: string | undefined = undefined;
+    export let downColor: $$PROPS['downColor'] = undefined;
     /** Flag to draw/hide candlestick wicks */
-    export let wickVisible: boolean | undefined = undefined;
+    export let wickVisible: $$PROPS['wickVisible'] = undefined;
     /** Flag to draw/hide candlestick borders around bodies */
-    export let borderVisible: boolean | undefined = undefined;
+    export let borderVisible: $$PROPS['borderVisible'] = undefined;
     /**
      * Color of borders around candles' bodies. Ignored if borderVisible == false
      * If specified, it overrides both borderUpColor and borderDownColor options
      */
-    export let borderColor: string | undefined = undefined;
+    export let borderColor: $$PROPS['borderColor'] = undefined;
     /** Color of the border of rising candlesticks. Ignored if borderVisible == false or borderColor is specified */
-    export let borderUpColor: string | undefined = undefined;
+    export let borderUpColor: $$PROPS['borderUpColor'] = undefined;
     /** Color of the border of rising candlesticks. Ignored if borderVisible == false or borderColor is specified */
-    export let borderDownColor: string | undefined = undefined;
+    export let borderDownColor: $$PROPS['borderDownColor'] = undefined;
     /**
      * Color of candlestick wicks. Ignored if wickVisible == false
      * If specified, it overrides both wickUpColor and wickDownColor options
      */
-    export let wickColor: string | undefined = undefined;
+    export let wickColor: $$PROPS['wickColor'] = undefined;
     /** Color of rising candlestick wicks. Ignored if wickVisible == false or wickColor is specified */
-    export let wickUpColor: string | undefined = undefined;
+    export let wickUpColor: $$PROPS['wickUpColor'] = undefined;
     /** Color of falling candlestick wicks. Ignored if wickVisible == false or wickColor is specified */
-    export let wickDownColor: string | undefined = undefined;
+    export let wickDownColor: $$PROPS['wickDownColor'] = undefined;
 
-    export let ref: Reference<ISeriesApi<'Candlestick'>> | undefined = undefined;
+    export let ref: $$PROPS['ref'] = undefined;
 
-    export let data: SeriesDataItemTypeMap['Candlestick'][] = [];
+    export let data: $$PROPS['data'] = [];
 
     let options: CandlestickSeriesPartialOptions;
     $: options = {

@@ -6,8 +6,8 @@
 
 <script>
     import Switcher from '../components/switcher.svelte';
-    import Chart from '../../components/chart.svelte';
-    import AreaSeries from '../../components/area-series.svelte';
+    import Chart from 'svelte-lightweight-charts/components/chart.svelte';
+    import AreaSeries from 'svelte-lightweight-charts/components/area-series.svelte';
 
     const THEMES = {
         Dark: {

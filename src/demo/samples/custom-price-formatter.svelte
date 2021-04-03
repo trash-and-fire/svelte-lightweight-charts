@@ -12,8 +12,8 @@
 
 <script>
     import {CrosshairMode} from 'lightweight-charts';
-    import Chart from '../../components/chart.svelte';
-    import AreaSeries from '../../components/area-series.svelte';
+    import Chart from 'svelte-lightweight-charts/components/chart.svelte';
+    import AreaSeries from 'svelte-lightweight-charts/components/area-series.svelte';
     import Switcher from '../components/switcher.svelte';
 
     // TODO: solve this WTF with linter
