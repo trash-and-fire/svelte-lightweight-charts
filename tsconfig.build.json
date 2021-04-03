@@ -6,13 +6,13 @@
     "sourceMap": false,
     "declaration": true,
     "noEmitOnError": true,
-    "outDir": "./src/package/dist"
+    "outDir": "./dist"
   },
   "include": [
     "src/package/**/*"
   ],
   "exclude": [
     "node_modules/**/*",
-    "src/package/dist/**/*"
+    "dist/**/*"
   ]
 }

@@ -1,10 +1,11 @@
-const {src, dest, parallel} = require('gulp');
+const {src, dest, parallel, series} = require('gulp');
 // const typescript = require('gulp-typescript');
 const rename = require('gulp-rename');
 const transform = require('gulp-transform');
 const {preprocess} = require('svelte/compiler');
 const camelize = require('lodash/camelCase');
 const upper = require('lodash/upperFirst')
+const remove = require('gulp-clean');
 
 // const tsProject = typescript.createProject('tsconfig.build.json');
 
@@ -30,7 +31,7 @@ function typings() {
             path.basename = path.basename.replace(/\.interface$/, '.svelte');
             path.extname = '.d.ts';
         }))
-        .pipe(dest('./src/package/dist'));
+        .pipe(dest('./dist'));
 }
 
 async function applyPreprocess(content, file) {
@@ -52,12 +53,17 @@ async function applyPreprocess(content, file) {
 }
 
 function svelte() {
-    return src(['./src/package/[!dist]**/*.svelte'])
+    return src(['./src/package/**/*.svelte'])
         .pipe(transform('utf8', applyPreprocess))
-        .pipe(dest('./src/package/dist'));
+        .pipe(dest('./dist'));
 }
 
-const build = parallel(svelte, typings);
+function clean() {
+    return src(['./dist/**/*.interface.js', './dist/**/*.interface.d.ts'], { read: false })
+        .pipe(remove());
+}
+
+const build = series(parallel(svelte, typings), clean);
 
 module.exports = {
     build: build,
