@@ -316,7 +316,7 @@
 <form>
     <fieldset name="navigation">
         <legend>Navigation:</legend>
-        <a href="/official-samples.html">Official samples gallery</a>
+        <a href="official-samples.html">Official samples gallery</a>
     </fieldset>
     <fieldset name="size">
         <legend>Size options:</legend>
