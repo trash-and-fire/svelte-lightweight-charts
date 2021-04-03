@@ -60,7 +60,7 @@
   },
   "scripts": {
     "prepublishOnly": "npm run build-package",
-    "build-package": "tsc --project tsconfig.build.json && gulp build",
+    "build-package": "gulp build",
     "build-demo": "npm run build-package && cross-env NODE_ENV=production webpack --bail",
     "start": "npm run build-package && webpack serve --content-base src/demo/public",
     "validate": "svelte-check"

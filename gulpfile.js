@@ -1,19 +1,11 @@
 const {src, dest, parallel, series} = require('gulp');
-// const typescript = require('gulp-typescript');
 const rename = require('gulp-rename');
 const transform = require('gulp-transform');
 const {preprocess} = require('svelte/compiler');
 const camelize = require('lodash/camelCase');
 const upper = require('lodash/upperFirst')
 const remove = require('gulp-clean');
-
-// const tsProject = typescript.createProject('tsconfig.build.json');
-
-// function scripts() {
-//     return src(['./src/package/**/*.ts'])
-//         .pipe(tsProject())
-//         .pipe(dest('./src/package/dist'));
-// }
+const {exec} = require('child_process');
 
 function convertToTypings(content, file) {
     const filename = file.basename[0].toUpperCase() + file.basename.slice(1);
@@ -78,9 +70,16 @@ function manifest() {
         .pipe(dest('./dist'));
 }
 
-const build = series(wipe, parallel(manifest, svelte, typings), clean);
+function typescript(callback) {
+    exec('tsc --project tsconfig.build.json', (err, stdout, stderr) => {
+        console.log(stdout);
+        console.log(stderr);
+        callback(err);
+    });
+}
+
+const build = series(wipe, typescript, parallel(manifest, svelte, typings), clean);
 
 module.exports = {
     build,
-    wipe,
 };
