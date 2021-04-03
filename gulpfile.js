@@ -65,6 +65,10 @@ function manifest() {
         .pipe(transform('utf8', (content) => {
             const json = JSON.parse(content);
             delete json.private;
+            delete json.scripts;
+            delete json.husky;
+            delete json.engines;
+            delete json['lint-staged'];
             return JSON.stringify(json, null, '  ');
         }))
         .pipe(dest('./dist'));
