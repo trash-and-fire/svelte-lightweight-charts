@@ -15,8 +15,8 @@ module.exports = {
     resolve: {
         alias: Object.assign({
             'svelte-lightweight-charts': path.resolve(__dirname, './src/package/dist'),
-        },prod ? {} : {
-              'lightweight-charts': 'lightweight-charts/dist/lightweight-charts.esm.development.js',
+        }, prod ? {} : {
+            'lightweight-charts': 'lightweight-charts/dist/lightweight-charts.esm.development.js',
         }),
         extensions: ['.mjs', '.js', '.ts', '.svelte'],
     },
@@ -78,16 +78,29 @@ module.exports = {
             }
         }),
         new HtmlWebpackPlugin({
-            chunks: ['index'],
+            chunks: ['runtime', 'vendors', 'index'],
             filename: 'index.html',
         }),
         new HtmlWebpackPlugin({
-            chunks: ['official-samples'],
+            chunks: ['runtime', 'vendors', 'official-samples'],
             filename: 'official-samples.html',
         })
     ],
     devtool: prod ? false : 'source-map',
     devServer: {
         hot: false
-    }
+    },
+    optimization: {
+        moduleIds: 'deterministic',
+        runtimeChunk: 'single',
+        splitChunks: {
+            cacheGroups: {
+                vendor: {
+                    test: /[\\/]node_modules[\\/]/,
+                    name: 'vendors',
+                    chunks: 'all',
+                },
+            },
+        },
+    },
 };
