@@ -80,10 +80,12 @@ module.exports = {
         new HtmlWebpackPlugin({
             chunks: ['runtime', 'vendors', 'index'],
             filename: 'index.html',
+            base: 'https://trash-and-fire.github.io/svelte-lightweight-charts/'
         }),
         new HtmlWebpackPlugin({
             chunks: ['runtime', 'vendors', 'official-samples'],
             filename: 'official-samples.html',
+            base: 'https://trash-and-fire.github.io/svelte-lightweight-charts/'
         })
     ],
     devtool: prod ? false : 'source-map',
