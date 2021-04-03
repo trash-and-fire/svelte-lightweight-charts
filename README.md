@@ -13,7 +13,7 @@ npm install lightweight-charts svelte-lightweight-charts
 There are two ways to use this package:
 - As set of components
 
-```sveltehtml
+```html
 <script>
     import Chart from "svelte-lightweight-charts/components/chart.svelte";
     import LineSeries from "svelte-lightweight-charts/components/line-series.svelte";
@@ -36,7 +36,7 @@ There are two ways to use this package:
 ```
 
 - As action
-```sveltehtml
+```html
 <script>
     import chart from "svelte-lightweight-charts";
     const data = [
