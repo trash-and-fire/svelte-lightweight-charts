@@ -68,7 +68,17 @@ function wipe() {
         .pipe(remove());
 }
 
-const build = series(wipe, parallel(svelte, typings), clean);
+function manifest() {
+    return src(['./package.json'])
+        .pipe(transform('utf8', (content) => {
+            const json = JSON.parse(content);
+            delete json.private;
+            return JSON.stringify(json, null, '  ');
+        }))
+        .pipe(dest('./dist'));
+}
+
+const build = series(wipe, parallel(manifest, svelte, typings), clean);
 
 module.exports = {
     build,

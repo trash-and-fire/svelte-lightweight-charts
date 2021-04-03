@@ -1,4 +1,5 @@
 {
+  "private": true,
   "name": "svelte-lightweight-charts",
   "version": "1.0.0",
   "description": "Svelte wrapper for financial lightweight charts built with HTML5 canvas",
@@ -21,9 +22,9 @@
     "charting",
     "charts"
   ],
-  "main": "dist/index.js",
+  "main": "index.js",
   "files": [
-    "dist/**"
+    "**"
   ],
   "devDependencies": {
     "@tsconfig/svelte": "1.0.10",
