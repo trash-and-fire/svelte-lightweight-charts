@@ -58,7 +58,7 @@
     "webpack-dev-server": "3.11.2"
   },
   "scripts": {
-    "prepublishOnly": "",
+    "prepublishOnly": "npm run build-package",
     "build-package": "tsc --project tsconfig.build.json && gulp build",
     "build-demo": "npm run build-package && cross-env NODE_ENV=production webpack --bail",
     "start": "npm run build-package && webpack serve --content-base src/demo/public",
