@@ -63,8 +63,14 @@ function clean() {
         .pipe(remove());
 }
 
-const build = series(parallel(svelte, typings), clean);
+function wipe() {
+    return src(['./dist'], { read: false, allowEmpty: true })
+        .pipe(remove());
+}
+
+const build = series(wipe, parallel(svelte, typings), clean);
 
 module.exports = {
-    build: build,
+    build,
+    wipe,
 };
