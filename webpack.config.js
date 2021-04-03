@@ -2,26 +2,28 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const path = require('path');
 const sveltePreprocess = require('svelte-preprocess');
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 const mode = process.env.NODE_ENV || 'development';
 const prod = mode === 'production';
 
 module.exports = {
     entry: {
-        'build/bundle': ['./src/demo'],
-        'build/official-samples': ['./src/demo/official-samples'],
+        'index': ['./src/demo'],
+        'official-samples': ['./src/demo/official-samples'],
     },
     resolve: {
-        alias: {
-            'lightweight-charts': 'lightweight-charts/dist/lightweight-charts.esm.development.js',
-            'svelte-lightweight-charts': path.resolve(__dirname,'./src/package/dist'),
-        },
+        alias: Object.assign({
+            'svelte-lightweight-charts': path.resolve(__dirname, './src/package/dist'),
+        },prod ? {} : {
+              'lightweight-charts': 'lightweight-charts/dist/lightweight-charts.esm.development.js',
+        }),
         extensions: ['.mjs', '.js', '.ts', '.svelte'],
     },
     output: {
         path: path.join(__dirname, '/public'),
-        filename: '[name].js',
-        chunkFilename: '[name].[id].js'
+        filename: prod ? '[name].[contenthash].js' : '[name].js',
+        chunkFilename: prod ? '[name].[id].[contenthash].js' : '[name].[id].js'
     },
     module: {
         rules: [
@@ -66,7 +68,7 @@ module.exports = {
     mode,
     plugins: [
         new MiniCssExtractPlugin({
-            filename: '[name].css'
+            filename: prod ? '[name].[contenthash].css' : '[name].css'
         }),
         new ForkTsCheckerWebpackPlugin({
             typescript: {
@@ -75,6 +77,14 @@ module.exports = {
                 }
             }
         }),
+        new HtmlWebpackPlugin({
+            chunks: ['index'],
+            filename: 'index.html',
+        }),
+        new HtmlWebpackPlugin({
+            chunks: ['official-samples'],
+            filename: 'official-samples.html',
+        })
     ],
     devtool: prod ? false : 'source-map',
     devServer: {
