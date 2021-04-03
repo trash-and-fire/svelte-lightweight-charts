@@ -21,7 +21,7 @@ module.exports = {
         extensions: ['.mjs', '.js', '.ts', '.svelte'],
     },
     output: {
-        path: path.join(__dirname, '/public'),
+        path: path.join(__dirname, '/docs'),
         filename: prod ? '[name].[contenthash].js' : '[name].js',
         chunkFilename: prod ? '[name].[id].[contenthash].js' : '[name].[id].js'
     },
