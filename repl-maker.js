@@ -1,6 +1,6 @@
 const axios = require('axios').default;
 
-class SvelteReplRepository {
+module.exports = class SvelteReplRepository {
     constructor(auth) {
         if (!auth) {
             throw new Error('No auth token')
@@ -24,11 +24,3 @@ class SvelteReplRepository {
             .then((response) => response.data);
     }
 }
-
-const repository = new SvelteReplRepository(process.argv[2]);
-
-repository.update(
-    '549b84e42f3b462b9dfcc4eb52ba825e',
-    'Hello world 2',
-    [{ name: 'App.svelte', source: 'test2' }]
-).then(console.log).catch(console.log);

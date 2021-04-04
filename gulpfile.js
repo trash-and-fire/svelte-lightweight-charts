@@ -7,6 +7,9 @@ const upper = require('lodash/upperFirst')
 const remove = require('gulp-clean');
 const {exec} = require('child_process');
 const crc = require('crc-32');
+const {argv} = require('yargs');
+
+const SvelteReplRepository = require('./repl-maker');
 
 function convertToTypings(content, file) {
     const filename = file.basename[0].toUpperCase() + file.basename.slice(1);
@@ -89,20 +92,28 @@ function samples(...args) {
     const components = new Map();
     const samples = new Map();
 
+    const repository = new SvelteReplRepository(argv.auth);
+
     const resolveComponents = () => src(['./src/demo/samples/components/*.svelte'])
         .pipe(transform('utf8', (contents, file) => {
-            components.set(`components/${file.basename}`, {
-                hash: crc.str(contents),
-                name: file.basename,
+            return applyPreprocess(contents, file).then((code) => {
+                components.set(`components/${file.basename}`, {
+                    hash: crc.str(contents),
+                    name: file.basename,
+                    contents: code,
+                });
+                return code;
             });
-            return contents;
         }));
 
     const resolveSamples = () => src(['./src/demo/samples/*.svelte'])
         .pipe(transform('utf8', (contents, file) => {
+            const files = Array.from(components.keys()).filter((file) => contents.includes(file));
             samples.set(`${file.basename}`, {
                 hash: crc.str(contents),
                 name: file.basename,
+                contents,
+                files,
             });
             return contents;
         }));
@@ -115,34 +126,70 @@ function samples(...args) {
                 samples: {},
                 components: {},
             };
-            let componentChanged = false;
             for (const [component, meta] of components.entries()) {
-                // eslint-disable-next-line no-prototype-builtins
-                if (!contents.components.hasOwnProperty(component) || contents.components[component].hash !== meta.hash) {
-                    componentChanged = true;
-                }
                 next.components[component] = Object.assign({}, contents.components[component], {
                     hash: meta.hash,
                 })
             }
+            const promises = [];
             for (const [sample, meta] of samples.entries()) {
+                const files = meta.files.map((file) => {
+                    return {
+                        name: file,
+                        source: components.get(file).contents,
+                    }
+                })
                 // eslint-disable-next-line no-prototype-builtins
                 if (!contents.samples.hasOwnProperty(sample)) {
-                    // create repl
+                    console.log(`Creating repl for "${sample}"`);
+                    promises.push(repository.create(`test/svelte-lightweight-charts/${sample}`, [{
+                        name: 'App.svelte',
+                        source: meta.contents,
+                    }, ...files]).then((result) => {
+                        next.samples[sample] = Object.assign({}, contents.samples[sample], {
+                            hash: meta.hash,
+                            uid: result.uid,
+                            files: meta.files,
+                        });
+                    }));
                 } else {
-                    if (contents.samples[sample].hash !== meta.hash || componentChanged) {
-                        // update repl
+                    const isComponentsChanged = meta.files.some((file) => {
+                        // eslint-disable-next-line no-prototype-builtins
+                        if (!contents.components.hasOwnProperty(file)) {
+                            return true;
+                        }
+                        if (!components.get(file)) {
+                            return true;
+                        }
+                        const record = contents.components[file];
+                        return record.hash !== components.get(file).hash;
+                    })
+                    if (contents.samples[sample].hash !== meta.hash || isComponentsChanged) {
+                        const uid = contents.samples[sample].uid;
+                        if (!uid) {
+                            throw new Error('no id')
+                        }
+                        console.log(`Updating repl for "${sample}"`);
+                        promises.push(repository.update(uid, `test/svelte-lightweight-charts/${sample}`, [{
+                            name: 'App.svelte',
+                            source: meta.contents,
+                        }, ...files]).then(() => {
+                            next.samples[sample] = Object.assign({}, contents.samples[sample], {
+                                hash: meta.hash,
+                                files: meta.files,
+                            });
+                        }))
+                    } else {
+                        next.samples[sample] = Object.assign({}, contents.samples[sample]);
                     }
                 }
-                next.samples[sample] = Object.assign({}, contents.samples[sample], {
-                    hash: meta.hash,
-                })
-            }
-            return JSON.stringify(next, null, '  ');
-        }))
-        .pipe(dest('./temp'));
 
-    return series(parallel(resolveComponents, resolveSamples), createJSON)(...args);
+            }
+            return Promise.all(promises).then(() => JSON.stringify(next, null, '  '));
+        }))
+        .pipe(dest('./src/demo/'));
+
+    return series(resolveComponents, resolveSamples, createJSON)(...args);
 }
 
 module.exports = {
