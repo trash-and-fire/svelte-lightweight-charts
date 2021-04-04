@@ -6,6 +6,7 @@ const camelize = require('lodash/camelCase');
 const upper = require('lodash/upperFirst')
 const remove = require('gulp-clean');
 const {exec} = require('child_process');
+const crc = require('crc-32');
 
 function convertToTypings(content, file) {
     const filename = file.basename[0].toUpperCase() + file.basename.slice(1);
@@ -84,6 +85,67 @@ function typescript(callback) {
 
 const build = series(wipe, typescript, parallel(manifest, svelte, typings), clean);
 
+function samples(...args) {
+    const components = new Map();
+    const samples = new Map();
+
+    const resolveComponents = () => src(['./src/demo/samples/components/*.svelte'])
+        .pipe(transform('utf8', (contents, file) => {
+            components.set(`components/${file.basename}`, {
+                hash: crc.str(contents),
+                name: file.basename,
+            });
+            return contents;
+        }));
+
+    const resolveSamples = () => src(['./src/demo/samples/*.svelte'])
+        .pipe(transform('utf8', (contents, file) => {
+            samples.set(`${file.basename}`, {
+                hash: crc.str(contents),
+                name: file.basename,
+            });
+            return contents;
+        }));
+
+    const createJSON = () => src(['./src/demo/repl.json'])
+        .pipe(transform('utf8', (contents) => {
+            contents = JSON.parse(contents);
+
+            const next = {
+                samples: {},
+                components: {},
+            };
+            let componentChanged = false;
+            for (const [component, meta] of components.entries()) {
+                // eslint-disable-next-line no-prototype-builtins
+                if (!contents.components.hasOwnProperty(component) || contents.components[component].hash !== meta.hash) {
+                    componentChanged = true;
+                }
+                next.components[component] = Object.assign({}, contents.components[component], {
+                    hash: meta.hash,
+                })
+            }
+            for (const [sample, meta] of samples.entries()) {
+                // eslint-disable-next-line no-prototype-builtins
+                if (!contents.samples.hasOwnProperty(sample)) {
+                    // create repl
+                } else {
+                    if (contents.samples[sample].hash !== meta.hash || componentChanged) {
+                        // update repl
+                    }
+                }
+                next.samples[sample] = Object.assign({}, contents.samples[sample], {
+                    hash: meta.hash,
+                })
+            }
+            return JSON.stringify(next, null, '  ');
+        }))
+        .pipe(dest('./temp'));
+
+    return series(parallel(resolveComponents, resolveSamples), createJSON)(...args);
+}
+
 module.exports = {
     build,
+    samples,
 };
