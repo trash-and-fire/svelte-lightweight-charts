@@ -17,7 +17,7 @@
     import {LineStyle} from 'lightweight-charts';
     import type {ChartActionParams} from '../package';
     import {chart} from '../package';
-    import {BAR_DATA, HISTOGRAM_DATA, LINE_DATA} from '../package/data-series';
+    import {BAR_DATA, HISTOGRAM_DATA, LINE_DATA} from './data-series';
     import {onMount} from 'svelte';
 
     import Chart from 'svelte-lightweight-charts/components/chart.svelte';
