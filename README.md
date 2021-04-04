@@ -61,5 +61,5 @@ There are two ways to use this package:
     }]
 }}/>
 ```
-
-If you need more examples you can see [demo app](./src/demo) or [samples](./src/demo/samples)
+Here are some [official examples](https://trash-and-fire.github.io/svelte-lightweight-charts/official-samples.html) rewritten on Svelte. 
+If you need more information you can see [demo app sources](./src/demo) or [example sources](./src/demo/samples)
