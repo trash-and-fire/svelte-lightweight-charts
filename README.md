@@ -2,6 +2,12 @@ This package is a Svelte wrapper for [lightweight-charts](https://github.com/tra
 
 The package is under development.
 
+# [Demo](https://trash-and-fire.github.io/svelte-lightweight-charts/official-samples.html)
+
+Here are some official examples rewritten on Svelte. Each example you can open in the REPL to modify or fork
+
+If you need more information you can see [demo app sources](./src/demo) or [example sources](./src/demo/samples)
+
 # Installing
 
 ```bash
@@ -61,5 +67,3 @@ There are two ways to use this package:
     }]
 }}/>
 ```
-Here are some [official examples](https://trash-and-fire.github.io/svelte-lightweight-charts/official-samples.html) rewritten on Svelte. 
-If you need more information you can see [demo app sources](./src/demo) or [example sources](./src/demo/samples)
