@@ -30,6 +30,7 @@
     "@tsconfig/svelte": "1.0.10",
     "@typescript-eslint/eslint-plugin": "4.15.1",
     "@typescript-eslint/parser": "4.15.1",
+    "axios": "0.21.1",
     "cross-env": "7.0.3",
     "css-loader": "5.0.1",
     "eslint": "7.20.0",
