@@ -1,9 +1,15 @@
 import type {IChartApi, ISeriesApi} from 'lightweight-charts';
-import type {ActionResult, SeriesActionParams} from './types';
+import type {ActionResult, Reference, SeriesActionParams} from './types';
 import {ensure} from './utils';
 
+export type SeriesParams = Omit<SeriesActionParams, 'reference'>;
+
+export interface SeriesActionResult<T extends SeriesParams> extends ActionResult<T> {
+    updateReference(nextReference?: Reference<ISeriesApi<T['type']>>): void;
+}
+
 export function seriesCollection(target: IChartApi, params: SeriesActionParams[] = []): ActionResult<SeriesActionParams[] | undefined> {
-    const collection = new Map<string, ActionResult<SeriesActionParams>>();
+    const collection = new Map<string, SeriesActionResult<SeriesActionParams>>();
     for (const current of params) {
         collection.set(current.id, series(target, current));
     }
@@ -25,9 +31,12 @@ export function seriesCollection(target: IChartApi, params: SeriesActionParams[]
             for (const [id, options] of next.entries()) {
                 const entry = collection.get(id);
                 if (entry === undefined) {
-                    collection.set(id, series(target, options));
+                    const created = series(target, options);
+                    created.updateReference(options.reference as never);
+                    collection.set(id, created);
                 } else {
                     entry.update(options);
+                    entry.updateReference(options.reference as never);
                 }
             }
         },
@@ -39,12 +48,12 @@ export function seriesCollection(target: IChartApi, params: SeriesActionParams[]
     }
 }
 
-export function series<T extends SeriesActionParams>(target: IChartApi, params: T): ActionResult<T> {
+export function series<T extends SeriesParams>(target: IChartApi, params: T): SeriesActionResult<T> {
     let subject = createSeries(target, params);
-    let {reference} = params;
+    let reference: Reference<ISeriesApi<T['type']>>;
 
     return {
-        update(nextParams: SeriesActionParams): void {
+        update(nextParams: SeriesParams): void {
             if (nextParams.type !== subject.seriesType()) {
                 target.removeSeries(subject);
                 subject = createSeries(target, nextParams);
@@ -54,16 +63,17 @@ export function series<T extends SeriesActionParams>(target: IChartApi, params: 
             if (nextParams.options) {
                 subject.applyOptions(nextParams.options);
             }
-
-            if (nextParams.reference !== reference) {
+        },
+        updateReference(nextReference: Reference<ISeriesApi<T['type']>>): void {
+            if (nextReference !== reference) {
                 reference?.(null)
-                reference = nextParams.reference;
+                reference = nextReference;
                 // TODO: think about reference covariance
                 reference?.(subject as never);
             }
         },
         destroy(): void {
-            params.reference?.(null);
+            reference?.(null);
             target.removeSeries(subject);
         }
     };
@@ -77,31 +87,26 @@ function createSeries<T extends SeriesActionParams>(
         case 'Area': {
             const series = chart.addAreaSeries(params.options);
             series.setData(params.data);
-            params.reference?.(series);
             return series;
         }
         case 'Bar': {
             const series = chart.addBarSeries(params.options);
             series.setData(params.data);
-            params.reference?.(series);
             return series;
         }
         case 'Candlestick': {
             const series = chart.addCandlestickSeries(params.options);
             series.setData(params.data);
-            params.reference?.(series);
             return series;
         }
         case 'Histogram': {
             const series = chart.addHistogramSeries(params.options);
             series.setData(params.data);
-            params.reference?.(series);
             return series;
         }
         case 'Line': {
             const series = chart.addLineSeries(params.options);
             series.setData(params.data);
-            params.reference?.(series);
             return series;
         }
     }

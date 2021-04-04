@@ -5,7 +5,7 @@
     import type {$$PROPS} from './line-series.interface';
     import {series} from '../series';
     import {context} from './utils';
-    import {onDestroy} from 'svelte';
+    import {afterUpdate, onDestroy} from 'svelte';
 
     /** Visibility of the label with the latest visible price on the price scale */
     export let lastValueVisible: $$PROPS['lastValueVisible'] = undefined;
@@ -86,7 +86,6 @@
         type: 'Line',
         options,
         data,
-        reference: ref,
     });
 
     $: subject.update({
@@ -94,7 +93,10 @@
         type: 'Line',
         options,
         data,
-        reference: ref,
+    });
+
+    afterUpdate(() => {
+        subject.updateReference(ref);
     });
 
     onDestroy(() => {

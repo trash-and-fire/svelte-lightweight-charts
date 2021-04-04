@@ -1,5 +1,6 @@
 import type {
-    ISeriesApi, PriceLineOptions,
+    ISeriesApi,
+    PriceLineOptions,
     SeriesDataItemTypeMap,
     SeriesPartialOptionsMap,
     SeriesType

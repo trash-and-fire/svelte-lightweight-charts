@@ -5,7 +5,7 @@
     import type {$$PROPS} from './area-series.interface';
     import {series} from '../series';
     import {context} from './utils';
-    import {onDestroy} from 'svelte';
+    import {onDestroy, afterUpdate} from 'svelte';
 
     /** Visibility of the label with the latest visible price on the price scale */
     export let lastValueVisible: $$PROPS['lastValueVisible'] = undefined;
@@ -90,7 +90,6 @@
         type: 'Area',
         options,
         data,
-        reference: ref,
     });
 
     $: subject.update({
@@ -98,8 +97,11 @@
         type: 'Area',
         options,
         data,
-        reference: ref,
     });
+
+    afterUpdate(() => {
+        subject.updateReference(ref);
+    })
 
     onDestroy(() => {
         subject.destroy();
