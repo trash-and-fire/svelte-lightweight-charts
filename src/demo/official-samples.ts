@@ -1,6 +1,6 @@
 import './global.css';
 
-import App from './samples/gallery.svelte';
+import App from './gallery.svelte';
 
 new App({
     target: document.body,

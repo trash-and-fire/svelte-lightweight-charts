@@ -1,12 +1,12 @@
 <script>
-    import BarChart from './bar-chart.svelte';
-    import CandlestickChart from './candlestick-chart.svelte';
-    import CustomFontFamily from './custom-font-family.svelte';
-    import CustomPriceFormatter from './custom-price-formatter.svelte';
-    import CustomLocale from './custom-locale.svelte';
-    import CustomThemes from './custom-themes.svelte';
-    import CustomWatermark from './custom-watermark.svelte';
-    import Legend from './legend.svelte';
+    import BarChart from './samples/bar-chart.svelte';
+    import CandlestickChart from './samples/candlestick-chart.svelte';
+    import CustomFontFamily from './samples/custom-font-family.svelte';
+    import CustomPriceFormatter from './samples/custom-price-formatter.svelte';
+    import CustomLocale from './samples/custom-locale.svelte';
+    import CustomThemes from './samples/custom-themes.svelte';
+    import CustomWatermark from './samples/custom-watermark.svelte';
+    import Legend from './samples/legend.svelte';
 
     const components = [
         BarChart,
