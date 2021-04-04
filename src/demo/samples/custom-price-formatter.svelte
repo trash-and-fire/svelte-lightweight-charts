@@ -14,7 +14,7 @@
     import {CrosshairMode} from 'lightweight-charts';
     import Chart from 'svelte-lightweight-charts/components/chart.svelte';
     import AreaSeries from 'svelte-lightweight-charts/components/area-series.svelte';
-    import Switcher from '../components/switcher.svelte';
+    import Switcher from './components/switcher.svelte';
 
     // TODO: solve this WTF with linter
     const FORMATTERS = {

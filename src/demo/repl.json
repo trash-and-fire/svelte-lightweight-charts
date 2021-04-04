@@ -1,0 +1,57 @@
+{
+  "samples": {
+    "bar-chart.svelte": {
+      "hash": 1431931317,
+      "uid": "9340f52a3b9241d1aa25ed8a8c7cfdef",
+      "files": []
+    },
+    "candlestick-chart.svelte": {
+      "hash": 269599343,
+      "uid": "bba23a1f54ff40978d4321755c7446a0",
+      "files": []
+    },
+    "custom-watermark.svelte": {
+      "hash": -913484878,
+      "uid": "d2c8423038894f68b58097fd0aae2193",
+      "files": []
+    },
+    "legend.svelte": {
+      "hash": -1113210690,
+      "uid": "1b431bf3d75948769855d14c55bbc5f7",
+      "files": []
+    },
+    "custom-locale.svelte": {
+      "hash": 271223125,
+      "uid": "d3e6adf11a464012b16bc229de917255",
+      "files": [
+        "components/switcher.svelte"
+      ]
+    },
+    "custom-font-family.svelte": {
+      "hash": 423124555,
+      "uid": "d1cb45e40ef44234b081870ea90f9b19",
+      "files": [
+        "components/switcher.svelte"
+      ]
+    },
+    "custom-price-formatter.svelte": {
+      "hash": -382800839,
+      "uid": "9b755e215dd545c3beb5a799555ce5f8",
+      "files": [
+        "components/switcher.svelte"
+      ]
+    },
+    "custom-themes.svelte": {
+      "hash": -1008921990,
+      "uid": "e01c51fc09b94d26bd515d01c69ac5f2",
+      "files": [
+        "components/switcher.svelte"
+      ]
+    }
+  },
+  "components": {
+    "components/switcher.svelte": {
+      "hash": -450206706
+    }
+  }
+}
