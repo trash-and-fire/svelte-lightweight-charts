@@ -67,3 +67,26 @@ There are two ways to use this package:
     }]
 }}/>
 ```
+# Core API
+`svelte-lightweight-charts` supports chart object and all kind of series objects from `lightweight-charts`. 
+
+## Getting reference to lightweight-chart objects
+
+To get reference of lightweight-chart instance (`IChartApi`, `ISeriesApi<T>`, etc) of a node you can use `ref` property.
+```html
+<script>
+    let chartApi;
+</script>
+<Chart width={400} height={300} ref={(ref) => chartApi = ref}/>
+<button on:click={() => chartApi.priceScale().fitContent()}>Fit Content</button>
+```
+
+## Supported components
+- `<Chart>` - main chart container (`IChartApi`).
+- `<[Type]Series>` - series with specified `[Type]` (`ISeriesApi<Type>`). It has to be nested inside `<Chart>` component.
+
+## WIP components
+- `<PriceLine>` - price line (`IPriceLine`). It has to be nested inside `<[Type]Series>` component.
+
+# Typescript support
+Package is written on TypeScript and transpiled to plain `*.js` and `*.svelte` files. Definition files (including `*.svelte.d.ts`) are provided with package. It is a good place to find list of available properties that can be passed to each component.
