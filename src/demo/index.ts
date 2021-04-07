@@ -4,5 +4,7 @@ import App from './app.svelte';
 
 new App({
     target: document.body,
-    props: {}
+    props: {
+        reference: (chart: unknown) => (window as any).chart = chart,
+    }
 });

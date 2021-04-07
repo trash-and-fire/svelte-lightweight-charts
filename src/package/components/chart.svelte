@@ -3,6 +3,7 @@
 <script lang="ts">
     import type {ChartOptions, IChartApi, DeepPartial, MouseEventParams} from 'lightweight-charts';
     import type {$$EVENTS, $$PROPS} from './chart.interface';
+    import type {Reference} from '../types';
     import {createEventDispatcher} from 'svelte';
     import {context} from './utils';
     import {chart} from '../index';
@@ -36,6 +37,8 @@
     /** Structure that describes scaling behavior or boolean flag that disables/enables all kinds of scales */
     export let handleScale: $$PROPS['handleScale'] = undefined;
 
+    export let ref: $$PROPS['ref'] = undefined;
+
     let options: DeepPartial<ChartOptions> | undefined = undefined;
     $: options = {
         width,
@@ -59,8 +62,12 @@
         context(reference);
     }
 
-    function handleReference(ref: IChartApi | null): void {
-        reference = ref;
+    let handleReference: Reference<IChartApi> | undefined = undefined;
+    $: handleReference = (chart: IChartApi | null) => {
+        reference = chart;
+        if (ref !== undefined) {
+            ref(chart);
+        }
     }
 
     function handleCrosshairMove(params: MouseEventParams): void {

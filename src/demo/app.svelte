@@ -12,6 +12,7 @@
     } from 'lightweight-charts';
     import type {
         HistogramSeriesParams,
+        Reference,
         SeriesActionParams
     } from '../package/types';
     import {LineStyle} from 'lightweight-charts';
@@ -34,6 +35,8 @@
         | ISeriesApi<'Candlestick'>
         | ISeriesApi<'Line'>
         ;
+
+    export let reference: Reference<IChartApi> | undefined = undefined;
 
     const SERIES_TYPES: SeriesType[] = ['Area', 'Bar', 'Histogram', 'Candlestick', 'Line'];
 
@@ -372,7 +375,7 @@
     {#if components}
         <fieldset name="chart-component">
             <legend>Chart component:</legend>
-            <Chart {...(params.options ?? {})}>
+            <Chart {...(params.options ?? {})} ref={reference}>
                 {#if mainProps.type === 'Area' }
                     <AreaSeries
                         {...(mainProps.options ?? {})}
