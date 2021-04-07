@@ -72,7 +72,7 @@ There are two ways to use this package:
 
 ## Getting reference to lightweight-chart objects
 
-To get reference of lightweight-chart instance (`IChartApi`, `ISeriesApi<T>`, etc) of a node you can use `ref` property.
+To get reference of lightweight-chart (`IChartApi`, `ISeriesApi<T>`, etc) instance of a node you can use `ref` property.
 ```html
 <script>
     let chartApi;
