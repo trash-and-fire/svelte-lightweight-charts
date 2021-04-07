@@ -14,10 +14,10 @@
         HistogramSeriesParams,
         Reference,
         SeriesActionParams
-    } from '../package/types';
+    } from 'svelte-lightweight-charts/types';
+    import type {ChartActionParams} from 'svelte-lightweight-charts';
     import {LineStyle} from 'lightweight-charts';
-    import type {ChartActionParams} from '../package';
-    import {chart} from '../package';
+    import {chart} from 'svelte-lightweight-charts';
     import {BAR_DATA, HISTOGRAM_DATA, LINE_DATA} from './data-series';
     import {onMount} from 'svelte';
 
