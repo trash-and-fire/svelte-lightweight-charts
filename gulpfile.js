@@ -78,15 +78,16 @@ function manifest() {
         .pipe(dest('./dist'));
 }
 
-function typescript(callback) {
-    exec('tsc --project tsconfig.build.json', (err, stdout, stderr) => {
-        console.log(stdout);
-        console.log(stderr);
-        callback(err);
-    });
+function typescript() {
+    return exec('tsc --project tsconfig.build.json');
 }
 
-const build = series(wipe, typescript, parallel(manifest, svelte, typings), clean);
+function assets() {
+    return src(['README.md'])
+        .pipe(dest('./dist'));
+}
+
+const build = series(wipe, typescript, parallel(manifest, svelte, typings, assets), clean);
 
 function samples(...args) {
     const components = new Map();
