@@ -5,10 +5,8 @@
     import type {$$PROPS} from './histogram-series.interface';
     import type {Reference} from '../types';
 
-    import {afterUpdate, onDestroy} from 'svelte';
     import ContextProvider from './internal/context-provider.svelte';
-    import {series} from '../series';
-    import {context} from './utils';
+    import {useSeriesEffect} from './utils';
 
     /** Visibility of the label with the latest visible price on the price scale */
     export let lastValueVisible: $$PROPS['lastValueVisible'] = undefined;
@@ -82,27 +80,15 @@
     }
 
     const id = performance.now().toString();
-    const subject = series(context(), {
-        id,
-        type: 'Histogram',
-        options,
-        data,
-    });
-
-    $: subject.update({
-        id,
-        type: 'Histogram',
-        options,
-        data,
-    });
-
-    afterUpdate(() => {
-        subject.updateReference(handleReference);
-    });
-
-    onDestroy(() => {
-        subject.destroy();
-    });
+    useSeriesEffect(() => [
+        {
+            id,
+            type: 'Histogram',
+            options,
+            data,
+        },
+        handleReference,
+    ]);
 </script>
 {#if reference !== null}
     <ContextProvider value={reference}>
