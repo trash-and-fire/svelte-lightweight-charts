@@ -1,4 +1,5 @@
 import type {
+    IPriceLine,
     ISeriesApi,
     PriceLineOptions,
     SeriesDataItemTypeMap,
@@ -9,6 +10,10 @@ import type {
 export interface ActionResult<T> {
     update(params: T): void;
     destroy(): void;
+}
+
+export interface ReferencableActionResult<P, R> extends ActionResult<P> {
+    updateReference(nextReference?: Reference<R>): void;
 }
 
 export type Action<TTarget extends Element, TParams> = (target: TTarget, params: TParams) => ActionResult<TParams>
@@ -71,6 +76,12 @@ export interface SeriesParamsMap extends Record<SeriesType, unknown> {
     Candlestick: CandlestickSeriesParams;
     Histogram: HistogramSeriesParams;
     Line: LineSeriesParams;
+}
+
+export interface PriceLineParams {
+    id: string;
+    options: PriceLineOptions;
+    reference?: Reference<IPriceLine>;
 }
 
 export type Reference<T> = (ref: T | null) => void;

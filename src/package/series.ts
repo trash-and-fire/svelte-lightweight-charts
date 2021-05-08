@@ -1,56 +1,23 @@
-import type {IChartApi, ISeriesApi} from 'lightweight-charts';
-import type {ActionResult, Reference, SeriesActionParams} from './types';
-import {ensure} from './utils';
+import type {IChartApi, ISeriesApi, SeriesType} from 'lightweight-charts';
+import type {ActionResult, ReferencableActionResult, Reference, SeriesActionParams} from './types';
+import {collection} from './collection';
 
 export type SeriesParams = Omit<SeriesActionParams, 'reference'>;
 
-export interface SeriesActionResult<T extends SeriesParams> extends ActionResult<T> {
-    updateReference(nextReference?: Reference<ISeriesApi<T['type']>>): void;
-}
+export type SeriesActionResult<T extends SeriesParams> = ReferencableActionResult<T, ISeriesApi<T['type']>>;
 
 export function seriesCollection(target: IChartApi, params: SeriesActionParams[] = []): ActionResult<SeriesActionParams[] | undefined> {
-    const collection = new Map<string, SeriesActionResult<SeriesActionParams>>();
-    for (const current of params) {
-        collection.set(current.id, series(target, current));
-    }
-
-    return {
-        update(nextParams: SeriesActionParams[] = []): void {
-            const existing = new Set(collection.keys());
-            const next = new Map(nextParams.map((item: SeriesActionParams) => [item.id, item]));
-
-            for (const id of existing) {
-                if (!next.has(id)) {
-                    const entry = ensure(collection.get(id))
-                    entry.destroy();
-
-                    collection.delete(id);
-                }
-            }
-
-            for (const [id, options] of next.entries()) {
-                const entry = collection.get(id);
-                if (entry === undefined) {
-                    const created = series(target, options);
-                    created.updateReference(options.reference as never);
-                    collection.set(id, created);
-                } else {
-                    entry.update(options);
-                    entry.updateReference(options.reference as never);
-                }
-            }
-        },
-        destroy() {
-            for (const current of collection.values()) {
-                current.destroy();
-            }
-        }
-    }
+    return collection(
+        target,
+        params,
+        series,
+        (p: SeriesActionParams) => p.reference as Reference<ISeriesApi<SeriesType>>
+    );
 }
 
 export function series<T extends SeriesParams>(target: IChartApi, params: T): SeriesActionResult<T> {
     let subject = createSeries(target, params);
-    let reference: Reference<ISeriesApi<T['type']>>;
+    let reference: Reference<ISeriesApi<SeriesType>>;
 
     return {
         update(nextParams: SeriesParams): void {
@@ -68,8 +35,7 @@ export function series<T extends SeriesParams>(target: IChartApi, params: T): Se
             if (nextReference !== reference) {
                 reference?.(null)
                 reference = nextReference;
-                // TODO: think about reference covariance
-                reference?.(subject as never);
+                reference?.(subject);
             }
         },
         destroy(): void {
