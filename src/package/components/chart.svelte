@@ -5,7 +5,7 @@
     import type {$$EVENTS, $$PROPS} from './chart.interface';
     import type {Reference} from '../types';
     import {createEventDispatcher} from 'svelte';
-    import {context} from './utils';
+    import ContextProvider from './internal/context-provider.svelte';
     import {chart} from '../index';
 
     const dispatch = createEventDispatcher<$$EVENTS>();
@@ -58,10 +58,6 @@
 
     let reference: IChartApi | null = null;
 
-    $: if (reference !== null) {
-        context(reference);
-    }
-
     let handleReference: Reference<IChartApi> | undefined = undefined;
     $: handleReference = (chart: IChartApi | null) => {
         reference = chart;
@@ -85,5 +81,7 @@
     onClick: handleClick,
     reference: handleReference,
 }}>
-    {#if reference !== null}<slot/>{/if}
+    {#if reference !== null}
+        <ContextProvider value={reference}><slot/></ContextProvider>
+    {/if}
 </div>

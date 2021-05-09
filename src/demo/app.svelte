@@ -27,6 +27,7 @@
     import HistogramSeries from 'svelte-lightweight-charts/components/histogram-series.svelte';
     import BarSeries from 'svelte-lightweight-charts/components/bar-series.svelte';
     import CandlestickSeries from 'svelte-lightweight-charts/components/candlestick-series.svelte';
+    import PriceLine from 'svelte-lightweight-charts/components/price-line.svelte';
 
     type EverySeriesApi =
         | ISeriesApi<'Area'>
@@ -401,7 +402,11 @@
                         {...(mainProps.options ?? {})}
                         data={mainProps.data}
                         ref={handleMainComponentReference}
-                    />
+                    >
+                        {#each lines as line (line.id)}
+                            <PriceLine {...line.options}/>
+                        {/each}
+                    </AreaSeries>
                 {/if}
                 {#if mainProps.type === 'Line' }
                     <LineSeries

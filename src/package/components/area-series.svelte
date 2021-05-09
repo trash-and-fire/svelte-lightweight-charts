@@ -1,11 +1,13 @@
 <svelte:options immutable={true}/>
 
 <script lang="ts">
-    import type {AreaSeriesPartialOptions} from 'lightweight-charts';
+    import type {AreaSeriesPartialOptions, ISeriesApi} from 'lightweight-charts';
     import type {$$PROPS} from './area-series.interface';
+    import {onDestroy, afterUpdate} from 'svelte';
+    import ContextProvider from './internal/context-provider.svelte';
     import {series} from '../series';
     import {context} from './utils';
-    import {onDestroy, afterUpdate} from 'svelte';
+    import type {Reference} from '../types';
 
     /** Visibility of the label with the latest visible price on the price scale */
     export let lastValueVisible: $$PROPS['lastValueVisible'] = undefined;
@@ -84,6 +86,16 @@
         crosshairMarkerVisible,
     };
 
+    let reference: ISeriesApi<'Area'> | null = null;
+
+    let handleReference: Reference<ISeriesApi<'Area'>> | undefined = undefined;
+    $: handleReference = (series: ISeriesApi<'Area'> | null) => {
+        reference = series;
+        if (ref !== undefined) {
+            ref(series);
+        }
+    }
+
     const id = performance.now().toString();
     const subject = series(context(), {
         id,
@@ -100,10 +112,15 @@
     });
 
     afterUpdate(() => {
-        subject.updateReference(ref);
+        subject.updateReference(handleReference);
     })
 
     onDestroy(() => {
         subject.destroy();
     });
 </script>
+{#if reference !== null}
+    <ContextProvider value={reference}>
+        <slot/>
+    </ContextProvider>
+{/if}
