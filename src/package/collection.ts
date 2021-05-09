@@ -1,5 +1,5 @@
-import {ensure} from './utils';
 import type {ActionResult, Reference, ReferencableActionResult} from './types';
+import {ensure} from './utils';
 
 export function collection<T, K, P extends { id: string }, R extends ReferencableActionResult<P, K>>(
     target: T,

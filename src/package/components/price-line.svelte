@@ -1,6 +1,7 @@
 <script lang="ts">
     import type {PriceLineOptions} from 'lightweight-charts';
     import type {$$PROPS} from './price-line.interface';
+
     import {afterUpdate, onDestroy} from 'svelte';
     import {context} from './utils';
     import {line} from '../lines';

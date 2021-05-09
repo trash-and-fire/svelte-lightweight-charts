@@ -3,11 +3,12 @@
 <script lang="ts">
     import type {AreaSeriesPartialOptions, ISeriesApi} from 'lightweight-charts';
     import type {$$PROPS} from './area-series.interface';
+    import type {Reference} from '../types';
+
     import {onDestroy, afterUpdate} from 'svelte';
     import ContextProvider from './internal/context-provider.svelte';
     import {series} from '../series';
     import {context} from './utils';
-    import type {Reference} from '../types';
 
     /** Visibility of the label with the latest visible price on the price scale */
     export let lastValueVisible: $$PROPS['lastValueVisible'] = undefined;
