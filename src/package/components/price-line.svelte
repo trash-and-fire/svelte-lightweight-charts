@@ -12,7 +12,7 @@
     export let axisLabelVisible: $$PROPS['axisLabelVisible'];
     export let title: $$PROPS['title'];
 
-    export let ref: $$PROPS['ref'];
+    export let ref: $$PROPS['ref'] = undefined;
 
     let options: PriceLineOptions = {
         price,
