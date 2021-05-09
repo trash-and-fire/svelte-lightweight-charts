@@ -413,28 +413,44 @@
                         {...(mainProps.options ?? {})}
                         data={mainProps.data}
                         ref={handleMainComponentReference}
-                    />
+                    >
+                        {#each lines as line (line.id)}
+                            <PriceLine {...line.options}/>
+                        {/each}
+                    </LineSeries>
                 {/if}
                 {#if mainProps.type === 'Histogram'}
                     <HistogramSeries
                         {...(mainProps.options ?? {})}
                         data={mainProps.data}
                         ref={handleMainComponentReference}
-                    />
+                    >
+                        {#each lines as line (line.id)}
+                            <PriceLine {...line.options}/>
+                        {/each}
+                    </HistogramSeries>
                 {/if}
                 {#if mainProps.type === 'Bar'}
                     <BarSeries
                         {...(mainProps.options ?? {})}
                         data={mainProps.data}
                         ref={handleMainComponentReference}
-                    />
+                    >
+                        {#each lines as line (line.id)}
+                            <PriceLine {...line.options}/>
+                        {/each}
+                    </BarSeries>
                 {/if}
                 {#if mainProps.type === 'Candlestick'}
                     <CandlestickSeries
                         {...(mainProps.options ?? {})}
                         data={mainProps.data}
                         ref={handleMainComponentReference}
-                    />
+                    >
+                        {#each lines as line (line.id)}
+                            <PriceLine {...line.options}/>
+                        {/each}
+                    </CandlestickSeries>
                 {/if}
                 {#if showVolume}
                     {#key volumeProps.id}
