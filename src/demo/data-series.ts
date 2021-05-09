@@ -1,4 +1,6 @@
-export const LINE_DATA = [
+import type {SeriesDataItemTypeMap} from 'lightweight-charts';
+
+export const LINE_DATA: SeriesDataItemTypeMap['Line'][] = [
     {time: '2018-10-19', value: 35.98},
     {time: '2018-10-22', value: 35.75},
     {time: '2018-10-23', value: 35.65},

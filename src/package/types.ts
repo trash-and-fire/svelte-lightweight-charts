@@ -18,13 +18,19 @@ export interface ReferencableActionResult<P, R> extends ActionResult<P> {
 
 export type Action<TTarget extends Element, TParams> = (target: TTarget, params: TParams) => ActionResult<TParams>
 
+export interface PriceLineParams {
+    id: string;
+    options: PriceLineOptions;
+    reference?: Reference<IPriceLine>;
+}
+
 export interface AreaSeriesParams {
     id: string;
     type: 'Area';
     options?: SeriesPartialOptionsMap['Area'];
     data: SeriesDataItemTypeMap['Area'][];
     reference?: Reference<ISeriesApi<'Area'>>;
-    priceLines?: PriceLineOptions[];
+    priceLines?: PriceLineParams[];
 }
 
 export interface BarSeriesParams {
@@ -33,7 +39,7 @@ export interface BarSeriesParams {
     options?: SeriesPartialOptionsMap['Bar'];
     data: SeriesDataItemTypeMap['Bar'][];
     reference?: Reference<ISeriesApi<'Bar'>>;
-    priceLines?: PriceLineOptions[];
+    priceLines?: PriceLineParams[];
 }
 
 export interface CandlestickSeriesParams {
@@ -42,7 +48,7 @@ export interface CandlestickSeriesParams {
     options?: SeriesPartialOptionsMap['Candlestick'];
     data: SeriesDataItemTypeMap['Candlestick'][];
     reference?: Reference<ISeriesApi<'Candlestick'>>;
-    priceLines?: PriceLineOptions[];
+    priceLines?: PriceLineParams[];
 }
 
 export interface HistogramSeriesParams {
@@ -51,7 +57,7 @@ export interface HistogramSeriesParams {
     options?: SeriesPartialOptionsMap['Histogram'];
     data: SeriesDataItemTypeMap['Histogram'][];
     reference?: Reference<ISeriesApi<'Histogram'>>;
-    priceLines?: PriceLineOptions[];
+    priceLines?: PriceLineParams[];
 }
 
 export interface LineSeriesParams {
@@ -60,7 +66,7 @@ export interface LineSeriesParams {
     options?: SeriesPartialOptionsMap['Line'];
     data: SeriesDataItemTypeMap['Line'][];
     reference?: Reference<ISeriesApi<'Line'>>;
-    priceLines?: PriceLineOptions[];
+    priceLines?: PriceLineParams[];
 }
 
 export type SeriesActionParams =
@@ -76,12 +82,6 @@ export interface SeriesParamsMap extends Record<SeriesType, unknown> {
     Candlestick: CandlestickSeriesParams;
     Histogram: HistogramSeriesParams;
     Line: LineSeriesParams;
-}
-
-export interface PriceLineParams {
-    id: string;
-    options: PriceLineOptions;
-    reference?: Reference<IPriceLine>;
 }
 
 export type Reference<T> = (ref: T | null) => void;

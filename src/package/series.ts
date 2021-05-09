@@ -1,6 +1,7 @@
 import type {IChartApi, ISeriesApi, SeriesType} from 'lightweight-charts';
 import type {ActionResult, ReferencableActionResult, Reference, SeriesActionParams} from './types';
 import {collection} from './collection';
+import {linesCollection} from './lines';
 
 export type SeriesParams = Omit<SeriesActionParams, 'reference'>;
 
@@ -19,17 +20,24 @@ export function series<T extends SeriesParams>(target: IChartApi, params: T): Se
     let subject = createSeries(target, params);
     let reference: Reference<ISeriesApi<SeriesType>>;
 
+    let lines = linesCollection(subject, params.priceLines);
+
     return {
         update(nextParams: SeriesParams): void {
             if (nextParams.type !== subject.seriesType()) {
+                lines.destroy();
                 target.removeSeries(subject);
+                // TODO: where is reference update?
                 subject = createSeries(target, nextParams);
+                lines = linesCollection(subject, params.priceLines);
                 return;
             }
 
             if (nextParams.options) {
                 subject.applyOptions(nextParams.options);
             }
+
+            lines.update(nextParams.priceLines);
         },
         updateReference(nextReference: Reference<ISeriesApi<T['type']>>): void {
             if (nextReference !== reference) {

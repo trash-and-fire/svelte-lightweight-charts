@@ -9,6 +9,7 @@ export function collection<T, K, P extends { id: string }, R extends Referencabl
 ): ActionResult<P[] | undefined> {
     const collection = new Map<string, R>();
     for (const current of params) {
+        // TODO: where is initial reference?
         collection.set(current.id, factory(target, current));
     }
 
