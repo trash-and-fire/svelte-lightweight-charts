@@ -6,7 +6,7 @@
     import type {Reference} from '../types';
 
     import ContextProvider from './internal/context-provider.svelte';
-    import {useSeriesEffect} from './utils';
+    import {useSeriesEffect} from './internal/utils';
 
     /** Visibility of the label with the latest visible price on the price scale */
     export let lastValueVisible: $$PROPS['lastValueVisible'] = undefined;

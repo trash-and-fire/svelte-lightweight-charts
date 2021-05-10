@@ -1,5 +1,5 @@
 import type {IChartApi, ISeriesApi, SeriesType} from 'lightweight-charts';
-import type {ActionResult, ReferencableActionResult, Reference, SeriesActionParams} from './types';
+import type {ActionResult, ReferencableActionResult, Reference, SeriesActionParams} from '../types';
 import {collection} from './collection';
 import {linesCollection} from './lines';
 
