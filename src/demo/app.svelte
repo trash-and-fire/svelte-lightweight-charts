@@ -5,13 +5,13 @@
         IChartApi,
         ISeriesApi,
         MouseEventParams,
-        PriceLineOptions,
         SeriesType,
         ChartOptions,
         DeepPartial,
     } from 'lightweight-charts';
     import type {
         HistogramSeriesParams,
+        PriceLineParams,
         Reference,
         SeriesActionParams
     } from 'svelte-lightweight-charts/types';
@@ -27,6 +27,7 @@
     import HistogramSeries from 'svelte-lightweight-charts/components/histogram-series.svelte';
     import BarSeries from 'svelte-lightweight-charts/components/bar-series.svelte';
     import CandlestickSeries from 'svelte-lightweight-charts/components/candlestick-series.svelte';
+    import PriceLine from 'svelte-lightweight-charts/components/price-line.svelte';
 
     type EverySeriesApi =
         | ISeriesApi<'Area'>
@@ -39,6 +40,18 @@
     export let reference: Reference<IChartApi> | undefined = undefined;
 
     const SERIES_TYPES: SeriesType[] = ['Area', 'Bar', 'Histogram', 'Candlestick', 'Line'];
+
+    const lines: PriceLineParams[] = [{
+        id: 'price',
+        options: {
+            price: 41.0,
+            color: 'green',
+            lineWidth: 2,
+            lineStyle: LineStyle.Dotted,
+            axisLabelVisible: true,
+            title: 'P/L 500',
+        },
+    }];
 
     let width = 400;
     let height = 300;
@@ -124,16 +137,19 @@
 
         switch (drawMode) {
             case 'draw-priceline': {
-                const line: PriceLineOptions = {
-                    price: price,
-                    color: '#be1238',
-                    lineWidth: 2,
-                    lineStyle: LineStyle.Solid,
-                    axisLabelVisible: true,
-                    title: 'limit',
+                const line: PriceLineParams = {
+                    id: 'limit',
+                    options: {
+                        price: price,
+                        color: '#be1238',
+                        lineWidth: 2,
+                        lineStyle: LineStyle.Solid,
+                        axisLabelVisible: true,
+                        title: 'limit',
+                    }
                 };
                 mainProps = shallowCopy(mainProps)
-                mainProps.priceLines = [line];
+                mainProps.priceLines = [...lines, line];
                 break;
             }
         }
@@ -205,6 +221,7 @@
                     id: 'main',
                     type,
                     data: [...LINE_DATA],
+                    priceLines: lines,
                     reference: (ref: ISeriesApi<'Area'> | null) => {
                         mainSeries = ref;
                     }
@@ -214,6 +231,7 @@
                     id: 'main',
                     type,
                     data: [...LINE_DATA],
+                    priceLines: lines,
                     reference: (ref: ISeriesApi<'Line'> | null) => {
                         mainSeries = ref;
                     }
@@ -223,6 +241,7 @@
                     id: 'main',
                     type,
                     data: [...BAR_DATA],
+                    priceLines: lines,
                     reference: (ref: ISeriesApi<'Bar'> | null) => {
                         mainSeries = ref;
                     },
@@ -232,6 +251,7 @@
                     id: 'main',
                     type,
                     data: [...BAR_DATA],
+                    priceLines: lines,
                     reference: (ref: ISeriesApi<'Candlestick'> | null) => {
                         mainSeries = ref;
                     },
@@ -241,6 +261,7 @@
                     id: 'main',
                     type,
                     data: [...HISTOGRAM_DATA],
+                    priceLines: lines,
                     reference: (ref: ISeriesApi<'Histogram'> | null) => {
                         mainSeries = ref;
                     },
@@ -381,35 +402,55 @@
                         {...(mainProps.options ?? {})}
                         data={mainProps.data}
                         ref={handleMainComponentReference}
-                    />
+                    >
+                        {#each lines as line (line.id)}
+                            <PriceLine {...line.options}/>
+                        {/each}
+                    </AreaSeries>
                 {/if}
                 {#if mainProps.type === 'Line' }
                     <LineSeries
                         {...(mainProps.options ?? {})}
                         data={mainProps.data}
                         ref={handleMainComponentReference}
-                    />
+                    >
+                        {#each lines as line (line.id)}
+                            <PriceLine {...line.options}/>
+                        {/each}
+                    </LineSeries>
                 {/if}
                 {#if mainProps.type === 'Histogram'}
                     <HistogramSeries
                         {...(mainProps.options ?? {})}
                         data={mainProps.data}
                         ref={handleMainComponentReference}
-                    />
+                    >
+                        {#each lines as line (line.id)}
+                            <PriceLine {...line.options}/>
+                        {/each}
+                    </HistogramSeries>
                 {/if}
                 {#if mainProps.type === 'Bar'}
                     <BarSeries
                         {...(mainProps.options ?? {})}
                         data={mainProps.data}
                         ref={handleMainComponentReference}
-                    />
+                    >
+                        {#each lines as line (line.id)}
+                            <PriceLine {...line.options}/>
+                        {/each}
+                    </BarSeries>
                 {/if}
                 {#if mainProps.type === 'Candlestick'}
                     <CandlestickSeries
                         {...(mainProps.options ?? {})}
                         data={mainProps.data}
                         ref={handleMainComponentReference}
-                    />
+                    >
+                        {#each lines as line (line.id)}
+                            <PriceLine {...line.options}/>
+                        {/each}
+                    </CandlestickSeries>
                 {/if}
                 {#if showVolume}
                     {#key volumeProps.id}

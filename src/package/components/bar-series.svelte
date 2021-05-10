@@ -1,11 +1,14 @@
 <svelte:options immutable={true}/>
 
 <script lang="ts">
-    import type {BarSeriesPartialOptions} from 'lightweight-charts';
+    import type {BarSeriesPartialOptions, ISeriesApi} from 'lightweight-charts';
     import type {$$PROPS} from './bar-series.interface';
+    import type {Reference} from '../types';
+
+    import {afterUpdate, onDestroy} from 'svelte';
+    import ContextProvider from './internal/context-provider.svelte';
     import {series} from '../series';
     import {context} from './utils';
-    import {afterUpdate, onDestroy} from 'svelte';
 
     /** Visibility of the label with the latest visible price on the price scale */
     export let lastValueVisible: $$PROPS['lastValueVisible'] = undefined;
@@ -72,6 +75,16 @@
         thinBars,
     };
 
+    let reference: ISeriesApi<'Bar'> | null = null;
+
+    let handleReference: Reference<ISeriesApi<'Bar'>> | undefined = undefined;
+    $: handleReference = (series: ISeriesApi<'Bar'> | null) => {
+        reference = series;
+        if (ref !== undefined) {
+            ref(series);
+        }
+    }
+
     const id = performance.now().toString();
     const subject = series(context(), {
         id,
@@ -88,10 +101,15 @@
     });
 
     afterUpdate(() => {
-        subject.updateReference(ref);
+        subject.updateReference(handleReference);
     })
 
     onDestroy(() => {
         subject.destroy();
     });
 </script>
+{#if reference !== null}
+    <ContextProvider value={reference}>
+        <slot/>
+    </ContextProvider>
+{/if}

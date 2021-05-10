@@ -84,8 +84,6 @@ To get reference of lightweight-chart (`IChartApi`, `ISeriesApi<T>`, etc) instan
 ## Supported components
 - `<Chart>` - main chart container (`IChartApi`).
 - `<[Type]Series>` - series with specified `[Type]` (`ISeriesApi<Type>`). It has to be nested inside `<Chart>` component.
-
-## WIP components
 - `<PriceLine>` - price line (`IPriceLine`). It has to be nested inside `<[Type]Series>` component.
 
 # Typescript support
