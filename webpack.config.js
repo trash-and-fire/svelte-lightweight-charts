@@ -22,8 +22,8 @@ module.exports = {
     },
     output: {
         path: path.join(__dirname, '/docs'),
-        filename: prod ? '[name].[contenthash].js' : '[name].js',
-        chunkFilename: prod ? '[name].[id].[contenthash].js' : '[name].[id].js'
+        filename: '[name].js',
+        chunkFilename: '[name].[id].js'
     },
     module: {
         rules: [
@@ -68,7 +68,7 @@ module.exports = {
     mode,
     plugins: [
         new MiniCssExtractPlugin({
-            filename: prod ? '[name].[contenthash].css' : '[name].css'
+            filename: '[name].css'
         }),
         new ForkTsCheckerWebpackPlugin({
             typescript: {
