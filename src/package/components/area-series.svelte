@@ -5,10 +5,8 @@
     import type {$$PROPS} from './area-series.interface';
     import type {Reference} from '../types';
 
-    import {onDestroy, afterUpdate} from 'svelte';
     import ContextProvider from './internal/context-provider.svelte';
-    import {series} from '../series';
-    import {context} from './utils';
+    import {useSeriesEffect} from './utils';
 
     /** Visibility of the label with the latest visible price on the price scale */
     export let lastValueVisible: $$PROPS['lastValueVisible'] = undefined;
@@ -98,27 +96,15 @@
     }
 
     const id = performance.now().toString();
-    const subject = series(context(), {
-        id,
-        type: 'Area',
-        options,
-        data,
-    });
-
-    $: subject.update({
-        id,
-        type: 'Area',
-        options,
-        data,
-    });
-
-    afterUpdate(() => {
-        subject.updateReference(handleReference);
-    })
-
-    onDestroy(() => {
-        subject.destroy();
-    });
+    useSeriesEffect(() => [
+        {
+            id,
+            type: 'Area',
+            options,
+            data,
+        },
+        handleReference,
+    ]);
 </script>
 {#if reference !== null}
     <ContextProvider value={reference}>
