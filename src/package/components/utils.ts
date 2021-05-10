@@ -1,8 +1,10 @@
-import type {IChartApi, ISeriesApi, SeriesType} from 'lightweight-charts';
-import type {Reference} from '../types';
+import type {IChartApi, IPriceLine, ISeriesApi, SeriesType} from 'lightweight-charts';
+import type {PriceLineParams, Reference} from '../types';
+import type {PriceLineActionResult} from '../lines';
 
 import {afterUpdate, getContext, onMount, setContext} from 'svelte';
 import {series, SeriesActionResult, SeriesParams} from '../series';
+import {line} from '../lines';
 
 export type Context = IChartApi | ISeriesApi<SeriesType>;
 
@@ -35,5 +37,27 @@ export function useSeriesEffect<T extends SeriesParams>(callback: () => [params:
         const [params, ref] = callback();
         subject?.update(params);
         subject?.updateReference(ref);
-    })
+    });
+}
+
+export function useLineEffect(callback: () => [params: PriceLineParams, ref?: Reference<IPriceLine>]): void {
+    let subject: PriceLineActionResult | null = null;
+
+    const api = context<ISeriesApi<SeriesType>>();
+
+    onMount(() => {
+        const [params] = callback();
+        subject = line(api, params);
+
+        return () => {
+            subject?.destroy();
+            subject = null;
+        }
+    });
+
+    afterUpdate(() => {
+        const [params, ref] = callback();
+        subject?.update(params);
+        subject?.updateReference(ref);
+    });
 }

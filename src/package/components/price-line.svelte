@@ -2,9 +2,7 @@
     import type {PriceLineOptions} from 'lightweight-charts';
     import type {$$PROPS} from './price-line.interface';
 
-    import {afterUpdate, onDestroy} from 'svelte';
-    import {context} from './utils';
-    import {line} from '../lines';
+    import {useLineEffect} from './utils';
 
     export let price: $$PROPS['price'];
     export let color: $$PROPS['color'];
@@ -33,21 +31,11 @@
     };
 
     const id = performance.now().toString();
-    const subject = line(context(), {
-        id,
-        options,
-    });
-
-    $: subject.update({
-        id,
-        options,
-    });
-
-    afterUpdate(() => {
-        subject.updateReference(ref);
-    });
-
-    onDestroy(() => {
-        subject.destroy();
-    });
+    useLineEffect(() => [
+        {
+            id,
+            options,
+        },
+        ref
+    ])
 </script>
