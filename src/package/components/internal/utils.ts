@@ -1,10 +1,10 @@
 import type {IChartApi, IPriceLine, ISeriesApi, SeriesType} from 'lightweight-charts';
-import type {PriceLineParams, Reference} from '../types';
-import type {PriceLineActionResult} from '../lines';
+import type {PriceLineParams, Reference} from '../../types';
+import type {PriceLineActionResult} from '../../internal/lines';
 
 import {afterUpdate, getContext, onMount, setContext} from 'svelte';
-import {series, SeriesActionResult, SeriesParams} from '../series';
-import {line} from '../lines';
+import {series, SeriesActionResult, SeriesParams} from '../../internal/series';
+import {line} from '../../internal/lines';
 
 export type Context = IChartApi | ISeriesApi<SeriesType>;
 

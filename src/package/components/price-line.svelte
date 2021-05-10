@@ -2,7 +2,7 @@
     import type {PriceLineOptions} from 'lightweight-charts';
     import type {$$PROPS} from './price-line.interface';
 
-    import {useLineEffect} from './utils';
+    import {useLineEffect} from './internal/utils';
 
     export let price: $$PROPS['price'];
     export let color: $$PROPS['color'];
