@@ -1,11 +1,12 @@
 <svelte:options immutable={true}/>
 
 <script lang="ts">
-    import type {HistogramSeriesPartialOptions} from 'lightweight-charts';
+    import type {HistogramSeriesPartialOptions, ISeriesApi} from 'lightweight-charts';
     import type {$$PROPS} from './histogram-series.interface';
-    import {series} from '../series';
-    import {context} from './utils';
-    import {onDestroy} from 'svelte';
+    import type {Reference} from '../types';
+
+    import ContextProvider from './internal/context-provider.svelte';
+    import {useSeriesEffect} from './internal/utils';
 
     /** Visibility of the label with the latest visible price on the price scale */
     export let lastValueVisible: $$PROPS['lastValueVisible'] = undefined;
@@ -68,24 +69,29 @@
         base,
     };
 
+    let reference: ISeriesApi<'Histogram'> | null = null;
+
+    let handleReference: Reference<ISeriesApi<'Histogram'>> | undefined = undefined;
+    $: handleReference = (series: ISeriesApi<'Histogram'> | null) => {
+        reference = series;
+        if (ref !== undefined) {
+            ref(series);
+        }
+    }
+
     const id = performance.now().toString();
-    const subject = series(context(), {
-        id,
-        type: 'Histogram',
-        options,
-        data,
-        reference: ref,
-    });
-
-    $: subject.update({
-        id,
-        type: 'Histogram',
-        options,
-        data,
-        reference: ref,
-    });
-
-    onDestroy(() => {
-        subject.destroy();
-    });
+    useSeriesEffect(() => [
+        {
+            id,
+            type: 'Histogram',
+            options,
+            data,
+        },
+        handleReference,
+    ]);
 </script>
+{#if reference !== null}
+    <ContextProvider value={reference}>
+        <slot/>
+    </ContextProvider>
+{/if}

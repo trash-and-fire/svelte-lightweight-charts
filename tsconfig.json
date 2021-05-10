@@ -35,6 +35,7 @@
     "rootDir": "./src",
     "baseUrl": "./",
     "paths": {
+      "svelte-lightweight-charts": ["./dist"],
       "svelte-lightweight-charts/*": ["./dist/*"],
     }
   },

@@ -10,26 +10,16 @@
       "uid": "bba23a1f54ff40978d4321755c7446a0",
       "files": []
     },
-    "custom-watermark.svelte": {
-      "hash": -913484878,
-      "uid": "d2c8423038894f68b58097fd0aae2193",
-      "files": []
-    },
-    "legend.svelte": {
-      "hash": -1113210690,
-      "uid": "1b431bf3d75948769855d14c55bbc5f7",
-      "files": []
-    },
-    "custom-locale.svelte": {
-      "hash": 271223125,
-      "uid": "d3e6adf11a464012b16bc229de917255",
+    "custom-font-family.svelte": {
+      "hash": 423124555,
+      "uid": "d1cb45e40ef44234b081870ea90f9b19",
       "files": [
         "components/switcher.svelte"
       ]
     },
-    "custom-font-family.svelte": {
-      "hash": 423124555,
-      "uid": "d1cb45e40ef44234b081870ea90f9b19",
+    "custom-locale.svelte": {
+      "hash": 271223125,
+      "uid": "d3e6adf11a464012b16bc229de917255",
       "files": [
         "components/switcher.svelte"
       ]
@@ -47,6 +37,21 @@
       "files": [
         "components/switcher.svelte"
       ]
+    },
+    "custom-watermark.svelte": {
+      "hash": -913484878,
+      "uid": "d2c8423038894f68b58097fd0aae2193",
+      "files": []
+    },
+    "legend.svelte": {
+      "hash": -1113210690,
+      "uid": "1b431bf3d75948769855d14c55bbc5f7",
+      "files": []
+    },
+    "price-lines-with-titles.svelte": {
+      "hash": -2066010044,
+      "uid": "9dd182e8d9974e9780e284e2943346dd",
+      "files": []
     }
   },
   "components": {

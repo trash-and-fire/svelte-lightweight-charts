@@ -1,11 +1,12 @@
 <svelte:options immutable={true}/>
 
 <script lang="ts">
-    import type {LineSeriesPartialOptions} from 'lightweight-charts';
+    import type {LineSeriesPartialOptions, ISeriesApi} from 'lightweight-charts';
     import type {$$PROPS} from './line-series.interface';
-    import {series} from '../series';
-    import {context} from './utils';
-    import {onDestroy} from 'svelte';
+    import type {Reference} from '../types';
+
+    import ContextProvider from './internal/context-provider.svelte';
+    import {useSeriesEffect} from './internal/utils';
 
     /** Visibility of the label with the latest visible price on the price scale */
     export let lastValueVisible: $$PROPS['lastValueVisible'] = undefined;
@@ -80,24 +81,29 @@
         crosshairMarkerVisible,
     };
 
+    let reference: ISeriesApi<'Line'> | null = null;
+
+    let handleReference: Reference<ISeriesApi<'Line'>> | undefined = undefined;
+    $: handleReference = (series: ISeriesApi<'Line'> | null) => {
+        reference = series;
+        if (ref !== undefined) {
+            ref(series);
+        }
+    }
+
     const id = performance.now().toString();
-    const subject = series(context(), {
-        id,
-        type: 'Line',
-        options,
-        data,
-        reference: ref,
-    });
-
-    $: subject.update({
-        id,
-        type: 'Line',
-        options,
-        data,
-        reference: ref,
-    });
-
-    onDestroy(() => {
-        subject.destroy();
-    });
+    useSeriesEffect(() => [
+        {
+            id,
+            type: 'Line',
+            options,
+            data,
+        },
+        handleReference,
+    ]);
 </script>
+{#if reference !== null}
+    <ContextProvider value={reference}>
+        <slot/>
+    </ContextProvider>
+{/if}

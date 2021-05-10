@@ -3,8 +3,10 @@
 <script lang="ts">
     import type {ChartOptions, IChartApi, DeepPartial, MouseEventParams} from 'lightweight-charts';
     import type {$$EVENTS, $$PROPS} from './chart.interface';
+    import type {Reference} from '../types';
+
     import {createEventDispatcher} from 'svelte';
-    import {context} from './utils';
+    import ContextProvider from './internal/context-provider.svelte';
     import {chart} from '../index';
 
     const dispatch = createEventDispatcher<$$EVENTS>();
@@ -36,6 +38,8 @@
     /** Structure that describes scaling behavior or boolean flag that disables/enables all kinds of scales */
     export let handleScale: $$PROPS['handleScale'] = undefined;
 
+    export let ref: $$PROPS['ref'] = undefined;
+
     let options: DeepPartial<ChartOptions> | undefined = undefined;
     $: options = {
         width,
@@ -55,12 +59,12 @@
 
     let reference: IChartApi | null = null;
 
-    $: if (reference !== null) {
-        context(reference);
-    }
-
-    function handleReference(ref: IChartApi | null): void {
-        reference = ref;
+    let handleReference: Reference<IChartApi> | undefined = undefined;
+    $: handleReference = (chart: IChartApi | null) => {
+        reference = chart;
+        if (ref !== undefined) {
+            ref(chart);
+        }
     }
 
     function handleCrosshairMove(params: MouseEventParams): void {
@@ -78,5 +82,7 @@
     onClick: handleClick,
     reference: handleReference,
 }}>
-    {#if reference !== null}<slot/>{/if}
+    {#if reference !== null}
+        <ContextProvider value={reference}><slot/></ContextProvider>
+    {/if}
 </div>

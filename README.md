@@ -2,6 +2,12 @@ This package is a Svelte wrapper for [lightweight-charts](https://github.com/tra
 
 The package is under development.
 
+# [Demo](https://trash-and-fire.github.io/svelte-lightweight-charts/official-samples.html)
+
+Here are some official examples rewritten on Svelte. Each example you can open in the REPL to modify or fork
+
+If you need more information you can see [demo app sources](./src/demo) or [example sources](./src/demo/samples)
+
 # Installing
 
 ```bash
@@ -61,5 +67,24 @@ There are two ways to use this package:
     }]
 }}/>
 ```
+# Core API
+`svelte-lightweight-charts` supports chart object and all kind of series objects from `lightweight-charts`. 
 
-If you need more examples you can see [demo app](./src/demo) or [samples](./src/demo/samples)
+## Getting reference to lightweight-chart objects
+
+To get reference of lightweight-chart (`IChartApi`, `ISeriesApi<T>`, etc) instance of a node you can use `ref` property.
+```html
+<script>
+    let chartApi;
+</script>
+<Chart width={400} height={300} ref={(ref) => chartApi = ref}/>
+<button on:click={() => chartApi.priceScale().fitContent()}>Fit Content</button>
+```
+
+## Supported components
+- `<Chart>` - main chart container (`IChartApi`).
+- `<[Type]Series>` - series with specified `[Type]` (`ISeriesApi<Type>`). It has to be nested inside `<Chart>` component.
+- `<PriceLine>` - price line (`IPriceLine`). It has to be nested inside `<[Type]Series>` component.
+
+# Typescript support
+Package is written on TypeScript and transpiled to plain `*.js` and `*.svelte` files. Definition files (including `*.svelte.d.ts`) are provided with package. It is a good place to find list of available properties that can be passed to each component.

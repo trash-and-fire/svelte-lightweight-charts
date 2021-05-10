@@ -6,7 +6,7 @@ import {
     MouseEventHandler,
 } from 'lightweight-charts';
 import type {ActionResult, Reference, SeriesActionParams} from './types';
-import {seriesCollection} from './series';
+import {seriesCollection} from './internal/series';
 
 export interface ChartActionParams<T extends Array<SeriesActionParams>> {
     options?: DeepPartial<ChartOptions>;

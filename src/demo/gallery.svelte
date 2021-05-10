@@ -6,9 +6,9 @@
     // eslint-disable-next-line @typescript-eslint/typedef
     const components = context.keys().map((request) => {
         const [file] = /(\w|[-.])+$/.exec(request);
-        const id = repl.samples[file].uid;
+        const id = repl.samples[file]?.uid;
         return {
-            href: `https://svelte.dev/repl/${id}`,
+            href: id !== undefined ? `https://svelte.dev/repl/${id}` : undefined,
             constructor: context(request).default,
         }
     });
@@ -17,13 +17,15 @@
 <div class="container">
     {#each components as component (component)}
         <div class="item">
-            <a class="link" target="_blank" href={component.href} title="Show in REPL">
-                <svg width="18" height="15" viewBox="0 0 18 15" xmlns="http://www.w3.org/2000/svg">
-                    <g stroke="currentColor" fill="none">
-                        <path d="M12.5 2.5l5 5-5 5M10.5.5l-3 14M5.5 2.5l-5 5 5 5"></path>
-                    </g>
-                </svg>
-            </a>
+            {#if component.href !== undefined}
+                <a class="link" target="_blank" href={component.href} title="Show in REPL">
+                    <svg width="18" height="15" viewBox="0 0 18 15" xmlns="http://www.w3.org/2000/svg">
+                        <g stroke="currentColor" fill="none">
+                            <path d="M12.5 2.5l5 5-5 5M10.5.5l-3 14M5.5 2.5l-5 5 5 5"></path>
+                        </g>
+                    </svg>
+                </a>
+            {/if}
             <svelte:component this={component.constructor}/>
         </div>
     {/each}
