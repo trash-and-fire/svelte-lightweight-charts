@@ -104,7 +104,7 @@
     ],
     "transform": {
       "^.+\\.(js|jsx|ts|tsx)$": "babel-jest",
-      "^.+\\.svelte$": "<rootDir>/scripts/svelte-jest.cjs"
+      "^.+\\.svelte$": "<rootDir>/scripts/svelte-jest.js"
     },
     "extensionsToTreatAsEsm": [".svelte", ".ts"],
     "transformIgnorePatterns": [
