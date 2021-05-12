@@ -4,7 +4,6 @@
   "version": "1.1.1",
   "description": "Svelte wrapper for financial lightweight charts built with HTML5 canvas",
   "license": "MIT",
-  "type": "module",
   "repository": {
     "type": "git",
     "url": "https://github.com/trash-and-fire/svelte-lightweight-charts.git"
