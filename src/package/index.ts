@@ -107,3 +107,5 @@ export function chart<T extends Array<SeriesActionParams>>(
         }
     }
 }
+
+export default chart;
