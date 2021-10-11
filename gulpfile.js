@@ -87,7 +87,15 @@ function assets() {
         .pipe(dest('./dist'));
 }
 
-const build = series(wipe, typescript, parallel(manifest, svelte, typings, assets), clean);
+function repl() {
+    return src(['./dist/**/*.svelte', './dist/**/*.js'])
+        .pipe(transform('utf8', (content) => {
+            return content.toString().replace(/'lightweight-charts'/g, "'lightweight-charts?module'")
+        }))
+        .pipe(dest('./dist'));
+}
+
+const build = series(wipe, typescript, parallel(manifest, svelte, typings, assets), clean, argv.repl ? repl : undefined);
 
 function samples(...args) {
     const components = new Map();
