@@ -88,14 +88,18 @@ function assets() {
 }
 
 function repl() {
-    return src(['./dist/**/*.svelte', './dist/**/*.js'])
-        .pipe(transform('utf8', (content) => {
-            return content.toString().replace(/'lightweight-charts'/g, "'lightweight-charts?module'")
-        }))
-        .pipe(dest('./dist'));
+    if (argv.repl) {
+        return src(['./dist/**/*.svelte', './dist/**/*.js'])
+            .pipe(transform('utf8', (content) => {
+                return content.toString().replace(/'lightweight-charts'/g, "'lightweight-charts?module'")
+            }))
+            .pipe(dest('./dist'));
+    } else {
+        return src(['./']);
+    }
 }
 
-const build = series(wipe, typescript, parallel(manifest, svelte, typings, assets), clean, argv.repl ? repl : undefined);
+const build = series(wipe, typescript, parallel(manifest, svelte, typings, assets), clean, repl);
 
 function samples(...args) {
     const components = new Map();
@@ -117,6 +121,21 @@ function samples(...args) {
 
     const resolveSamples = () => src(['./src/demo/samples/*.svelte'])
         .pipe(transform('utf8', (contents, file) => {
+            contents = contents.toString().replace(/'lightweight-charts'/g, "'lightweight-charts?module'")
+            contents = contents.toString().replace(/svelte-lightweight-charts/g, 'svelte-lightweight-charts@repl');
+
+            const issue =
+`
+<script>
+    /**
+     * Warning:
+     * Until the issue [https://github.com/sveltejs/svelte-repl/issues/177] is resolved
+     * you should use imports from 'svelte-lightweight-charts@repl' and 'lightweight-charts?module' in REPL
+     */
+`
+            contents = contents.toString().replace(/<script>/g, issue);
+
+
             const files = Array.from(components.keys()).filter((file) => contents.includes(file));
             samples.set(`${file.basename}`, {
                 hash: crc.str(contents),
