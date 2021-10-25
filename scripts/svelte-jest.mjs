@@ -1,5 +1,5 @@
-const {preprocess, compile} = require('svelte/compiler');
-const {typescript} = require('svelte-preprocess');
+import {preprocess, compile} from 'svelte/compiler';
+import preprocessors from 'svelte-preprocess';
 
 function compiler(src, filename) {
   const result = compile(src, {
@@ -16,11 +16,14 @@ function compiler(src, filename) {
     map: result.js.map
   }
 }
-module.exports = {
+export default {
     async processAsync(src, filename) {
-        const ts = typescript();
+        const ts = preprocessors.typescript();
         ts.filename = filename;
         const { code } = await preprocess(src, ts);
         return compiler(code, filename);
+    },
+    process() {
+        throw new Error('not implemented');
     }
 }

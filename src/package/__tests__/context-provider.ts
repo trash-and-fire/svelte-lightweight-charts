@@ -2,12 +2,12 @@
 
 import ContextProvider from '../components/internal/context-provider.svelte'
 
-describe('Foo Component', () => {
+describe('ContextProvider', () => {
   it('should render', () => {
     const el = document.createElement('div')
     new ContextProvider({
       target: el
     })
-    expect(el.textContent).toBe('Hello Foo!')
+    expect(el.textContent).toBe('')
   })
 })
