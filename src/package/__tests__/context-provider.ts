@@ -6,7 +6,10 @@ describe('ContextProvider', () => {
   it('should render', () => {
     const el = document.createElement('div')
     new ContextProvider({
-      target: el
+      target: el,
+      props: {
+        value: {},
+      }
     })
     expect(el.textContent).toBe('')
   })
