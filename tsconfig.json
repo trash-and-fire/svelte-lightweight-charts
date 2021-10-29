@@ -44,6 +44,6 @@
   ],
   "exclude": [
     "node_modules/**/*",
-    "src/package/__tests__/**/*"
+    "src/package/**/__tests__/**/*"
   ]
 }
