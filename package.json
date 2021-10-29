@@ -68,7 +68,7 @@
     "yargs": "16.2.0"
   },
   "scripts": {
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "test": "node --experimental-vm-modules --no-warnings node_modules/jest/bin/jest.js",
     "prepublishOnly": "npm run build-package",
     "build-package": "gulp build",
     "build-demo": "npm run build-package && cross-env NODE_ENV=production webpack --bail",

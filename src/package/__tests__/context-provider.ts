@@ -1,4 +1,4 @@
-/// <reference types="jest"/>
+import {describe, it, expect} from '@jest/globals';
 
 import ContextProvider from '../components/internal/context-provider.svelte'
 
