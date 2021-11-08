@@ -97,7 +97,8 @@
     ],
     "collectCoverageFrom": [
       "src/package/**/*.{js,jsx,ts,tsx}",
-      "!src/package/**/*.d.ts"
+      "!src/package/**/*.d.ts",
+      "!src/package/**/*.interface.ts"
     ],
     "testMatch": [
       "<rootDir>/src/package/**/__tests__/**/*.{mjs,js,jsx,ts,tsx}",
