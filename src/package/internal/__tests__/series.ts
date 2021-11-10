@@ -272,7 +272,7 @@ describe('Synthetic action: series', function () {
         expect(COLLECTION_ACTION.destroy).toHaveBeenCalledTimes(1);
     });
 
-    it.skip('should handle reference when series type changed', async () => {
+    it('should handle reference when series type changed', async () => {
         const {series} = await import('../series');
 
         const subject = series(CHART_API, {

@@ -27,8 +27,9 @@ export function series<T extends SeriesParams>(target: IChartApi, params: T): Se
             if (nextParams.type !== subject.seriesType()) {
                 lines.destroy();
                 target.removeSeries(subject);
-                // TODO: where is reference update?
+                reference?.(null);
                 subject = createSeries(target, nextParams);
+                reference?.(subject);
                 lines = linesCollection(subject, params.priceLines);
                 return;
             }
