@@ -47,6 +47,7 @@ export function series<T extends SeriesParams>(target: IChartApi, params: T): Se
             }
         },
         destroy(): void {
+            lines.destroy();
             reference?.(null);
             target.removeSeries(subject);
         }

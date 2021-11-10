@@ -123,7 +123,7 @@ describe('Synthetic action: series', function () {
         expect(CHART_API.removeSeries).toHaveBeenCalledWith(SERIES_API);
     });
 
-    it.skip('should destroy lines collection when destroyed', async () => {
+    it('should destroy lines collection when destroyed', async () => {
         const {series} = await import('../series');
 
         const subject = series(CHART_API, {
