@@ -3,7 +3,7 @@ import {ensure} from './utils';
 
 export function collection<T, K, P extends { id: string }, R extends ReferencableActionResult<P, K>>(
     target: T,
-    params: P[],
+    params: P[] = [],
     factory: (target: T, params: P) => R,
     reference: (params: P) => Reference<K> | undefined
 ): ActionResult<P[] | undefined> {
@@ -16,7 +16,7 @@ export function collection<T, K, P extends { id: string }, R extends Referencabl
     }
 
     return {
-        update(nextParams: P[]): void {
+        update(nextParams: P[] = []): void {
             const existing = new Set(collection.keys());
             const next = new Map(nextParams.map((item: P) => [item.id, item]));
 
