@@ -1,6 +1,6 @@
 import {describe, it, expect} from '@jest/globals';
 
-import ContextProvider from '../components/internal/context-provider.svelte'
+import ContextProvider from '../context-provider.svelte';
 
 describe('ContextProvider', () => {
   it('should render', () => {
