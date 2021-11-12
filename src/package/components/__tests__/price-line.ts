@@ -63,13 +63,15 @@ describe('PriceLine component', () => {
 
         await tick();
 
+        LINE_API.applyOptions.mockClear();
+
         component.$set({
             price: 41.0,
             color: 'green',
             lineWidth: 2,
             lineStyle: 1,
             axisLabelVisible: true,
-            title: 'P/L 500',
+            title: 'Line',
         });
 
         await tick();
@@ -81,7 +83,7 @@ describe('PriceLine component', () => {
             lineWidth: 2,
             lineStyle: 1,
             axisLabelVisible: true,
-            title: 'P/L 500',
+            title: 'Line',
         });
     });
 

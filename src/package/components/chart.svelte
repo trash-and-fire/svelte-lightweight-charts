@@ -60,12 +60,12 @@
     let reference: IChartApi | null = null;
 
     let handleReference: Reference<IChartApi> | undefined = undefined;
-    $: handleReference = (chart: IChartApi | null) => {
+    $: handleReference = ((ref?: Reference<IChartApi>) => (chart: IChartApi | null) => {
         reference = chart;
         if (ref !== undefined) {
             ref(chart);
         }
-    }
+    })(ref);
 
     function handleCrosshairMove(params: MouseEventParams): void {
         dispatch('crosshairMove', params);

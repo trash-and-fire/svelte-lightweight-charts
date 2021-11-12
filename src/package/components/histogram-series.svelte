@@ -72,12 +72,12 @@
     let reference: ISeriesApi<'Histogram'> | null = null;
 
     let handleReference: Reference<ISeriesApi<'Histogram'>> | undefined = undefined;
-    $: handleReference = (series: ISeriesApi<'Histogram'> | null) => {
+    $: handleReference = ((ref?: Reference<ISeriesApi<'Histogram'>>) => (series: ISeriesApi<'Histogram'> | null) => {
         reference = series;
         if (ref !== undefined) {
             ref(series);
         }
-    }
+    })(ref);
 
     const id = performance.now().toString();
     useSeriesEffect(() => [
