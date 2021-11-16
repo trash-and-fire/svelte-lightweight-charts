@@ -54,12 +54,6 @@
         }
     }
 
-    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type,@typescript-eslint/typedef
-    function pad(n) {
-        var s = ('0' + n);
-        return s.substr(s.length - 2);
-    }
-
     const options = {
         width: 600,
         height: 300,

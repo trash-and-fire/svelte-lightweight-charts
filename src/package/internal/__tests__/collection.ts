@@ -9,7 +9,7 @@ const HEAD_ELEMENT = { id: 'head-element', reference: () => void 0 };
 const MIDDLE_ELEMENT = { id: 'middle-element', reference: () => void 0 }
 const TAIL_ELEMENT = { id: 'tail-element', reference: () => void 0 };
 
-const FACTORY = jest.fn((target: object, params: Params) => ({
+const FACTORY = jest.fn(() => ({
     update: jest.fn(),
     updateReference: jest.fn(),
     destroy: jest.fn(),
