@@ -27,16 +27,21 @@
     "**"
   ],
   "devDependencies": {
+    "@babel/core": "7.14.0",
+    "@babel/preset-env": "7.14.1",
+    "@babel/preset-typescript": "7.13.0",
     "@tsconfig/svelte": "1.0.10",
-    "@typescript-eslint/eslint-plugin": "4.15.1",
-    "@typescript-eslint/parser": "4.15.1",
-    "axios": "0.21.1",
+    "@types/jest": "27.0.2",
+    "@typescript-eslint/eslint-plugin": "5.4.0",
+    "@typescript-eslint/parser": "5.4.0",
+    "axios": "0.23.0",
+    "babel-jest": "27.3.1",
     "crc-32": "1.2.0",
     "cross-env": "7.0.3",
     "css-loader": "5.0.1",
-    "eslint": "7.20.0",
+    "eslint": "8.2.0",
     "eslint-plugin-node": "11.1.0",
-    "eslint-plugin-svelte3": "3.1.1",
+    "eslint-plugin-svelte3": "3.2.1",
     "fork-ts-checker-webpack-plugin": "6.1.1",
     "gulp": "4.0.2",
     "gulp-clean": "0.4.0",
@@ -44,29 +49,32 @@
     "gulp-transform": "3.0.5",
     "html-webpack-plugin": "5.3.1",
     "husky": "4.3.8",
+    "jest": "27.3.1",
     "lightweight-charts": "3.3.0",
     "lint-staged": "10.5.4",
     "lodash": "4.17.21",
     "mini-css-extract-plugin": "1.3.4",
     "plugin-error": "1.0.1",
-    "svelte": "3.31.2",
+    "svelte": "3.44.0",
     "svelte-check": "1.3.0",
     "svelte-loader": "3.0.0",
-    "svelte-preprocess": "4.6.9",
+    "svelte-preprocess": "4.9.8",
     "ts-loader": "8.0.4",
     "tslib": "2.0.1",
-    "typescript": "4.0.3",
+    "typescript": "4.2.4",
     "webpack": "5.23.0",
-    "webpack-cli": "4.5.0",
+    "webpack-cli": "4.9.1",
     "webpack-dev-server": "3.11.2",
     "yargs": "16.2.0"
   },
   "scripts": {
+    "test": "node --experimental-vm-modules --no-warnings node_modules/jest/bin/jest.js",
     "prepublishOnly": "npm run build-package",
     "build-package": "gulp build",
     "build-demo": "npm run build-package && cross-env NODE_ENV=production webpack --bail",
     "start": "npm run build-package && webpack serve --content-base src/demo/public",
     "samples": "gulp samples",
+    "lint": "eslint .",
     "validate": "svelte-check"
   },
   "peerDependencies": {
@@ -82,5 +90,45 @@
   },
   "engines": {
     "node": ">=10.3.0"
+  },
+  "jest": {
+    "testEnvironment": "jsdom",
+    "roots": [
+      "<rootDir>/src/package"
+    ],
+    "collectCoverageFrom": [
+      "src/package/**/*.{js,jsx,ts,tsx}",
+      "!src/package/**/*.d.ts",
+      "!src/package/**/*.interface.ts"
+    ],
+    "testMatch": [
+      "<rootDir>/src/package/**/__tests__/**/*.{mjs,js,jsx,ts,tsx}",
+      "<rootDir>/src/package/**/*.{spec,test}.{mjs,js,jsx,ts,tsx}"
+    ],
+    "transform": {
+      "^.+\\.(js|jsx|ts|tsx)$": "babel-jest",
+      "^.+\\.svelte$": "<rootDir>/scripts/svelte-jest.mjs"
+    },
+    "extensionsToTreatAsEsm": [
+      ".svelte",
+      ".ts"
+    ],
+    "transformIgnorePatterns": [
+      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|ts|tsx)$"
+    ]
+  },
+  "babel": {
+    "presets": [
+      [
+        "@babel/preset-env",
+        {
+          "modules": false,
+          "targets": {
+            "node": "current"
+          }
+        }
+      ],
+      "@babel/preset-typescript"
+    ]
   }
 }

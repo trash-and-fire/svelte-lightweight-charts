@@ -18,7 +18,7 @@ export function context<T extends Context>(value?: T): T | void {
     }
 }
 
-export function useSeriesEffect<T extends SeriesParams>(callback: () => [params: T, ref?: Reference<ISeriesApi<T['type']>>]): void {
+export function useSeriesEffect<T extends SeriesParams>(callback: () => [params: T, ref: Reference<ISeriesApi<T['type']>> | undefined]): void {
     let subject: SeriesActionResult<T> | null = null;
 
     const api = context<IChartApi>();
@@ -40,7 +40,7 @@ export function useSeriesEffect<T extends SeriesParams>(callback: () => [params:
     });
 }
 
-export function useLineEffect(callback: () => [params: PriceLineParams, ref?: Reference<IPriceLine>]): void {
+export function useLineEffect(callback: () => [params: PriceLineParams, ref: Reference<IPriceLine> | undefined]): void {
     let subject: PriceLineActionResult | null = null;
 
     const api = context<ISeriesApi<SeriesType>>();
