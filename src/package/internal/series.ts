@@ -85,5 +85,10 @@ function createSeries<T extends SeriesActionParams>(
             series.setData(params.data);
             return series;
         }
+        case 'Baseline': {
+            const series = chart.addBaselineSeries(params.options);
+            series.setData(params.data);
+            return series;
+        }
     }
 }
