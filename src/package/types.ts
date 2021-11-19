@@ -69,14 +69,14 @@ export interface LineSeriesParams {
     priceLines?: PriceLineParams[];
 }
 
-export interface BaselineSeriesParams {
+export type BaselineSeriesParams = 'Baseline' extends SeriesType ? {
     id: string;
     type: 'Baseline';
     options?: SeriesPartialOptionsMap['Baseline'];
     data: SeriesDataItemTypeMap['Baseline'][];
     reference?: Reference<ISeriesApi<'Baseline'>>;
     priceLines?: PriceLineParams[];
-}
+} : never;
 
 export type SeriesActionParams =
     | AreaSeriesParams
