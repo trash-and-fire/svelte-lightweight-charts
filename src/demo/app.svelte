@@ -27,6 +27,7 @@
     import HistogramSeries from 'svelte-lightweight-charts/components/histogram-series.svelte';
     import BarSeries from 'svelte-lightweight-charts/components/bar-series.svelte';
     import CandlestickSeries from 'svelte-lightweight-charts/components/candlestick-series.svelte';
+    import BaselineSeries from 'svelte-lightweight-charts/components/baseline-series.svelte';
     import PriceLine from 'svelte-lightweight-charts/components/price-line.svelte';
 
     type EverySeriesApi =
@@ -35,11 +36,12 @@
         | ISeriesApi<'Histogram'>
         | ISeriesApi<'Candlestick'>
         | ISeriesApi<'Line'>
+        | ISeriesApi<'Baseline'>
         ;
 
     export let reference: Reference<IChartApi> | undefined = undefined;
 
-    const SERIES_TYPES: SeriesType[] = ['Area', 'Bar', 'Histogram', 'Candlestick', 'Line'];
+    const SERIES_TYPES: SeriesType[] = ['Area', 'Bar', 'Histogram', 'Candlestick', 'Line', 'Baseline'];
 
     const lines: PriceLineParams[] = [{
         id: 'price',
@@ -196,7 +198,7 @@
             clearTicker();
         }
         if (daily) {
-            ticker = setInterval(
+            ticker = window.setInterval(
                 () => {
                     day.setDate(day.getDate() + 1);
                     day = new Date(day);
@@ -204,7 +206,7 @@
                 1000
             );
         } else {
-            ticker = setInterval(
+            ticker = window.setInterval(
                 () => {
                     day.setHours(day.getHours() + 6);
                     day = new Date(day);
@@ -265,6 +267,22 @@
                     reference: (ref: ISeriesApi<'Histogram'> | null) => {
                         mainSeries = ref;
                     },
+                }
+            case 'Baseline':
+                return {
+                    id: 'main',
+                    type,
+                    data: [...LINE_DATA],
+                    options: {
+                        baseValue: {
+                            type: "price",
+                            price: 38,
+                        },
+                    },
+                    priceLines: lines,
+                    reference: (ref: ISeriesApi<'Baseline'> | null) => {
+                        mainSeries = ref;
+                    }
                 }
             default:
                 throw new Error();
@@ -361,7 +379,7 @@
     </fieldset>
     <fieldset name="series">
         <legend>Main Series type:</legend>
-        {#each SERIES_TYPES as type (type) }
+        {#each SERIES_TYPES as type (type)}
             <label>
                 <input type="radio" name="series-type" value={type} bind:group={seriesType}> {type}
             </label>
@@ -451,6 +469,17 @@
                             <PriceLine {...line.options}/>
                         {/each}
                     </CandlestickSeries>
+                {/if}
+                {#if mainProps.type === 'Baseline'}
+                    <BaselineSeries
+                        {...(mainProps.options ?? {})}
+                        data={mainProps.data}
+                        ref={handleMainComponentReference}
+                    >
+                        {#each lines as line (line.id)}
+                            <PriceLine {...line.options}/>
+                        {/each}
+                    </BaselineSeries>
                 {/if}
                 {#if showVolume}
                     {#key volumeProps.id}

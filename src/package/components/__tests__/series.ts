@@ -16,6 +16,7 @@ const CHART_API = {
     addCandlestickSeries: jest.fn(() => SERIES_API),
     addHistogramSeries: jest.fn(() => SERIES_API),
     addLineSeries: jest.fn(() => SERIES_API),
+    addBaselineSeries: jest.fn(() => SERIES_API),
     removeSeries: jest.fn(),
 }
 
@@ -25,6 +26,7 @@ describe.each([
     ['Candlestick', 'candlestick-series', 'addCandlestickSeries'],
     ['Histogram', 'histogram-series', 'addHistogramSeries'],
     ['Line', 'line-series', 'addLineSeries'],
+    ['Baseline', 'baseline-series', 'addBaselineSeries'],
 ])('%sSeries component', (type: SeriesType, name: string, method: keyof typeof CHART_API) => {
     beforeAll(() => {
         SERIES_API.seriesType = jest.fn(() => type);

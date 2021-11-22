@@ -69,12 +69,22 @@ export interface LineSeriesParams {
     priceLines?: PriceLineParams[];
 }
 
+export type BaselineSeriesParams = 'Baseline' extends SeriesType ? {
+    id: string;
+    type: 'Baseline';
+    options?: SeriesPartialOptionsMap['Baseline'];
+    data: SeriesDataItemTypeMap['Baseline'][];
+    reference?: Reference<ISeriesApi<'Baseline'>>;
+    priceLines?: PriceLineParams[];
+} : never;
+
 export type SeriesActionParams =
     | AreaSeriesParams
     | BarSeriesParams
     | CandlestickSeriesParams
     | HistogramSeriesParams
     | LineSeriesParams
+    | BaselineSeriesParams
 
 export interface SeriesParamsMap extends Record<SeriesType, unknown> {
     Area: AreaSeriesParams;
@@ -82,6 +92,7 @@ export interface SeriesParamsMap extends Record<SeriesType, unknown> {
     Candlestick: CandlestickSeriesParams;
     Histogram: HistogramSeriesParams;
     Line: LineSeriesParams;
+    Baseline: BaselineSeriesParams;
 }
 
 export type Reference<T> = (ref: T | null) => void;
