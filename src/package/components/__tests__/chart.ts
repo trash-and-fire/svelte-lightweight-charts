@@ -103,4 +103,87 @@ describe('Chart component', () => {
 
         expect(CHART_ACTION_OBJECT.destroy).toHaveBeenCalledTimes(1);
     });
+
+    it('should handle dom reference', async () => {
+        const { default: Chart } = await import('../chart.svelte');
+        const ref = jest.fn<HTMLElement | null, []>();
+        const target = document.createElement('div');
+        const component = new Chart({
+            target,
+            props: {
+                width: 100,
+                height: 100,
+                container: {
+                    ref,
+                }
+            },
+        });
+
+        await tick();
+
+        expect(ref).toHaveBeenCalledTimes(1);
+        expect(ref).toHaveBeenLastCalledWith(target.firstElementChild);
+
+        component.$set({
+            width: 100,
+            height: 100,
+            container: {
+                ref,
+            }
+        });
+
+        await tick();
+
+        expect(ref).toHaveBeenCalledTimes(1);
+
+        const nextRef = jest.fn<HTMLElement | null, []>();
+        component.$set({
+            width: 100,
+            height: 100,
+            container: {
+                ref: nextRef,
+            }
+        });
+
+        await tick();
+
+        expect(ref).toHaveBeenCalledTimes(2);
+        expect(ref).toHaveBeenLastCalledWith(null);
+
+        expect(nextRef).toHaveBeenCalledTimes(1);
+        expect(nextRef).toHaveBeenLastCalledWith(target.firstElementChild);
+
+        component.$destroy();
+
+        await tick();
+
+        expect(ref).toHaveBeenCalledTimes(2);
+
+        expect(nextRef).toHaveBeenCalledTimes(2);
+        expect(nextRef).toHaveBeenLastCalledWith(null);
+    });
+
+    it('should spread attributes to dom container', async () => {
+        const { default: Chart } = await import('../chart.svelte');
+
+        const target = document.createElement('div')
+        new Chart({
+            target,
+            props: {
+                width: 100,
+                height: 100,
+                container: {
+                    class: 'container',
+                    id: 'container',
+                    'data-test': 'container',
+                }
+            },
+        });
+
+        await tick();
+
+        expect(target.firstElementChild.className).toBe('container');
+        expect(target.firstElementChild.id).toBe('container');
+        expect(target.firstElementChild.getAttribute('data-test')).toBe('container');
+    });
 })

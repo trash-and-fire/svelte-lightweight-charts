@@ -6,10 +6,13 @@
     import type {Reference} from '../types';
 
     import {createEventDispatcher} from 'svelte';
+    import {element} from './internal/element';
     import ContextProvider from './internal/context-provider.svelte';
     import {chart} from '../index';
 
     const dispatch = createEventDispatcher<$$EVENTS>();
+
+    export let container: $$PROPS['container'] = undefined;
 
     /** Height of the chart */
     export let width: $$PROPS['width'] = 0;
@@ -67,6 +70,13 @@
         }
     })(ref);
 
+    // Dom container attributes
+    let attrs: $$PROPS['container'] = {};
+    $: {
+        attrs = Object.assign({}, container);
+        delete attrs.ref;
+    }
+
     function handleCrosshairMove(params: MouseEventParams): void {
         dispatch('crosshairMove', params);
     }
@@ -76,12 +86,16 @@
     }
 </script>
 
-<div use:chart={{
-    options,
-    onCrosshairMove: handleCrosshairMove,
-    onClick: handleClick,
-    reference: handleReference,
-}}>
+<div
+    {...attrs}
+    use:element={container?.ref}
+    use:chart={{
+        options,
+        onCrosshairMove: handleCrosshairMove,
+        onClick: handleClick,
+        reference: handleReference,
+    }}
+>
     {#if reference !== null}
         <ContextProvider value={reference}><slot/></ContextProvider>
     {/if}

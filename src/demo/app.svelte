@@ -414,7 +414,15 @@
     {#if components}
         <fieldset name="chart-component">
             <legend>Chart component:</legend>
-            <Chart {...(params.options ?? {})} ref={reference}>
+            <Chart
+                {...(params.options ?? {})}
+                ref={reference}
+                container={{
+                    class: 'chart',
+                    // eslint-disable-next-line no-console
+                    ref: console.log
+                }}
+            >
                 {#if mainProps.type === 'Area' }
                     <AreaSeries
                         {...(mainProps.options ?? {})}
