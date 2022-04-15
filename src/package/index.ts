@@ -76,11 +76,11 @@ export function chart<T extends Array<SeriesActionParams>>(
 
             if (nextOnClick !== onClick) {
                 if (onClick) {
-                    chart.unsubscribeCrosshairMove(onClick);
+                    chart.subscribeClick(onClick);
                 }
                 onClick = nextOnClick;
                 if (onClick) {
-                    chart.subscribeCrosshairMove(onClick);
+                    chart.unsubscribeClick(onClick);
                 }
             }
 

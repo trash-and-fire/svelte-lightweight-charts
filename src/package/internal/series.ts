@@ -27,8 +27,9 @@ export function series<T extends SeriesParams>(target: IChartApi, params: T): Se
             if (nextParams.type !== subject.seriesType()) {
                 lines.destroy();
                 target.removeSeries(subject);
-                // TODO: where is reference update?
+                reference?.(null);
                 subject = createSeries(target, nextParams);
+                reference?.(subject);
                 lines = linesCollection(subject, params.priceLines);
                 return;
             }
@@ -47,6 +48,7 @@ export function series<T extends SeriesParams>(target: IChartApi, params: T): Se
             }
         },
         destroy(): void {
+            lines.destroy();
             reference?.(null);
             target.removeSeries(subject);
         }
@@ -80,6 +82,11 @@ function createSeries<T extends SeriesActionParams>(
         }
         case 'Line': {
             const series = chart.addLineSeries(params.options);
+            series.setData(params.data);
+            return series;
+        }
+        case 'Baseline': {
+            const series = chart.addBaselineSeries(params.options);
             series.setData(params.data);
             return series;
         }

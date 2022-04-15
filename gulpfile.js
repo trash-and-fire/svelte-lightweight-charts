@@ -5,7 +5,7 @@ const {preprocess} = require('svelte/compiler');
 const camelize = require('lodash/camelCase');
 const upper = require('lodash/upperFirst')
 const remove = require('gulp-clean');
-const {exec} = require('child_process');
+const {spawn} = require('child_process');
 const crc = require('crc-32');
 const {argv} = require('yargs');
 
@@ -79,7 +79,7 @@ function manifest() {
 }
 
 function typescript() {
-    return exec('tsc --project tsconfig.build.json');
+    return spawn('tsc', ['--project', 'tsconfig.build.json'], { stdio: 'inherit' });
 }
 
 function assets() {

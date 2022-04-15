@@ -88,12 +88,12 @@
     let reference: ISeriesApi<'Area'> | null = null;
 
     let handleReference: Reference<ISeriesApi<'Area'>> | undefined = undefined;
-    $: handleReference = (series: ISeriesApi<'Area'> | null) => {
+    $: handleReference = ((ref?: Reference<ISeriesApi<'Area'>>) => (series: ISeriesApi<'Area'> | null) => {
         reference = series;
         if (ref !== undefined) {
             ref(series);
         }
-    }
+    })(ref);
 
     const id = performance.now().toString();
     useSeriesEffect(() => [
