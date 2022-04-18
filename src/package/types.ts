@@ -1,10 +1,16 @@
 import type {
+    DeepPartial,
     IPriceLine,
     ISeriesApi,
+    ITimeScaleApi,
+    LogicalRangeChangeEventHandler,
     PriceLineOptions,
     SeriesDataItemTypeMap,
     SeriesPartialOptionsMap,
-    SeriesType
+    SeriesType,
+    SizeChangeEventHandler,
+    TimeRangeChangeEventHandler,
+    TimeScaleOptions,
 } from 'lightweight-charts';
 
 export interface ActionResult<T> {
@@ -93,6 +99,14 @@ export interface SeriesParamsMap extends Record<SeriesType, unknown> {
     Histogram: HistogramSeriesParams;
     Line: LineSeriesParams;
     Baseline: BaselineSeriesParams;
+}
+
+export interface TimeScaleParams {
+    options?: DeepPartial<TimeScaleOptions>;
+    reference?: Reference<ITimeScaleApi>;
+    onVisibleTimeRangeChange?: TimeRangeChangeEventHandler;
+    onVisibleLogicalRangeChange?: LogicalRangeChangeEventHandler;
+    onSizeChange?: SizeChangeEventHandler;
 }
 
 export type Reference<T> = (ref: T | null) => void;

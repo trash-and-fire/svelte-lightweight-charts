@@ -16,6 +16,8 @@
         SeriesActionParams
     } from 'svelte-lightweight-charts/types';
     import type {ChartActionParams} from 'svelte-lightweight-charts';
+    import type {$$EVENTS as TimeScaleEvents} from 'svelte-lightweight-charts/components/time-scale.svelte';
+
     import {LineStyle} from 'lightweight-charts';
     import {chart} from 'svelte-lightweight-charts';
     import {BAR_DATA, HISTOGRAM_DATA, LINE_DATA} from './data-series';
@@ -29,6 +31,7 @@
     import CandlestickSeries from 'svelte-lightweight-charts/components/candlestick-series.svelte';
     import BaselineSeries from 'svelte-lightweight-charts/components/baseline-series.svelte';
     import PriceLine from 'svelte-lightweight-charts/components/price-line.svelte';
+    import TimeScale from 'svelte-lightweight-charts/components/time-scale.svelte'
 
     type EverySeriesApi =
         | ISeriesApi<'Area'>
@@ -96,6 +99,7 @@
 
     let showVolume = true;
     let intraday = false;
+    let timeScaleVisible = true;
     let ticker: number | null = null;
 
     $: if (ticker !== null) {
@@ -357,6 +361,12 @@
     function handleVolumeComponentReference(ref: ISeriesApi<'Histogram'> | null): void {
         volumeComponent = ref;
     }
+
+    let timeScaleInfo: Record<string, unknown> = {};
+    function handleTimeScaleEvent<T extends keyof TimeScaleEvents>(event: TimeScaleEvents[T]): void {
+        timeScaleInfo[event.type] = event.detail;
+        timeScaleInfo = { ...timeScaleInfo };
+    }
 </script>
 
 <form>
@@ -402,6 +412,9 @@
         <label>
             <input type="checkbox" name="intraday" id="intraday" bind:checked={intraday}> Intraday
         </label>
+        <label>
+            <input type="checkbox" name="time-scale" id="time-scale" bind:checked={timeScaleVisible}> Visible Time Scale
+        </label>
         <button on:click={handleTicker} type="button">{ ticker ? 'Stop' : 'Start' }</button>
         <button on:click={handleFitContent} type="button">Fit content</button>
     </fieldset>
@@ -423,6 +436,12 @@
                     ref: console.log
                 }}
             >
+                <TimeScale
+                    visible={timeScaleVisible}
+                    on:visibleTimeRangeChange={handleTimeScaleEvent}
+                    on:visibleLogicalRangeChange={handleTimeScaleEvent}
+                    on:sizeChange={handleTimeScaleEvent}
+                />
                 {#if mainProps.type === 'Area' }
                     <AreaSeries
                         {...(mainProps.options ?? {})}
@@ -501,6 +520,10 @@
             </Chart>
         </fieldset>
     {/if}
+    <fieldset>
+        <legend>TimeScale info:</legend>
+        <pre>{JSON.stringify(timeScaleInfo, null, 4)}</pre>
+    </fieldset>
 </form>
 
 
