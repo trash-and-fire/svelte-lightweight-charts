@@ -8,6 +8,7 @@ import type {Reference} from '../types';
 export interface $$PROPS extends HistogramSeriesPartialOptions {
     ref?: Reference<ISeriesApi<'Histogram'>>;
     data: SeriesDataItemTypeMap['Histogram'][];
+    reactive?: boolean;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface

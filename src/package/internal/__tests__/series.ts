@@ -297,4 +297,59 @@ describe('Synthetic action: series', function () {
         expect(reference).toHaveBeenNthCalledWith(1, null);
         expect(reference).toHaveBeenNthCalledWith(2, SERIES_API);
     });
+
+    it('should update date when reactive', async () => {
+        const {series} = await import('../series');
+
+        const subject = series(CHART_API, {
+            id: 'series',
+            type: 'Line' as SeriesType,
+            reactive: true,
+            data: [],
+            options: {},
+        });
+
+        expect(SERIES_API.setData).toHaveBeenCalledTimes(1);
+        expect(SERIES_API.setData).toHaveBeenLastCalledWith([]);
+
+        subject.update({
+            id: 'series',
+            type: 'Line' as SeriesType,
+            reactive: true,
+            data: [{
+                value: 123,
+            }],
+            options: {},
+        });
+
+        expect(SERIES_API.setData).toHaveBeenCalledTimes(2);
+        expect(SERIES_API.setData).toHaveBeenLastCalledWith([{
+            value: 123,
+        }]);
+    });
+
+    it('should not update date when not reactive', async () => {
+        const {series} = await import('../series');
+
+        const subject = series(CHART_API, {
+            id: 'series',
+            type: 'Line' as SeriesType,
+            data: [],
+            options: {},
+        });
+
+        expect(SERIES_API.setData).toHaveBeenCalledTimes(1);
+        expect(SERIES_API.setData).toHaveBeenLastCalledWith([]);
+
+        subject.update({
+            id: 'series',
+            type: 'Line' as SeriesType,
+            data: [{
+                value: 123,
+            }],
+            options: {},
+        });
+
+        expect(SERIES_API.setData).toHaveBeenCalledTimes(1);
+    });
 });

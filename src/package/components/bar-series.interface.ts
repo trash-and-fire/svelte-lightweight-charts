@@ -8,6 +8,7 @@ import type {Reference} from '../types';
 export interface $$PROPS extends BarSeriesPartialOptions {
     ref?: Reference<ISeriesApi<'Bar'>>;
     data: SeriesDataItemTypeMap['Bar'][];
+    reactive?: boolean;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface

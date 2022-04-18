@@ -16,6 +16,9 @@
         SeriesActionParams
     } from 'svelte-lightweight-charts/types';
     import type {ChartActionParams} from 'svelte-lightweight-charts';
+    import type {$$EVENTS as ChartEvents} from 'svelte-lightweight-charts/components/chart.svelte'
+    import type {$$EVENTS as TimeScaleEvents} from 'svelte-lightweight-charts/components/time-scale.svelte';
+
     import {LineStyle} from 'lightweight-charts';
     import {chart} from 'svelte-lightweight-charts';
     import {BAR_DATA, HISTOGRAM_DATA, LINE_DATA} from './data-series';
@@ -29,6 +32,7 @@
     import CandlestickSeries from 'svelte-lightweight-charts/components/candlestick-series.svelte';
     import BaselineSeries from 'svelte-lightweight-charts/components/baseline-series.svelte';
     import PriceLine from 'svelte-lightweight-charts/components/price-line.svelte';
+    import TimeScale from 'svelte-lightweight-charts/components/time-scale.svelte'
 
     type EverySeriesApi =
         | ISeriesApi<'Area'>
@@ -91,11 +95,12 @@
         updateVolumeData(volumeComponent, day);
     }
 
-    let action = true;
+    let action = false;
     let components = true;
 
     let showVolume = true;
     let intraday = false;
+    let timeScaleVisible = true;
     let ticker: number | null = null;
 
     $: if (ticker !== null) {
@@ -109,7 +114,6 @@
         series: showVolume ? [mainProps, volumeProps] : [mainProps],
         reference: handleReference,
         onClick: handleClick,
-        onCrosshairMove: handleCrosshairMove,
     };
 
     let api: IChartApi | null = null;
@@ -157,9 +161,9 @@
         }
     }
 
-    function handleCrosshairMove(): void {
+    function handleCrosshairMove(e: ChartEvents['crosshairMove']): void {
         // eslint-disable-next-line no-console
-        console.log('move');
+        console.log('move', e.detail);
     }
 
     function handleReference(ref: IChartApi | null): void {
@@ -357,6 +361,12 @@
     function handleVolumeComponentReference(ref: ISeriesApi<'Histogram'> | null): void {
         volumeComponent = ref;
     }
+
+    let timeScaleInfo: Record<string, unknown> = {};
+    function handleTimeScaleEvent<T extends keyof TimeScaleEvents>(event: TimeScaleEvents[T]): void {
+        timeScaleInfo[event.type] = event.detail;
+        timeScaleInfo = { ...timeScaleInfo };
+    }
 </script>
 
 <form>
@@ -402,6 +412,9 @@
         <label>
             <input type="checkbox" name="intraday" id="intraday" bind:checked={intraday}> Intraday
         </label>
+        <label>
+            <input type="checkbox" name="time-scale" id="time-scale" bind:checked={timeScaleVisible}> Visible Time Scale
+        </label>
         <button on:click={handleTicker} type="button">{ ticker ? 'Stop' : 'Start' }</button>
         <button on:click={handleFitContent} type="button">Fit content</button>
     </fieldset>
@@ -422,7 +435,14 @@
                     // eslint-disable-next-line no-console
                     ref: console.log
                 }}
+                on:crosshairMove={handleCrosshairMove}
             >
+                <TimeScale
+                    visible={timeScaleVisible}
+                    on:visibleTimeRangeChange={handleTimeScaleEvent}
+                    on:visibleLogicalRangeChange={handleTimeScaleEvent}
+                    on:sizeChange={handleTimeScaleEvent}
+                />
                 {#if mainProps.type === 'Area' }
                     <AreaSeries
                         {...(mainProps.options ?? {})}
@@ -501,6 +521,10 @@
             </Chart>
         </fieldset>
     {/if}
+    <fieldset>
+        <legend>TimeScale info:</legend>
+        <pre>{JSON.stringify(timeScaleInfo, null, 4)}</pre>
+    </fieldset>
 </form>
 
 
