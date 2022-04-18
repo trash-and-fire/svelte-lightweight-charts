@@ -28,24 +28,28 @@
 
     let timer = null;
 
-    function handleVisibleLogicalRangeChange({ detail: logicalRange }) {
+    function handleVisibleLogicalRangeChange() {
+        if (!timeScale || !candleSeries) {
+            return;
+        }
         if (timer !== null) {
             return;
         }
         timer = setTimeout(() => {
-         if (logicalRange !== null) {
-             const barsInfo = candleSeries.barsInLogicalRange(logicalRange);
-             if (barsInfo !== null && barsInfo.barsBefore < 10) {
-                 const firstTime = getBusinessDayBeforeCurrentAt(data[0].time, 1);
-                 const lastTime = getBusinessDayBeforeCurrentAt(firstTime, Math.max(100, -barsInfo.barsBefore + 100));
-                 const newPeriod = {
-                     timeFrom: lastTime,
-                     timeTo: firstTime,
-                 };
-                 data = [...generateBarsData(newPeriod), ...data];
-                 candleSeries.setData(data);
-             }
-         }
+            const logicalRange = timeScale.getVisibleLogicalRange();
+            if (logicalRange !== null) {
+                const barsInfo = candleSeries.barsInLogicalRange(logicalRange);
+                if (barsInfo !== null && barsInfo.barsBefore < 10) {
+                    const firstTime = getBusinessDayBeforeCurrentAt(data[0].time, 1);
+                    const lastTime = getBusinessDayBeforeCurrentAt(firstTime, Math.max(100, -barsInfo.barsBefore + 100));
+                    const newPeriod = {
+                        timeFrom: lastTime,
+                        timeTo: firstTime,
+                    };
+                    data = [...generateBarsData(newPeriod), ...data];
+                    candleSeries.setData(data);
+                }
+            }
          timer = null;
         }, 500);
     }
