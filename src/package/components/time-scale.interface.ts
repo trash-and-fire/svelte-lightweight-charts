@@ -9,9 +9,10 @@ export interface $$PROPS {
     ref?: Reference<ITimeScaleApi>;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface $$EVENTS {
-    visibleTimeRangeChange?: TimeRange | null;
-    visibleLogicalRangeChange?: LogicalRange | null;
-    sizeChange?: { width: number; height: number };
+export interface $$EVENTS_DETAIL {
+    visibleTimeRangeChange: TimeRange | null;
+    visibleLogicalRangeChange: LogicalRange | null;
+    sizeChange: { width: number; height: number };
 }
+
+export type $$EVENTS = { [K in keyof $$EVENTS_DETAIL]: CustomEvent<$$EVENTS_DETAIL[K]> & { type: K } };

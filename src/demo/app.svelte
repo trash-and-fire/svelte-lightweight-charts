@@ -16,6 +16,8 @@
         SeriesActionParams
     } from 'svelte-lightweight-charts/types';
     import type {ChartActionParams} from 'svelte-lightweight-charts';
+    import type {$$EVENTS as TimeScaleEvents} from 'svelte-lightweight-charts/components/time-scale.svelte';
+
     import {LineStyle} from 'lightweight-charts';
     import {chart} from 'svelte-lightweight-charts';
     import {BAR_DATA, HISTOGRAM_DATA, LINE_DATA} from './data-series';
@@ -358,6 +360,12 @@
     function handleVolumeComponentReference(ref: ISeriesApi<'Histogram'> | null): void {
         volumeComponent = ref;
     }
+
+    let timeScaleInfo: Record<string, unknown> = {};
+    function handleTimeScaleEvent<T extends keyof TimeScaleEvents>(event: TimeScaleEvents[T]): void {
+        timeScaleInfo[event.type] = event.detail;
+        timeScaleInfo = { ...timeScaleInfo };
+    }
 </script>
 
 <form>
@@ -425,10 +433,9 @@
                 }}
             >
                 <TimeScale
-                        ref={console.log}
-                        on:visibleTimeRangeChange={console.log}
-                        on:visibleLogicalRangeChange={console.log}
-                        on:sizeChange={console.log}
+                    on:visibleTimeRangeChange={handleTimeScaleEvent}
+                    on:visibleLogicalRangeChange={handleTimeScaleEvent}
+                    on:sizeChange={handleTimeScaleEvent}
                 />
                 {#if mainProps.type === 'Area' }
                     <AreaSeries
@@ -508,6 +515,10 @@
             </Chart>
         </fieldset>
     {/if}
+    <fieldset>
+        <legend>TimeScale info:</legend>
+        <pre>{JSON.stringify(timeScaleInfo, null, 4)}</pre>
+    </fieldset>
 </form>
 
 

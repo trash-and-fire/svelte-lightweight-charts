@@ -2,12 +2,12 @@
 
 <script lang="ts">
     import type {LogicalRange, TimeRange} from 'lightweight-charts';
-    import type {$$PROPS, $$EVENTS} from './time-scale.interface';
+    import type {$$PROPS, $$EVENTS_DETAIL} from './time-scale.interface';
 
     import {createEventDispatcher} from 'svelte';
     import {useTimeScaleEffect} from './internal/utils';
 
-    const dispatch = createEventDispatcher<$$EVENTS>();
+    const dispatch = createEventDispatcher<$$EVENTS_DETAIL>();
 
     export let ref: $$PROPS['ref'] = undefined;
 
