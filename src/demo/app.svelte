@@ -29,6 +29,7 @@
     import CandlestickSeries from 'svelte-lightweight-charts/components/candlestick-series.svelte';
     import BaselineSeries from 'svelte-lightweight-charts/components/baseline-series.svelte';
     import PriceLine from 'svelte-lightweight-charts/components/price-line.svelte';
+    import TimeScale from 'svelte-lightweight-charts/components/time-scale.svelte'
 
     type EverySeriesApi =
         | ISeriesApi<'Area'>
@@ -423,6 +424,12 @@
                     ref: console.log
                 }}
             >
+                <TimeScale
+                        ref={console.log}
+                        on:visibleTimeRangeChange={console.log}
+                        on:visibleLogicalRangeChange={console.log}
+                        on:sizeChange={console.log}
+                />
                 {#if mainProps.type === 'Area' }
                     <AreaSeries
                         {...(mainProps.options ?? {})}
