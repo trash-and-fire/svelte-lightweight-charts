@@ -1,3 +1,5 @@
+<svelte:options immutable={true}/>
+
 <script lang="ts">
     import type {PriceLineOptions} from 'lightweight-charts';
     import type {$$PROPS} from './price-line.interface';
