@@ -76,11 +76,11 @@ export function chart<T extends Array<SeriesActionParams>>(
 
             if (nextOnClick !== onClick) {
                 if (onClick) {
-                    chart.subscribeClick(onClick);
+                    chart.unsubscribeClick(onClick);
                 }
                 onClick = nextOnClick;
                 if (onClick) {
-                    chart.unsubscribeClick(onClick);
+                    chart.subscribeClick(onClick);
                 }
             }
 
