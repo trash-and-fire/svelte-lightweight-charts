@@ -16,6 +16,7 @@
         SeriesActionParams
     } from 'svelte-lightweight-charts/types';
     import type {ChartActionParams} from 'svelte-lightweight-charts';
+    import type {$$EVENTS as ChartEvents} from 'svelte-lightweight-charts/components/chart.svelte'
     import type {$$EVENTS as TimeScaleEvents} from 'svelte-lightweight-charts/components/time-scale.svelte';
 
     import {LineStyle} from 'lightweight-charts';
@@ -94,7 +95,7 @@
         updateVolumeData(volumeComponent, day);
     }
 
-    let action = true;
+    let action = false;
     let components = true;
 
     let showVolume = true;
@@ -113,7 +114,6 @@
         series: showVolume ? [mainProps, volumeProps] : [mainProps],
         reference: handleReference,
         onClick: handleClick,
-        onCrosshairMove: handleCrosshairMove,
     };
 
     let api: IChartApi | null = null;
@@ -161,9 +161,9 @@
         }
     }
 
-    function handleCrosshairMove(): void {
+    function handleCrosshairMove(e: ChartEvents['crosshairMove']): void {
         // eslint-disable-next-line no-console
-        console.log('move');
+        console.log('move', e.detail);
     }
 
     function handleReference(ref: IChartApi | null): void {
@@ -435,6 +435,7 @@
                     // eslint-disable-next-line no-console
                     ref: console.log
                 }}
+                on:crosshairMove={handleCrosshairMove}
             >
                 <TimeScale
                     visible={timeScaleVisible}

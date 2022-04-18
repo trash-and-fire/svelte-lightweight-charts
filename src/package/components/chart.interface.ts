@@ -15,7 +15,9 @@ export interface $$PROPS extends DeepPartial<ChartOptions> {
     }
 }
 
-export interface $$EVENTS {
+export interface $$EVENTS_DETAIL {
     crosshairMove: MouseEventParams,
     click: MouseEventParams,
 }
+
+export type $$EVENTS = { [K in keyof $$EVENTS_DETAIL]: CustomEvent<$$EVENTS_DETAIL[K]> & { type: K } };
