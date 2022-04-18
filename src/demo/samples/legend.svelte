@@ -37,14 +37,12 @@
 
     let areaSeries = null;
 
-    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type,@typescript-eslint/typedef
     function handleSeriesReference(ref) {
         areaSeries = ref;
     }
 
     let legend = 'ETC USD 7D VWAP';
 
-    // eslint-disable-next-line @typescript-eslint/typedef,@typescript-eslint/explicit-function-return-type
     function handleCrosshairMove({detail: param}) {
         if (param.time) {
             const price = param.seriesPrices.get(areaSeries);
