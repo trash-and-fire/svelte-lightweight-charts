@@ -40,49 +40,49 @@ describe('Synthetic action: "time-scale"', () => {
     it('should handle event listeners', async () => {
         const {timeScale} = await import('../time-scale');
 
-        const options: TimeScaleParams = {
+        const params: TimeScaleParams = {
             onSizeChange: jest.fn(),
             onVisibleLogicalRangeChange: jest.fn(),
             onVisibleTimeRangeChange: jest.fn(),
         }
-        const handle = timeScale(CHART_API, options);
+        const handle = timeScale(CHART_API, params);
 
         expect(TIME_SCALE_API.subscribeSizeChange).toHaveBeenCalledTimes(1);
-        expect(TIME_SCALE_API.subscribeSizeChange).toHaveBeenLastCalledWith(options.onSizeChange);
+        expect(TIME_SCALE_API.subscribeSizeChange).toHaveBeenLastCalledWith(params.onSizeChange);
         expect(TIME_SCALE_API.subscribeVisibleLogicalRangeChange).toHaveBeenCalledTimes(1);
-        expect(TIME_SCALE_API.subscribeVisibleLogicalRangeChange).toHaveBeenLastCalledWith(options.onVisibleLogicalRangeChange);
+        expect(TIME_SCALE_API.subscribeVisibleLogicalRangeChange).toHaveBeenLastCalledWith(params.onVisibleLogicalRangeChange);
         expect(TIME_SCALE_API.subscribeVisibleTimeRangeChange).toHaveBeenCalledTimes(1);
-        expect(TIME_SCALE_API.subscribeVisibleTimeRangeChange).toHaveBeenLastCalledWith(options.onVisibleTimeRangeChange);
+        expect(TIME_SCALE_API.subscribeVisibleTimeRangeChange).toHaveBeenLastCalledWith(params.onVisibleTimeRangeChange);
 
-        const nextOptions: TimeScaleParams = {
+        const nextParams: TimeScaleParams = {
             onSizeChange: jest.fn(),
             onVisibleLogicalRangeChange: jest.fn(),
             onVisibleTimeRangeChange: jest.fn(),
         }
-        handle.update(nextOptions);
+        handle.update(nextParams);
 
         expect(TIME_SCALE_API.unsubscribeSizeChange).toHaveBeenCalledTimes(1);
-        expect(TIME_SCALE_API.unsubscribeSizeChange).toHaveBeenLastCalledWith(options.onSizeChange);
+        expect(TIME_SCALE_API.unsubscribeSizeChange).toHaveBeenLastCalledWith(params.onSizeChange);
         expect(TIME_SCALE_API.unsubscribeVisibleLogicalRangeChange).toHaveBeenCalledTimes(1);
-        expect(TIME_SCALE_API.unsubscribeVisibleLogicalRangeChange).toHaveBeenLastCalledWith(options.onVisibleLogicalRangeChange);
+        expect(TIME_SCALE_API.unsubscribeVisibleLogicalRangeChange).toHaveBeenLastCalledWith(params.onVisibleLogicalRangeChange);
         expect(TIME_SCALE_API.unsubscribeVisibleTimeRangeChange).toHaveBeenCalledTimes(1);
-        expect(TIME_SCALE_API.unsubscribeVisibleTimeRangeChange).toHaveBeenLastCalledWith(options.onVisibleTimeRangeChange);
+        expect(TIME_SCALE_API.unsubscribeVisibleTimeRangeChange).toHaveBeenLastCalledWith(params.onVisibleTimeRangeChange);
 
         expect(TIME_SCALE_API.subscribeSizeChange).toHaveBeenCalledTimes(2);
-        expect(TIME_SCALE_API.subscribeSizeChange).toHaveBeenLastCalledWith(nextOptions.onSizeChange);
+        expect(TIME_SCALE_API.subscribeSizeChange).toHaveBeenLastCalledWith(nextParams.onSizeChange);
         expect(TIME_SCALE_API.subscribeVisibleLogicalRangeChange).toHaveBeenCalledTimes(2);
-        expect(TIME_SCALE_API.subscribeVisibleLogicalRangeChange).toHaveBeenLastCalledWith(nextOptions.onVisibleLogicalRangeChange);
+        expect(TIME_SCALE_API.subscribeVisibleLogicalRangeChange).toHaveBeenLastCalledWith(nextParams.onVisibleLogicalRangeChange);
         expect(TIME_SCALE_API.subscribeVisibleTimeRangeChange).toHaveBeenCalledTimes(2);
-        expect(TIME_SCALE_API.subscribeVisibleTimeRangeChange).toHaveBeenLastCalledWith(nextOptions.onVisibleTimeRangeChange);
+        expect(TIME_SCALE_API.subscribeVisibleTimeRangeChange).toHaveBeenLastCalledWith(nextParams.onVisibleTimeRangeChange);
 
         handle.destroy();
 
         expect(TIME_SCALE_API.unsubscribeSizeChange).toHaveBeenCalledTimes(2);
-        expect(TIME_SCALE_API.unsubscribeSizeChange).toHaveBeenLastCalledWith(nextOptions.onSizeChange);
+        expect(TIME_SCALE_API.unsubscribeSizeChange).toHaveBeenLastCalledWith(nextParams.onSizeChange);
         expect(TIME_SCALE_API.unsubscribeVisibleLogicalRangeChange).toHaveBeenCalledTimes(2);
-        expect(TIME_SCALE_API.unsubscribeVisibleLogicalRangeChange).toHaveBeenLastCalledWith(nextOptions.onVisibleLogicalRangeChange);
+        expect(TIME_SCALE_API.unsubscribeVisibleLogicalRangeChange).toHaveBeenLastCalledWith(nextParams.onVisibleLogicalRangeChange);
         expect(TIME_SCALE_API.unsubscribeVisibleTimeRangeChange).toHaveBeenCalledTimes(2);
-        expect(TIME_SCALE_API.unsubscribeVisibleTimeRangeChange).toHaveBeenLastCalledWith(nextOptions.onVisibleTimeRangeChange);
+        expect(TIME_SCALE_API.unsubscribeVisibleTimeRangeChange).toHaveBeenLastCalledWith(nextParams.onVisibleTimeRangeChange);
     });
 
     it('should handle reference', async () => {
@@ -108,5 +108,25 @@ describe('Synthetic action: "time-scale"', () => {
 
         expect(next).toHaveBeenCalledTimes(2);
         expect(next).toHaveBeenCalledWith(null);
+    });
+
+    it('should handle options', async () => {
+        const {timeScale} = await import('../time-scale');
+
+        const params: TimeScaleParams = {
+            options: {},
+        }
+        const handle = timeScale(CHART_API, params);
+
+        expect(TIME_SCALE_API.applyOptions).toHaveBeenCalledTimes(1);
+        expect(TIME_SCALE_API.applyOptions).toHaveBeenLastCalledWith(params.options);
+
+        const nextParams: TimeScaleParams = {
+            options: {},
+        }
+        handle.update(nextParams);
+
+        expect(TIME_SCALE_API.applyOptions).toHaveBeenCalledTimes(2);
+        expect(TIME_SCALE_API.applyOptions).toHaveBeenLastCalledWith(nextParams.options);
     });
 });

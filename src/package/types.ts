@@ -1,4 +1,5 @@
 import type {
+    DeepPartial,
     IPriceLine,
     ISeriesApi,
     ITimeScaleApi,
@@ -9,6 +10,7 @@ import type {
     SeriesType,
     SizeChangeEventHandler,
     TimeRangeChangeEventHandler,
+    TimeScaleOptions,
 } from 'lightweight-charts';
 
 export interface ActionResult<T> {
@@ -100,6 +102,7 @@ export interface SeriesParamsMap extends Record<SeriesType, unknown> {
 }
 
 export interface TimeScaleParams {
+    options?: DeepPartial<TimeScaleOptions>;
     reference?: Reference<ITimeScaleApi>;
     onVisibleTimeRangeChange?: TimeRangeChangeEventHandler;
     onVisibleLogicalRangeChange?: LogicalRangeChangeEventHandler;

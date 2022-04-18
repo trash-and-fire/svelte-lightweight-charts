@@ -2,10 +2,12 @@ import type {
     ITimeScaleApi,
     TimeRange,
     LogicalRange,
+    DeepPartial,
+    TimeScaleOptions,
 } from 'lightweight-charts';
 import type {Reference} from '../types';
 
-export interface $$PROPS {
+export interface $$PROPS extends DeepPartial<TimeScaleOptions>{
     ref?: Reference<ITimeScaleApi>;
 }
 

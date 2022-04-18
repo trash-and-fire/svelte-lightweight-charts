@@ -99,6 +99,7 @@
 
     let showVolume = true;
     let intraday = false;
+    let timeScaleVisible = true;
     let ticker: number | null = null;
 
     $: if (ticker !== null) {
@@ -411,6 +412,9 @@
         <label>
             <input type="checkbox" name="intraday" id="intraday" bind:checked={intraday}> Intraday
         </label>
+        <label>
+            <input type="checkbox" name="time-scale" id="time-scale" bind:checked={timeScaleVisible}> Visible Time Scale
+        </label>
         <button on:click={handleTicker} type="button">{ ticker ? 'Stop' : 'Start' }</button>
         <button on:click={handleFitContent} type="button">Fit content</button>
     </fieldset>
@@ -433,6 +437,7 @@
                 }}
             >
                 <TimeScale
+                    visible={timeScaleVisible}
                     on:visibleTimeRangeChange={handleTimeScaleEvent}
                     on:visibleLogicalRangeChange={handleTimeScaleEvent}
                     on:sizeChange={handleTimeScaleEvent}

@@ -5,6 +5,7 @@ export type TimeScaleActionResult = ReferencableActionResult<TimeScaleParams, IT
 
 export function timeScale(target: IChartApi, params: TimeScaleParams): TimeScaleActionResult {
     let {
+        options,
         onVisibleTimeRangeChange,
         onVisibleLogicalRangeChange,
         onSizeChange,
@@ -12,6 +13,10 @@ export function timeScale(target: IChartApi, params: TimeScaleParams): TimeScale
 
     const subject = target.timeScale();
     let reference: Reference<ITimeScaleApi>;
+
+    if (options) {
+        subject.applyOptions(options);
+    }
 
     if (onVisibleTimeRangeChange) {
         subject.subscribeVisibleTimeRangeChange(onVisibleTimeRangeChange);
@@ -26,10 +31,18 @@ export function timeScale(target: IChartApi, params: TimeScaleParams): TimeScale
     return {
         update(nextParams: TimeScaleParams): void {
             const {
+                options: nextOptions,
                 onVisibleTimeRangeChange: nextOnVisibleTimeRangeChange,
                 onVisibleLogicalRangeChange: nextOnVisibleLogicalRangeChange,
                 onSizeChange: nextOnSizeChange,
             } = nextParams;
+
+            if (nextOptions !== options) {
+                options = nextOptions;
+                if (options) {
+                    subject.applyOptions(options);
+                }
+            }
 
             if (nextOnVisibleTimeRangeChange !== onVisibleTimeRangeChange) {
                 if (onVisibleTimeRangeChange) {
