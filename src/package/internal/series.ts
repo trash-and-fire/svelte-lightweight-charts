@@ -21,6 +21,7 @@ export function series<T extends SeriesParams>(target: IChartApi, params: T): Se
     let reference: Reference<ISeriesApi<SeriesType>>;
 
     let lines = linesCollection(subject, params.priceLines);
+    let data = params.reactive ? params.data : null;
 
     return {
         update(nextParams: SeriesParams): void {
@@ -36,6 +37,15 @@ export function series<T extends SeriesParams>(target: IChartApi, params: T): Se
 
             if (nextParams.options) {
                 subject.applyOptions(nextParams.options);
+            }
+
+            if (!nextParams.reactive) {
+                data = null;
+            }
+
+            if (nextParams.data !== data && nextParams.reactive) {
+                data = nextParams.data;
+                subject.setData(data);
             }
 
             lines.update(nextParams.priceLines);

@@ -54,6 +54,7 @@
     export let ref: $$PROPS['ref'] = undefined;
 
     export let data: $$PROPS['data'] = [];
+    export let reactive: $$PROPS['reactive'] = false;
 
     let options: AreaSeriesPartialOptions;
     $: options = {
@@ -100,6 +101,7 @@
         {
             id,
             type: 'Area',
+            reactive,
             options,
             data,
         },

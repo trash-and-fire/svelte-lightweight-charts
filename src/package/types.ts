@@ -33,6 +33,7 @@ export interface PriceLineParams {
 export interface AreaSeriesParams {
     id: string;
     type: 'Area';
+    reactive?: boolean;
     options?: SeriesPartialOptionsMap['Area'];
     data: SeriesDataItemTypeMap['Area'][];
     reference?: Reference<ISeriesApi<'Area'>>;
@@ -42,6 +43,7 @@ export interface AreaSeriesParams {
 export interface BarSeriesParams {
     id: string;
     type: 'Bar';
+    reactive?: boolean;
     options?: SeriesPartialOptionsMap['Bar'];
     data: SeriesDataItemTypeMap['Bar'][];
     reference?: Reference<ISeriesApi<'Bar'>>;
@@ -51,6 +53,7 @@ export interface BarSeriesParams {
 export interface CandlestickSeriesParams {
     id: string;
     type: 'Candlestick';
+    reactive?: boolean;
     options?: SeriesPartialOptionsMap['Candlestick'];
     data: SeriesDataItemTypeMap['Candlestick'][];
     reference?: Reference<ISeriesApi<'Candlestick'>>;
@@ -60,6 +63,7 @@ export interface CandlestickSeriesParams {
 export interface HistogramSeriesParams {
     id: string;
     type: 'Histogram';
+    reactive?: boolean;
     options?: SeriesPartialOptionsMap['Histogram'];
     data: SeriesDataItemTypeMap['Histogram'][];
     reference?: Reference<ISeriesApi<'Histogram'>>;
@@ -69,6 +73,7 @@ export interface HistogramSeriesParams {
 export interface LineSeriesParams {
     id: string;
     type: 'Line';
+    reactive?: boolean;
     options?: SeriesPartialOptionsMap['Line'];
     data: SeriesDataItemTypeMap['Line'][];
     reference?: Reference<ISeriesApi<'Line'>>;
@@ -78,6 +83,7 @@ export interface LineSeriesParams {
 export type BaselineSeriesParams = 'Baseline' extends SeriesType ? {
     id: string;
     type: 'Baseline';
+    reactive?: boolean;
     options?: SeriesPartialOptionsMap['Baseline'];
     data: SeriesDataItemTypeMap['Baseline'][];
     reference?: Reference<ISeriesApi<'Baseline'>>;

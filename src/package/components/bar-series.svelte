@@ -48,6 +48,7 @@
     export let ref: $$PROPS['ref'] = undefined;
 
     export let data: $$PROPS['data'] = [];
+    export let reactive: $$PROPS['reactive'] = false;
 
     let options: BarSeriesPartialOptions;
     $: options = {
@@ -88,6 +89,7 @@
         {
             id,
             type: 'Bar',
+            reactive,
             options,
             data,
         },

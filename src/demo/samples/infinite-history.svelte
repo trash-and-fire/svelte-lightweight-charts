@@ -8,6 +8,7 @@
         <CandlestickSeries
             ref={handleSeriesRef}
             data={data}
+            reactive={true}
         />
     </Chart>
 </div>
@@ -47,7 +48,6 @@
                         timeTo: firstTime,
                     };
                     data = [...generateBarsData(newPeriod), ...data];
-                    candleSeries.setData(data);
                 }
             }
          timer = null;
