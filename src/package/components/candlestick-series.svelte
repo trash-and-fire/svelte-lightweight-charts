@@ -70,6 +70,7 @@
     export let ref: $$PROPS['ref'] = undefined;
 
     export let data: $$PROPS['data'] = [];
+    export let reactive: $$PROPS['reactive'] = false;
 
     let options: CandlestickSeriesPartialOptions;
     $: options = {
@@ -104,18 +105,19 @@
     let reference: ISeriesApi<'Candlestick'> | null = null;
 
     let handleReference: Reference<ISeriesApi<'Candlestick'>> | undefined = undefined;
-    $: handleReference = (series: ISeriesApi<'Candlestick'> | null) => {
+    $: handleReference = ((ref?: Reference<ISeriesApi<'Candlestick'>>) => (series: ISeriesApi<'Candlestick'> | null) => {
         reference = series;
         if (ref !== undefined) {
             ref(series);
         }
-    }
+    })(ref);
 
     const id = performance.now().toString();
     useSeriesEffect(() => [
         {
             id,
             type: 'Candlestick',
+            reactive,
             options,
             data,
         },

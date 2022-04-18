@@ -21,20 +21,31 @@ export function series<T extends SeriesParams>(target: IChartApi, params: T): Se
     let reference: Reference<ISeriesApi<SeriesType>>;
 
     let lines = linesCollection(subject, params.priceLines);
+    let data = params.reactive ? params.data : null;
 
     return {
         update(nextParams: SeriesParams): void {
             if (nextParams.type !== subject.seriesType()) {
                 lines.destroy();
                 target.removeSeries(subject);
-                // TODO: where is reference update?
+                reference?.(null);
                 subject = createSeries(target, nextParams);
+                reference?.(subject);
                 lines = linesCollection(subject, params.priceLines);
                 return;
             }
 
             if (nextParams.options) {
                 subject.applyOptions(nextParams.options);
+            }
+
+            if (!nextParams.reactive) {
+                data = null;
+            }
+
+            if (nextParams.data !== data && nextParams.reactive) {
+                data = nextParams.data;
+                subject.setData(data);
             }
 
             lines.update(nextParams.priceLines);
@@ -47,6 +58,7 @@ export function series<T extends SeriesParams>(target: IChartApi, params: T): Se
             }
         },
         destroy(): void {
+            lines.destroy();
             reference?.(null);
             target.removeSeries(subject);
         }
@@ -80,6 +92,11 @@ function createSeries<T extends SeriesActionParams>(
         }
         case 'Line': {
             const series = chart.addLineSeries(params.options);
+            series.setData(params.data);
+            return series;
+        }
+        case 'Baseline': {
+            const series = chart.addBaselineSeries(params.options);
             series.setData(params.data);
             return series;
         }

@@ -43,6 +43,7 @@
     "src/**/*"
   ],
   "exclude": [
-    "node_modules/**/*"
+    "node_modules/**/*",
+    "src/package/**/__tests__/**/*"
   ]
 }

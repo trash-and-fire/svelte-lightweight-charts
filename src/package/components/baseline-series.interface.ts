@@ -1,13 +1,13 @@
 import type {
-    HistogramSeriesPartialOptions,
+    BaselineSeriesPartialOptions,
     ISeriesApi,
     SeriesDataItemTypeMap
 } from 'lightweight-charts';
 import type {Reference} from '../types';
 
-export interface $$PROPS extends HistogramSeriesPartialOptions {
-    ref?: Reference<ISeriesApi<'Histogram'>>;
-    data: SeriesDataItemTypeMap['Histogram'][];
+export interface $$PROPS extends BaselineSeriesPartialOptions {
+    ref?: Reference<ISeriesApi<'Baseline'>>;
+    data: SeriesDataItemTypeMap['Baseline'][];
     reactive?: boolean;
 }
 

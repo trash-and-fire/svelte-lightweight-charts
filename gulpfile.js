@@ -5,7 +5,7 @@ const {preprocess} = require('svelte/compiler');
 const camelize = require('lodash/camelCase');
 const upper = require('lodash/upperFirst')
 const remove = require('gulp-clean');
-const {exec} = require('child_process');
+const {spawn} = require('child_process');
 const crc = require('crc-32');
 const {argv} = require('yargs');
 
@@ -79,7 +79,7 @@ function manifest() {
 }
 
 function typescript() {
-    return exec('tsc --project tsconfig.build.json');
+    return spawn('tsc', ['--project', 'tsconfig.build.json'], { stdio: 'inherit' });
 }
 
 function assets() {
@@ -87,7 +87,19 @@ function assets() {
         .pipe(dest('./dist'));
 }
 
-const build = series(wipe, typescript, parallel(manifest, svelte, typings, assets), clean);
+function repl() {
+    if (argv.repl) {
+        return src(['./dist/**/*.svelte', './dist/**/*.js'])
+            .pipe(transform('utf8', (content) => {
+                return content.toString().replace(/'lightweight-charts'/g, "'lightweight-charts?module'")
+            }))
+            .pipe(dest('./dist'));
+    } else {
+        return src(['./']);
+    }
+}
+
+const build = series(wipe, typescript, parallel(manifest, svelte, typings, assets), clean, repl);
 
 function samples(...args) {
     const components = new Map();
@@ -109,6 +121,21 @@ function samples(...args) {
 
     const resolveSamples = () => src(['./src/demo/samples/*.svelte'])
         .pipe(transform('utf8', (contents, file) => {
+            contents = contents.toString().replace(/'lightweight-charts'/g, "'lightweight-charts?module'")
+            contents = contents.toString().replace(/svelte-lightweight-charts/g, 'svelte-lightweight-charts@repl');
+
+            const issue =
+`
+<script>
+    /**
+     * Warning:
+     * Until the issue [https://github.com/sveltejs/svelte-repl/issues/177] is resolved
+     * you should use imports from 'svelte-lightweight-charts@repl' and 'lightweight-charts?module' in REPL
+     */
+`
+            contents = contents.toString().replace(/<script>/g, issue);
+
+
             const files = Array.from(components.keys()).filter((file) => contents.includes(file));
             samples.set(`${file.basename}`, {
                 hash: crc.str(contents),
@@ -149,7 +176,7 @@ function samples(...args) {
                     }, ...files]).then((result) => {
                         next.samples[sample] = Object.assign({}, contents.samples[sample], {
                             hash: meta.hash,
-                            uid: result.uid,
+                            uid: result.id,
                             files: meta.files,
                         });
                     }));

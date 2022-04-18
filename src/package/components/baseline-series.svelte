@@ -1,8 +1,8 @@
 <svelte:options immutable={true}/>
 
 <script lang="ts">
-    import type {AreaSeriesPartialOptions, ISeriesApi} from 'lightweight-charts';
-    import type {$$PROPS} from './area-series.interface';
+    import type {BaselineSeriesPartialOptions, ISeriesApi} from 'lightweight-charts';
+    import type {$$PROPS} from './baseline-series.interface';
     import type {Reference} from '../types';
 
     import ContextProvider from './internal/context-provider.svelte';
@@ -40,23 +40,69 @@
     export let autoscaleInfoProvider: $$PROPS['autoscaleInfoProvider'] = undefined;
     export let scaleMargins: $$PROPS['scaleMargins'] = undefined;
 
-    export let topColor: $$PROPS['topColor'] = undefined;
-    export let bottomColor: $$PROPS['bottomColor'] = undefined;
-    export let lineColor: $$PROPS['lineColor'] = undefined;
-    export let lineStyle: $$PROPS['lineStyle'] = undefined;
+    /**
+     * Base value of the series.
+     */
+    export let baseValue: $$PROPS['baseValue'] = undefined;
+    /**
+     * The first color of the top area.
+     */
+    export let topFillColor1: $$PROPS['topFillColor1'] = undefined;
+    /**
+     * The second color of the top area.
+     */
+    export let topFillColor2: $$PROPS['topFillColor2'] = undefined;
+    /**
+     * The line color of the top area.
+     */
+    export let topLineColor: $$PROPS['topLineColor'] = undefined;
+    /**
+     * The first color of the bottom area.
+     */
+    export let bottomFillColor1: $$PROPS['bottomFillColor1'] = undefined;
+    /**
+     * The second color of the bottom area.
+     */
+    export let bottomFillColor2: $$PROPS['bottomFillColor2'] = undefined;
+    /**
+     * The line color of the bottom area.
+     */
+    export let bottomLineColor: $$PROPS['bottomLineColor'] = undefined;
+    /**
+     * Line width.
+     */
     export let lineWidth: $$PROPS['lineWidth'] = undefined;
-    export let lineType: $$PROPS['lineType'] = undefined;
+    /**
+     * Line style.
+     */
+    export let lineStyle: $$PROPS['lineStyle'] = undefined;
+    /**
+     * Show the crosshair marker.
+     */
     export let crosshairMarkerVisible: $$PROPS['crosshairMarkerVisible'] = undefined;
+    /**
+     * Crosshair marker radius in pixels.
+     */
     export let crosshairMarkerRadius: $$PROPS['crosshairMarkerRadius'] = undefined;
+    /**
+     * Crosshair marker border color. An empty string falls back to the the color of the series under the crosshair.
+     */
     export let crosshairMarkerBorderColor: $$PROPS['crosshairMarkerBorderColor'] = undefined;
+    /**
+     * The crosshair marker background color. An empty string falls back to the the color of the series under the crosshair.
+     */
     export let crosshairMarkerBackgroundColor: $$PROPS['crosshairMarkerBackgroundColor'] = undefined;
+    /**
+     * Last price animation mode.
+     */
+    export let lastPriceAnimation: $$PROPS['lastPriceAnimation'] = undefined;
 
     export let ref: $$PROPS['ref'] = undefined;
 
     export let data: $$PROPS['data'] = [];
     export let reactive: $$PROPS['reactive'] = false;
 
-    let options: AreaSeriesPartialOptions;
+    let options: BaselineSeriesPartialOptions;
     $: options = {
         lastValueVisible,
         title,
@@ -74,22 +120,26 @@
         baseLineStyle,
         autoscaleInfoProvider,
         scaleMargins,
-        topColor,
-        bottomColor,
-        lineColor,
+        baseValue,
+        topFillColor1,
+        topFillColor2,
+        topLineColor,
+        bottomFillColor1,
+        bottomFillColor2,
+        bottomLineColor,
         lineStyle,
         lineWidth,
-        lineType,
         crosshairMarkerBackgroundColor,
         crosshairMarkerBorderColor,
         crosshairMarkerRadius,
         crosshairMarkerVisible,
+        lastPriceAnimation,
     };
 
-    let reference: ISeriesApi<'Area'> | null = null;
+    let reference: ISeriesApi<'Baseline'> | null = null;
 
-    let handleReference: Reference<ISeriesApi<'Area'>> | undefined = undefined;
-    $: handleReference = ((ref?: Reference<ISeriesApi<'Area'>>) => (series: ISeriesApi<'Area'> | null) => {
+    let handleReference: Reference<ISeriesApi<'Baseline'>> | undefined = undefined;
+    $: handleReference = ((ref?: Reference<ISeriesApi<'Baseline'>>) => (series: ISeriesApi<'Baseline'> | null) => {
         reference = series;
         if (ref !== undefined) {
             ref(series);
@@ -100,7 +150,7 @@
     useSeriesEffect(() => [
         {
             id,
-            type: 'Area',
+            type: 'Baseline',
             reactive,
             options,
             data,

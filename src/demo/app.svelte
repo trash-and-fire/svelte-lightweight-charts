@@ -16,6 +16,9 @@
         SeriesActionParams
     } from 'svelte-lightweight-charts/types';
     import type {ChartActionParams} from 'svelte-lightweight-charts';
+    import type {$$EVENTS as ChartEvents} from 'svelte-lightweight-charts/components/chart.svelte'
+    import type {$$EVENTS as TimeScaleEvents} from 'svelte-lightweight-charts/components/time-scale.svelte';
+
     import {LineStyle} from 'lightweight-charts';
     import {chart} from 'svelte-lightweight-charts';
     import {BAR_DATA, HISTOGRAM_DATA, LINE_DATA} from './data-series';
@@ -27,7 +30,9 @@
     import HistogramSeries from 'svelte-lightweight-charts/components/histogram-series.svelte';
     import BarSeries from 'svelte-lightweight-charts/components/bar-series.svelte';
     import CandlestickSeries from 'svelte-lightweight-charts/components/candlestick-series.svelte';
+    import BaselineSeries from 'svelte-lightweight-charts/components/baseline-series.svelte';
     import PriceLine from 'svelte-lightweight-charts/components/price-line.svelte';
+    import TimeScale from 'svelte-lightweight-charts/components/time-scale.svelte'
 
     type EverySeriesApi =
         | ISeriesApi<'Area'>
@@ -35,11 +40,12 @@
         | ISeriesApi<'Histogram'>
         | ISeriesApi<'Candlestick'>
         | ISeriesApi<'Line'>
+        | ISeriesApi<'Baseline'>
         ;
 
     export let reference: Reference<IChartApi> | undefined = undefined;
 
-    const SERIES_TYPES: SeriesType[] = ['Area', 'Bar', 'Histogram', 'Candlestick', 'Line'];
+    const SERIES_TYPES: SeriesType[] = ['Area', 'Bar', 'Histogram', 'Candlestick', 'Line', 'Baseline'];
 
     const lines: PriceLineParams[] = [{
         id: 'price',
@@ -89,11 +95,12 @@
         updateVolumeData(volumeComponent, day);
     }
 
-    let action = true;
+    let action = false;
     let components = true;
 
     let showVolume = true;
     let intraday = false;
+    let timeScaleVisible = true;
     let ticker: number | null = null;
 
     $: if (ticker !== null) {
@@ -107,7 +114,6 @@
         series: showVolume ? [mainProps, volumeProps] : [mainProps],
         reference: handleReference,
         onClick: handleClick,
-        onCrosshairMove: handleCrosshairMove,
     };
 
     let api: IChartApi | null = null;
@@ -155,9 +161,9 @@
         }
     }
 
-    function handleCrosshairMove(): void {
+    function handleCrosshairMove(e: ChartEvents['crosshairMove']): void {
         // eslint-disable-next-line no-console
-        console.log('move');
+        console.log('move', e.detail);
     }
 
     function handleReference(ref: IChartApi | null): void {
@@ -196,7 +202,7 @@
             clearTicker();
         }
         if (daily) {
-            ticker = setInterval(
+            ticker = window.setInterval(
                 () => {
                     day.setDate(day.getDate() + 1);
                     day = new Date(day);
@@ -204,7 +210,7 @@
                 1000
             );
         } else {
-            ticker = setInterval(
+            ticker = window.setInterval(
                 () => {
                     day.setHours(day.getHours() + 6);
                     day = new Date(day);
@@ -265,6 +271,22 @@
                     reference: (ref: ISeriesApi<'Histogram'> | null) => {
                         mainSeries = ref;
                     },
+                }
+            case 'Baseline':
+                return {
+                    id: 'main',
+                    type,
+                    data: [...LINE_DATA],
+                    options: {
+                        baseValue: {
+                            type: "price",
+                            price: 38,
+                        },
+                    },
+                    priceLines: lines,
+                    reference: (ref: ISeriesApi<'Baseline'> | null) => {
+                        mainSeries = ref;
+                    }
                 }
             default:
                 throw new Error();
@@ -339,6 +361,12 @@
     function handleVolumeComponentReference(ref: ISeriesApi<'Histogram'> | null): void {
         volumeComponent = ref;
     }
+
+    let timeScaleInfo: Record<string, unknown> = {};
+    function handleTimeScaleEvent<T extends keyof TimeScaleEvents>(event: TimeScaleEvents[T]): void {
+        timeScaleInfo[event.type] = event.detail;
+        timeScaleInfo = { ...timeScaleInfo };
+    }
 </script>
 
 <form>
@@ -361,7 +389,7 @@
     </fieldset>
     <fieldset name="series">
         <legend>Main Series type:</legend>
-        {#each SERIES_TYPES as type (type) }
+        {#each SERIES_TYPES as type (type)}
             <label>
                 <input type="radio" name="series-type" value={type} bind:group={seriesType}> {type}
             </label>
@@ -384,6 +412,9 @@
         <label>
             <input type="checkbox" name="intraday" id="intraday" bind:checked={intraday}> Intraday
         </label>
+        <label>
+            <input type="checkbox" name="time-scale" id="time-scale" bind:checked={timeScaleVisible}> Visible Time Scale
+        </label>
         <button on:click={handleTicker} type="button">{ ticker ? 'Stop' : 'Start' }</button>
         <button on:click={handleFitContent} type="button">Fit content</button>
     </fieldset>
@@ -396,7 +427,22 @@
     {#if components}
         <fieldset name="chart-component">
             <legend>Chart component:</legend>
-            <Chart {...(params.options ?? {})} ref={reference}>
+            <Chart
+                {...(params.options ?? {})}
+                ref={reference}
+                container={{
+                    class: 'chart',
+                    // eslint-disable-next-line no-console
+                    ref: console.log
+                }}
+                on:crosshairMove={handleCrosshairMove}
+            >
+                <TimeScale
+                    visible={timeScaleVisible}
+                    on:visibleTimeRangeChange={handleTimeScaleEvent}
+                    on:visibleLogicalRangeChange={handleTimeScaleEvent}
+                    on:sizeChange={handleTimeScaleEvent}
+                />
                 {#if mainProps.type === 'Area' }
                     <AreaSeries
                         {...(mainProps.options ?? {})}
@@ -452,6 +498,17 @@
                         {/each}
                     </CandlestickSeries>
                 {/if}
+                {#if mainProps.type === 'Baseline'}
+                    <BaselineSeries
+                        {...(mainProps.options ?? {})}
+                        data={mainProps.data}
+                        ref={handleMainComponentReference}
+                    >
+                        {#each lines as line (line.id)}
+                            <PriceLine {...line.options}/>
+                        {/each}
+                    </BaselineSeries>
+                {/if}
                 {#if showVolume}
                     {#key volumeProps.id}
                         <HistogramSeries
@@ -464,6 +521,10 @@
             </Chart>
         </fieldset>
     {/if}
+    <fieldset>
+        <legend>TimeScale info:</legend>
+        <pre>{JSON.stringify(timeScaleInfo, null, 4)}</pre>
+    </fieldset>
 </form>
 
 

@@ -2,14 +2,17 @@
 
 <script lang="ts">
     import type {ChartOptions, IChartApi, DeepPartial, MouseEventParams} from 'lightweight-charts';
-    import type {$$EVENTS, $$PROPS} from './chart.interface';
+    import type {$$EVENTS_DETAIL, $$PROPS} from './chart.interface';
     import type {Reference} from '../types';
 
     import {createEventDispatcher} from 'svelte';
+    import {element} from './internal/element';
     import ContextProvider from './internal/context-provider.svelte';
     import {chart} from '../index';
 
-    const dispatch = createEventDispatcher<$$EVENTS>();
+    const dispatch = createEventDispatcher<$$EVENTS_DETAIL>();
+
+    export let container: $$PROPS['container'] = undefined;
 
     /** Height of the chart */
     export let width: $$PROPS['width'] = 0;
@@ -60,11 +63,18 @@
     let reference: IChartApi | null = null;
 
     let handleReference: Reference<IChartApi> | undefined = undefined;
-    $: handleReference = (chart: IChartApi | null) => {
+    $: handleReference = ((ref?: Reference<IChartApi>) => (chart: IChartApi | null) => {
         reference = chart;
         if (ref !== undefined) {
             ref(chart);
         }
+    })(ref);
+
+    // Dom container attributes
+    let attrs: $$PROPS['container'] = {};
+    $: {
+        attrs = Object.assign({}, container);
+        delete attrs.ref;
     }
 
     function handleCrosshairMove(params: MouseEventParams): void {
@@ -76,12 +86,16 @@
     }
 </script>
 
-<div use:chart={{
-    options,
-    onCrosshairMove: handleCrosshairMove,
-    onClick: handleClick,
-    reference: handleReference,
-}}>
+<div
+    {...attrs}
+    use:element={container?.ref}
+    use:chart={{
+        options,
+        onCrosshairMove: handleCrosshairMove,
+        onClick: handleClick,
+        reference: handleReference,
+    }}
+>
     {#if reference !== null}
         <ContextProvider value={reference}><slot/></ContextProvider>
     {/if}

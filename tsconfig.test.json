@@ -8,12 +8,8 @@
     "noEmitOnError": true,
     "outDir": "./dist"
   },
-  "include": [
-    "src/package/**/*"
-  ],
   "exclude": [
     "node_modules/**/*",
-    "dist/**/*",
-    "src/package/**/__tests__/**/*"
+    "dist/**/*"
   ]
 }

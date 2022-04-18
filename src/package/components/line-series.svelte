@@ -52,6 +52,7 @@
     export let ref: $$PROPS['ref'] = undefined;
 
     export let data: $$PROPS['data'] = [];
+    export let reactive: $$PROPS['reactive'] = false;
 
     let options: LineSeriesPartialOptions;
     $: options = {
@@ -84,18 +85,19 @@
     let reference: ISeriesApi<'Line'> | null = null;
 
     let handleReference: Reference<ISeriesApi<'Line'>> | undefined = undefined;
-    $: handleReference = (series: ISeriesApi<'Line'> | null) => {
+    $: handleReference = ((ref?: Reference<ISeriesApi<'Line'>>) => (series: ISeriesApi<'Line'> | null) => {
         reference = series;
         if (ref !== undefined) {
             ref(series);
         }
-    }
+    })(ref);
 
     const id = performance.now().toString();
     useSeriesEffect(() => [
         {
             id,
             type: 'Line',
+            reactive,
             options,
             data,
         },

@@ -1,5 +1,5 @@
-function typescriptRules() {
-    return {
+function typescriptRules(annotations) {
+    let result = {
         "no-console": "error",
         "@typescript-eslint/ban-types": [
             "error",
@@ -43,14 +43,10 @@ function typescriptRules() {
                 }
             }
         ],
-        "@typescript-eslint/explicit-function-return-type": [
-            "error",
-            {
-                "allowExpressions": true,
-            }
-        ],
         "@typescript-eslint/no-inferrable-types": "off",
-        "@typescript-eslint/typedef": [
+    };
+    if (annotations !== false) {
+        result["@typescript-eslint/typedef"] = [
             "error",
             {
                 arrowParameter: true,
@@ -58,8 +54,15 @@ function typescriptRules() {
                 parameter: true,
                 propertyDeclaration: true,
             }
-        ],
-    };
+        ]
+        result["@typescript-eslint/explicit-function-return-type"] = [
+            "error",
+            {
+                "allowExpressions": true,
+            }
+        ]
+    }
+    return result;
 }
 
 module.exports = {
@@ -70,7 +73,7 @@ module.exports = {
                 "eslint:recommended",
                 "plugin:node/recommended"
             ],
-            files: ['.eslintrc.js', 'webpack.config.js', 'gulpfile.js', 'repl-maker.js'],
+            files: ['.eslintrc.js', 'webpack.config.js', 'gulpfile.js', 'repl-maker.js', 'scripts/**/*.{js,cjs}'],
             parserOptions: {
                 "ecmaVersion": 2017
             },
@@ -81,6 +84,7 @@ module.exports = {
             },
             rules: {
                 "node/no-unpublished-require": "off",
+                "node/no-unpublished-import": "off",
             }
         },
         {
@@ -111,11 +115,33 @@ module.exports = {
                 'plugin:@typescript-eslint/recommended',
             ],
             files: ['**/*.svelte'],
+            excludedFiles: ['**/samples/**/*.svelte'],
             env: {
                 browser: true,
                 node: false
             },
             rules: typescriptRules(),
+            settings: {
+                'svelte3/typescript': require('typescript'),
+            }
+        },
+        {
+            parser: '@typescript-eslint/parser',
+            plugins: [
+                'svelte3',
+                '@typescript-eslint',
+            ],
+            processor: 'svelte3/svelte3',
+            extends: [
+                'eslint:recommended',
+                'plugin:@typescript-eslint/recommended',
+            ],
+            files: ['**/samples/**/*.svelte'],
+            env: {
+                browser: true,
+                node: false
+            },
+            rules: typescriptRules(false),
             settings: {
                 'svelte3/typescript': require('typescript'),
             }
