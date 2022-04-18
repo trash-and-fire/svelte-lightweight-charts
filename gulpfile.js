@@ -149,7 +149,7 @@ function samples(...args) {
                     }, ...files]).then((result) => {
                         next.samples[sample] = Object.assign({}, contents.samples[sample], {
                             hash: meta.hash,
-                            uid: result.uid,
+                            uid: result.id,
                             files: meta.files,
                         });
                     }));
