@@ -100,6 +100,7 @@
     export let ref: $$PROPS['ref'] = undefined;
 
     export let data: $$PROPS['data'] = [];
+    export let reactive: $$PROPS['reactive'] = false;
 
     let options: BaselineSeriesPartialOptions;
     $: options = {
@@ -150,6 +151,7 @@
         {
             id,
             type: 'Baseline',
+            reactive,
             options,
             data,
         },
