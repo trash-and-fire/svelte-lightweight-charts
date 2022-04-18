@@ -6,8 +6,8 @@ module.exports = class SvelteReplRepository {
             throw new Error('No auth token')
         }
         axios.defaults.headers.common.cookie = `sid=${auth};`
-        axios.defaults.headers.post['Content-Type'] = 'text/plain;charset=UTF-8';
-        axios.defaults.headers.patch['Content-Type'] = 'text/plain;charset=UTF-8';
+        axios.defaults.headers.post['Content-Type'] = 'application/json';
+        axios.defaults.headers.put['Content-Type'] = 'application/json';
     }
 
     getAll() {
@@ -20,7 +20,7 @@ module.exports = class SvelteReplRepository {
     }
 
     update(id, name, files) {
-        return axios.patch(`https://svelte.dev/repl/${id}.json`, JSON.stringify({ name, files }))
+        return axios.put(`https://svelte.dev/repl/${id}.json`, JSON.stringify({ name, files }))
             .then((response) => response.data);
     }
 }
