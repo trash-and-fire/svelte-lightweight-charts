@@ -1,10 +1,12 @@
 import type {
     DeepPartial,
     IPriceLine,
+    IPriceScaleApi,
     ISeriesApi,
     ITimeScaleApi,
     LogicalRangeChangeEventHandler,
     PriceLineOptions,
+    PriceScaleOptions,
     SeriesDataItemTypeMap,
     SeriesPartialOptionsMap,
     SeriesType,
@@ -113,6 +115,12 @@ export interface TimeScaleParams {
     onVisibleTimeRangeChange?: TimeRangeChangeEventHandler;
     onVisibleLogicalRangeChange?: LogicalRangeChangeEventHandler;
     onSizeChange?: SizeChangeEventHandler;
+}
+
+export interface PriceScaleParams {
+    id: string;
+    options?: DeepPartial<PriceScaleOptions>;
+    reference?: Reference<IPriceScaleApi>;
 }
 
 export type Reference<T> = (ref: T | null) => void;
