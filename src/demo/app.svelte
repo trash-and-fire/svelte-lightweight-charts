@@ -32,7 +32,8 @@
     import CandlestickSeries from 'svelte-lightweight-charts/components/candlestick-series.svelte';
     import BaselineSeries from 'svelte-lightweight-charts/components/baseline-series.svelte';
     import PriceLine from 'svelte-lightweight-charts/components/price-line.svelte';
-    import TimeScale from 'svelte-lightweight-charts/components/time-scale.svelte'
+    import TimeScale from 'svelte-lightweight-charts/components/time-scale.svelte';
+    import PriceScale from 'svelte-lightweight-charts/components/price-scale.svelte';
 
     type EverySeriesApi =
         | ISeriesApi<'Area'>
@@ -101,6 +102,7 @@
     let showVolume = true;
     let intraday = false;
     let timeScaleVisible = true;
+    let priceScaleId = 'right';
     let ticker: number | null = null;
 
     $: if (ticker !== null) {
@@ -415,6 +417,12 @@
         <label>
             <input type="checkbox" name="time-scale" id="time-scale" bind:checked={timeScaleVisible}> Visible Time Scale
         </label>
+        <label>
+            <input type="radio" name="price-scale" id="price-scale-right" value="right" bind:group={priceScaleId}> Right Price Scale
+        </label>
+        <label>
+            <input type="radio" name="price-scale" id="price-scale-left" value="left" bind:group={priceScaleId}> Left Price Scale
+        </label>
         <button on:click={handleTicker} type="button">{ ticker ? 'Stop' : 'Start' }</button>
         <button on:click={handleFitContent} type="button">Fit content</button>
     </fieldset>
@@ -437,6 +445,14 @@
                 }}
                 on:crosshairMove={handleCrosshairMove}
             >
+                <PriceScale
+                    id="left"
+                    visible={priceScaleId === 'left'}
+                />
+                <PriceScale
+                    id="right"
+                    visible={priceScaleId === 'right'}
+                />
                 <TimeScale
                     visible={timeScaleVisible}
                     on:visibleTimeRangeChange={handleTimeScaleEvent}
@@ -446,6 +462,7 @@
                 {#if mainProps.type === 'Area' }
                     <AreaSeries
                         {...(mainProps.options ?? {})}
+                        priceScaleId={priceScaleId}
                         data={mainProps.data}
                         ref={handleMainComponentReference}
                     >
@@ -457,6 +474,7 @@
                 {#if mainProps.type === 'Line' }
                     <LineSeries
                         {...(mainProps.options ?? {})}
+                        priceScaleId={priceScaleId}
                         data={mainProps.data}
                         ref={handleMainComponentReference}
                     >
@@ -468,6 +486,7 @@
                 {#if mainProps.type === 'Histogram'}
                     <HistogramSeries
                         {...(mainProps.options ?? {})}
+                        priceScaleId={priceScaleId}
                         data={mainProps.data}
                         ref={handleMainComponentReference}
                     >
@@ -479,6 +498,7 @@
                 {#if mainProps.type === 'Bar'}
                     <BarSeries
                         {...(mainProps.options ?? {})}
+                        priceScaleId={priceScaleId}
                         data={mainProps.data}
                         ref={handleMainComponentReference}
                     >
@@ -490,6 +510,7 @@
                 {#if mainProps.type === 'Candlestick'}
                     <CandlestickSeries
                         {...(mainProps.options ?? {})}
+                        priceScaleId={priceScaleId}
                         data={mainProps.data}
                         ref={handleMainComponentReference}
                     >
@@ -501,6 +522,7 @@
                 {#if mainProps.type === 'Baseline'}
                     <BaselineSeries
                         {...(mainProps.options ?? {})}
+                        priceScaleId={priceScaleId}
                         data={mainProps.data}
                         ref={handleMainComponentReference}
                     >
