@@ -90,7 +90,7 @@ It might be helpful to [auto-size](https://svelte.dev/repl/22c14c4729d44d65a6934
 ```
 Events:
 - [`on:crosshairMove`](https://tradingview.github.io/lightweight-charts/docs/api/interfaces/IChartApi#subscribeclick): `(event: CustomEvent<MouseEventParams>) => void`
-- [`on:click`](https://tradingview.github.io/lightweight-charts/docs/api/interfaces/IChartApi#subscribecrosshairmove): `(event: CustomEvent<MouseEventParams>) => void;`
+- [`on:click`](https://tradingview.github.io/lightweight-charts/docs/api/interfaces/IChartApi#subscribecrosshairmove): `(event: CustomEvent<MouseEventParams>) => void`
 
 Use the `ref` property to get a reference to a [`IChartApi`](https://tradingview.github.io/lightweight-charts/docs/api/interfaces/IChartApi) instance
 
