@@ -94,7 +94,29 @@ Events:
 
 Use the `ref` property to get a reference to a [`IChartApi`](https://tradingview.github.io/lightweight-charts/docs/api/interfaces/IChartApi) instance
 
-- `<[Type]Series>` - series with specified `[Type]` (`ISeriesApi<Type>`). It has to be nested inside `<Chart>` component.
+### Series
+
+Following types of series are supported:
+- `<AreaSeries>`
+- `<BarSeries>`
+- `<BaselineSeries>`
+- `<CandlestickSeries>`
+- `<HistogramSeries>`
+- `<LineSeries>`
+
+Series components should be nested inside a chart component. 
+
+You can pass any series option as separate property. 
+List of available options corresponding to each type of series can be found [here](https://tradingview.github.io/lightweight-charts/docs/api/interfaces/SeriesOptionsMap)
+
+Use the `ref` property to get reference to a [`ISeriesApi<SeriesType>`](https://tradingview.github.io/lightweight-charts/docs/api/interfaces/ISeriesApi) instance.
+
+#### Passing data
+To pass a data to a series you can use the `data` property. Look [here](https://tradingview.github.io/lightweight-charts/docs/api/interfaces/SeriesDataItemTypeMap) to find what shape of data you need for each series type.
+
+By default `data` represents only the **initial** data. Any subsequent data update does not update series.
+If you want to change this behavior please add [`reactive={true}`](https://svelte.dev/repl/0efb2840a9844ed5a1d84f2a1c9a2269) to you series component. In this case series will apply a new data if it is not reference equal to previous array. 
+
 - `<PriceLine>` - price line (`IPriceLine`). It has to be nested inside `<[Type]Series>` component.
 - `<TimeScale>` - time-scale (`ITimeScaleApi`). It has to be nested inside `<Chart>` component.
 - `<PriceScale>` - price-scale (`IPriceScaleApi`). It has to be nested inside `<Chart>` component.
