@@ -117,6 +117,8 @@ To pass a data to a series you can use the `data` property. Look [here](https://
 By default `data` represents only the **initial** data. Any subsequent data update does not update series.
 If you want to change this behavior please add [`reactive={true}`](https://svelte.dev/repl/0efb2840a9844ed5a1d84f2a1c9a2269) to you series component. In this case series will apply a new data if it is not reference equal to previous array. 
 
+### Other components
+
 - `<PriceLine>` - price line (`IPriceLine`). It has to be nested inside `<[Type]Series>` component.
 - `<TimeScale>` - time-scale (`ITimeScaleApi`). It has to be nested inside `<Chart>` component.
 - `<PriceScale>` - price-scale (`IPriceScaleApi`). It has to be nested inside `<Chart>` component.
