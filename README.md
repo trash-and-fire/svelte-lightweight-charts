@@ -40,13 +40,13 @@ npm install lightweight-charts svelte-lightweight-charts
 
 ## Getting reference to lightweight-chart objects
 
-To get reference of lightweight-chart (`IChartApi`, `ISeriesApi<T>`, etc) instance of a node you can use `ref` property.
+You can use the `ref` property to get a reference to a lightweight-chart api-instance from any component.
 ```html
 <script>
     let chartApi;
 </script>
 <Chart width={400} height={300} ref={(ref) => chartApi = ref}/>
-<button on:click={() => chartApi.priceScale().fitContent()}>Fit Content</button>
+<button on:click={() => chartApi.timeScale().fitContent()}>Fit Content</button>
 ```
 
 ## Components
