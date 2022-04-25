@@ -57,7 +57,7 @@ You can use the `ref` property to get a reference to a lightweight-chart api-ins
 You can pass any option from [`ChartOptions`](https://tradingview.github.io/lightweight-charts/docs/api/interfaces/ChartOptions) as separate property.
 
 Using `container` property you can get access to containing element:
-```
+```ts
 container?: {
     ref?: (element: HTMLElement | null) => void;
     class?: string;
@@ -65,7 +65,7 @@ container?: {
 }
 ```
 It might be helpful to [auto-size](https://svelte.dev/repl/22c14c4729d44d65a69346d1e3cc6e89) your chart container via ResizeObserver. 
-```sveltehtml
+```svelte
 <Chart {width} {height} container={{ref}}>
     <CandlestickSeries {data}/>
 </Chart>
