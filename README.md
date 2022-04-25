@@ -16,7 +16,7 @@ npm install lightweight-charts svelte-lightweight-charts
 
 ## Usage
 
-```html
+```svelte
 <script>
     import Chart from "svelte-lightweight-charts/components/chart.svelte";
     import LineSeries from "svelte-lightweight-charts/components/line-series.svelte";
@@ -41,7 +41,7 @@ npm install lightweight-charts svelte-lightweight-charts
 ## Getting reference to lightweight-chart objects
 
 You can use the `ref` property to get a reference to a lightweight-chart api-instance from any component.
-```html
+```svelte
 <script>
     let chartApi;
 </script>
