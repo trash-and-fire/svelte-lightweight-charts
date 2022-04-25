@@ -51,7 +51,49 @@ You can use the `ref` property to get a reference to a lightweight-chart api-ins
 
 ## Components
 
-- `<Chart>` - main chart container (`IChartApi`).
+### Chart
+
+`<Chart>` - main chart container and wrapping dom element.
+You can pass any option from [`ChartOptions`](https://tradingview.github.io/lightweight-charts/docs/api/interfaces/ChartOptions) as separate property.
+
+Using `container` property you can get access to containing element:
+```
+container?: {
+    ref?: (element: HTMLElement | null) => void;
+    class?: string;
+    id?: string;
+}
+```
+It might be helpful to [auto-size](https://svelte.dev/repl/22c14c4729d44d65a69346d1e3cc6e89) your chart container via ResizeObserver. 
+```sveltehtml
+<Chart {width} {height} container={{ref}}>
+    <CandlestickSeries {data}/>
+</Chart>
+<script>
+    let observer;
+    let width = 600;
+    let height = 300;
+    let ref = (element) => {
+        if (observer) {
+            observer.disconnect();
+        }
+        if (!element) {
+                return;
+        }
+        observer = new ResizeObserver(([entry]) => {
+            width = entry.contentRect.width;
+            height = entry.contentRect.height;
+        });
+        observer.observe(element);
+    }
+</script>
+```
+Events:
+- [`on:crosshairMove`](https://tradingview.github.io/lightweight-charts/docs/api/interfaces/IChartApi#subscribeclick): `(event: CustomEvent<MouseEventParams>) => void`
+- [`on:click`](https://tradingview.github.io/lightweight-charts/docs/api/interfaces/IChartApi#subscribecrosshairmove): `(event: CustomEvent<MouseEventParams>) => void;`
+
+Use the `ref` property to get a reference to a [`IChartApi`](https://tradingview.github.io/lightweight-charts/docs/api/interfaces/IChartApi) instance
+
 - `<[Type]Series>` - series with specified `[Type]` (`ISeriesApi<Type>`). It has to be nested inside `<Chart>` component.
 - `<PriceLine>` - price line (`IPriceLine`). It has to be nested inside `<[Type]Series>` component.
 - `<TimeScale>` - time-scale (`ITimeScaleApi`). It has to be nested inside `<Chart>` component.
