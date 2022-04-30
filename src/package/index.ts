@@ -11,6 +11,7 @@ export {default as PriceLine} from './components/price-line.svelte';
 export {default as PriceScale} from './components/price-scale.svelte';
 export {default as TimeScale} from './components/time-scale.svelte';
 
+export type {ChartActionParams} from './internal/chart';
 export type {$$PROPS as ChartProps} from './components/chart.interface';
 export type {$$PROPS as AreaSeriesProps} from './components/area-series.interface';
 export type {$$PROPS as BarSeriesProps} from './components/bar-series.interface';

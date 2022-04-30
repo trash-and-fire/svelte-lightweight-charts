@@ -82,12 +82,20 @@ function typescript() {
     return spawn('tsc', ['--project', 'tsconfig.build.json'], { stdio: 'inherit' });
 }
 
+function index() {
+    return src(['./dist/index.d.ts'])
+        .pipe(transform('utf8', (content) => {
+            return String(content).replace(/\.interface'/g, '.svelte\'');
+        }))
+        .pipe(dest('./dist'));
+}
+
 function assets() {
     return src(['README.md'])
         .pipe(dest('./dist'));
 }
 
-const build = series(wipe, typescript, parallel(manifest, svelte, typings, assets), clean);
+const build = series(wipe, typescript, parallel(manifest, svelte, typings, assets), index, clean);
 
 function samples(...args) {
     const components = new Map();
