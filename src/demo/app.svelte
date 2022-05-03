@@ -4,36 +4,35 @@
     import type {
         IChartApi,
         ISeriesApi,
-        MouseEventParams,
         SeriesType,
         ChartOptions,
         DeepPartial,
     } from 'lightweight-charts';
     import type {
-        HistogramSeriesParams,
-        PriceLineParams,
         Reference,
-        SeriesActionParams
-    } from 'svelte-lightweight-charts/types';
-    import type {ChartActionParams} from 'svelte-lightweight-charts';
-    import type {$$EVENTS as ChartEvents} from 'svelte-lightweight-charts/components/chart.svelte'
-    import type {$$EVENTS as TimeScaleEvents} from 'svelte-lightweight-charts/components/time-scale.svelte';
+        ChartEventArgs,
+        TimeScaleEventArgs,
+    } from 'svelte-lightweight-charts';
+
+    import type {PriceLineParams} from 'svelte-lightweight-charts/internal/lines';
+    import type {SeriesActionParams, HistogramSeriesParams} from 'svelte-lightweight-charts/internal/series';
 
     import {LineStyle} from 'lightweight-charts';
-    import {chart} from 'svelte-lightweight-charts';
     import {BAR_DATA, HISTOGRAM_DATA, LINE_DATA} from './data-series';
     import {onMount} from 'svelte';
 
-    import Chart from 'svelte-lightweight-charts/components/chart.svelte';
-    import LineSeries from 'svelte-lightweight-charts/components/line-series.svelte';
-    import AreaSeries from 'svelte-lightweight-charts/components/area-series.svelte';
-    import HistogramSeries from 'svelte-lightweight-charts/components/histogram-series.svelte';
-    import BarSeries from 'svelte-lightweight-charts/components/bar-series.svelte';
-    import CandlestickSeries from 'svelte-lightweight-charts/components/candlestick-series.svelte';
-    import BaselineSeries from 'svelte-lightweight-charts/components/baseline-series.svelte';
-    import PriceLine from 'svelte-lightweight-charts/components/price-line.svelte';
-    import TimeScale from 'svelte-lightweight-charts/components/time-scale.svelte';
-    import PriceScale from 'svelte-lightweight-charts/components/price-scale.svelte';
+    import {
+        Chart,
+        LineSeries,
+        AreaSeries,
+        HistogramSeries,
+        BarSeries,
+        CandlestickSeries,
+        BaselineSeries,
+        PriceLine,
+        TimeScale,
+        PriceScale,
+    } from 'svelte-lightweight-charts';
 
     type EverySeriesApi =
         | ISeriesApi<'Area'>
@@ -96,9 +95,6 @@
         updateVolumeData(volumeComponent, day);
     }
 
-    let action = false;
-    let components = true;
-
     let showVolume = true;
     let intraday = false;
     let timeScaleVisible = true;
@@ -108,15 +104,6 @@
     $: if (ticker !== null) {
         setupTicker(!intraday);
     }
-
-    let params: ChartActionParams<[SeriesActionParams, HistogramSeriesParams] | [SeriesActionParams]>;
-
-    $: params = {
-        options,
-        series: showVolume ? [mainProps, volumeProps] : [mainProps],
-        reference: handleReference,
-        onClick: handleClick,
-    };
 
     let api: IChartApi | null = null;
     let drawMode: 'draw-priceline' | null = null;
@@ -130,8 +117,8 @@
         }
     })
 
-    function handleClick(e: MouseEventParams): void {
-        const {point} = e;
+    function handleClick(e: ChartEventArgs['click']): void {
+        const {point} = e.detail;
         if (point === undefined) {
             return;
         }
@@ -163,13 +150,14 @@
         }
     }
 
-    function handleCrosshairMove(e: ChartEvents['crosshairMove']): void {
+    function handleCrosshairMove(e: ChartEventArgs['crosshairMove']): void {
         // eslint-disable-next-line no-console
         console.log('move', e.detail);
     }
 
     function handleReference(ref: IChartApi | null): void {
         api = ref;
+        reference?.(ref);
     }
 
     function handleFitContent(): void {
@@ -365,7 +353,7 @@
     }
 
     let timeScaleInfo: Record<string, unknown> = {};
-    function handleTimeScaleEvent<T extends keyof TimeScaleEvents>(event: TimeScaleEvents[T]): void {
+    function handleTimeScaleEvent<T extends keyof TimeScaleEventArgs>(event: TimeScaleEventArgs[T]): void {
         timeScaleInfo[event.type] = event.detail;
         timeScaleInfo = { ...timeScaleInfo };
     }
@@ -397,15 +385,6 @@
             </label>
         {/each}
     </fieldset>
-    <fieldset name="views">
-        <legend>Views:</legend>
-        <label>
-            <input type="checkbox" name="action" bind:checked={action}> Action
-        </label>
-        <label>
-            <input type="checkbox" name="action" bind:checked={components}> Component
-        </label>
-    </fieldset>
     <fieldset name="controller">
         <legend>Controller options:</legend>
         <label>
@@ -426,123 +405,116 @@
         <button on:click={handleTicker} type="button">{ ticker ? 'Stop' : 'Start' }</button>
         <button on:click={handleFitContent} type="button">Fit content</button>
     </fieldset>
-    {#if action}
-        <fieldset name="chart-action">
-            <legend>Chart action:</legend>
-            <section use:chart={params}></section>
-        </fieldset>
-    {/if}
-    {#if components}
-        <fieldset name="chart-component">
-            <legend>Chart component:</legend>
-            <Chart
-                {...(params.options ?? {})}
-                ref={reference}
-                container={{
-                    class: 'chart',
-                    // eslint-disable-next-line no-console
-                    ref: console.log
-                }}
-                on:crosshairMove={handleCrosshairMove}
-            >
-                <PriceScale
-                    id="left"
-                    visible={priceScaleId === 'left'}
-                />
-                <PriceScale
-                    id="right"
-                    visible={priceScaleId === 'right'}
-                />
-                <TimeScale
-                    visible={timeScaleVisible}
-                    on:visibleTimeRangeChange={handleTimeScaleEvent}
-                    on:visibleLogicalRangeChange={handleTimeScaleEvent}
-                    on:sizeChange={handleTimeScaleEvent}
-                />
-                {#if mainProps.type === 'Area' }
-                    <AreaSeries
-                        {...(mainProps.options ?? {})}
-                        priceScaleId={priceScaleId}
-                        data={mainProps.data}
-                        ref={handleMainComponentReference}
-                    >
-                        {#each lines as line (line.id)}
-                            <PriceLine {...line.options}/>
-                        {/each}
-                    </AreaSeries>
-                {/if}
-                {#if mainProps.type === 'Line' }
-                    <LineSeries
-                        {...(mainProps.options ?? {})}
-                        priceScaleId={priceScaleId}
-                        data={mainProps.data}
-                        ref={handleMainComponentReference}
-                    >
-                        {#each lines as line (line.id)}
-                            <PriceLine {...line.options}/>
-                        {/each}
-                    </LineSeries>
-                {/if}
-                {#if mainProps.type === 'Histogram'}
+    <fieldset name="chart-component">
+        <legend>Chart component:</legend>
+        <Chart
+            {...options}
+            ref={handleReference}
+            container={{
+                class: 'chart',
+                // eslint-disable-next-line no-console
+                ref: console.log
+            }}
+            on:crosshairMove={handleCrosshairMove}
+            on:click={handleClick}
+        >
+            <PriceScale
+                id="left"
+                visible={priceScaleId === 'left'}
+            />
+            <PriceScale
+                id="right"
+                visible={priceScaleId === 'right'}
+            />
+            <TimeScale
+                visible={timeScaleVisible}
+                on:visibleTimeRangeChange={handleTimeScaleEvent}
+                on:visibleLogicalRangeChange={handleTimeScaleEvent}
+                on:sizeChange={handleTimeScaleEvent}
+            />
+            {#if mainProps.type === 'Area' }
+                <AreaSeries
+                    {...(mainProps.options ?? {})}
+                    priceScaleId={priceScaleId}
+                    data={mainProps.data}
+                    ref={handleMainComponentReference}
+                >
+                    {#each lines as line (line.id)}
+                        <PriceLine {...line.options}/>
+                    {/each}
+                </AreaSeries>
+            {/if}
+            {#if mainProps.type === 'Line' }
+                <LineSeries
+                    {...(mainProps.options ?? {})}
+                    priceScaleId={priceScaleId}
+                    data={mainProps.data}
+                    ref={handleMainComponentReference}
+                >
+                    {#each lines as line (line.id)}
+                        <PriceLine {...line.options}/>
+                    {/each}
+                </LineSeries>
+            {/if}
+            {#if mainProps.type === 'Histogram'}
+                <HistogramSeries
+                    {...(mainProps.options ?? {})}
+                    priceScaleId={priceScaleId}
+                    data={mainProps.data}
+                    ref={handleMainComponentReference}
+                >
+                    {#each lines as line (line.id)}
+                        <PriceLine {...line.options}/>
+                    {/each}
+                </HistogramSeries>
+            {/if}
+            {#if mainProps.type === 'Bar'}
+                <BarSeries
+                    {...(mainProps.options ?? {})}
+                    priceScaleId={priceScaleId}
+                    data={mainProps.data}
+                    ref={handleMainComponentReference}
+                >
+                    {#each lines as line (line.id)}
+                        <PriceLine {...line.options}/>
+                    {/each}
+                </BarSeries>
+            {/if}
+            {#if mainProps.type === 'Candlestick'}
+                <CandlestickSeries
+                    {...(mainProps.options ?? {})}
+                    priceScaleId={priceScaleId}
+                    data={mainProps.data}
+                    ref={handleMainComponentReference}
+                >
+                    {#each lines as line (line.id)}
+                        <PriceLine {...line.options}/>
+                    {/each}
+                </CandlestickSeries>
+            {/if}
+            {#if mainProps.type === 'Baseline'}
+                <BaselineSeries
+                    {...(mainProps.options ?? {})}
+                    priceScaleId={priceScaleId}
+                    data={mainProps.data}
+                    ref={handleMainComponentReference}
+                >
+                    {#each lines as line (line.id)}
+                        <PriceLine {...line.options}/>
+                    {/each}
+                </BaselineSeries>
+            {/if}
+            {#if showVolume}
+                {#key volumeProps.id}
                     <HistogramSeries
-                        {...(mainProps.options ?? {})}
-                        priceScaleId={priceScaleId}
-                        data={mainProps.data}
-                        ref={handleMainComponentReference}
-                    >
-                        {#each lines as line (line.id)}
-                            <PriceLine {...line.options}/>
-                        {/each}
-                    </HistogramSeries>
-                {/if}
-                {#if mainProps.type === 'Bar'}
-                    <BarSeries
-                        {...(mainProps.options ?? {})}
-                        priceScaleId={priceScaleId}
-                        data={mainProps.data}
-                        ref={handleMainComponentReference}
-                    >
-                        {#each lines as line (line.id)}
-                            <PriceLine {...line.options}/>
-                        {/each}
-                    </BarSeries>
-                {/if}
-                {#if mainProps.type === 'Candlestick'}
-                    <CandlestickSeries
-                        {...(mainProps.options ?? {})}
-                        priceScaleId={priceScaleId}
-                        data={mainProps.data}
-                        ref={handleMainComponentReference}
-                    >
-                        {#each lines as line (line.id)}
-                            <PriceLine {...line.options}/>
-                        {/each}
-                    </CandlestickSeries>
-                {/if}
-                {#if mainProps.type === 'Baseline'}
-                    <BaselineSeries
-                        {...(mainProps.options ?? {})}
-                        priceScaleId={priceScaleId}
-                        data={mainProps.data}
-                        ref={handleMainComponentReference}
-                    >
-                        {#each lines as line (line.id)}
-                            <PriceLine {...line.options}/>
-                        {/each}
-                    </BaselineSeries>
-                {/if}
-                {#if showVolume}
-                    {#key volumeProps.id}
-                        <HistogramSeries
-                            {...(volumeProps.options ?? {})}
-                            data={volumeProps.data}
-                            ref={handleVolumeComponentReference}
-                        />
-                    {/key}
-                {/if}
-            </Chart>
-        </fieldset>
-    {/if}
+                        {...(volumeProps.options ?? {})}
+                        data={volumeProps.data}
+                        ref={handleVolumeComponentReference}
+                    />
+                {/key}
+            {/if}
+        </Chart>
+    </fieldset>
     <fieldset>
         <legend>TimeScale info:</legend>
         <pre>{JSON.stringify(timeScaleInfo, null, 4)}</pre>

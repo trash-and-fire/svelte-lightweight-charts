@@ -3,7 +3,7 @@
 <script lang="ts">
     import type {BarSeriesPartialOptions, ISeriesApi} from 'lightweight-charts';
     import type {$$PROPS} from './bar-series.interface';
-    import type {Reference} from '../types';
+    import type {Reference} from '../internal/utils';
 
     import ContextProvider from './internal/context-provider.svelte';
     import {useSeriesEffect} from './internal/utils';

@@ -3,7 +3,7 @@
 <script lang="ts">
     import type {HistogramSeriesPartialOptions, ISeriesApi} from 'lightweight-charts';
     import type {$$PROPS} from './histogram-series.interface';
-    import type {Reference} from '../types';
+    import type {Reference} from '../internal/utils';
 
     import ContextProvider from './internal/context-provider.svelte';
     import {useSeriesEffect} from './internal/utils';

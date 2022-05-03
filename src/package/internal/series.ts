@@ -1,7 +1,77 @@
-import type {IChartApi, ISeriesApi, SeriesType} from 'lightweight-charts';
-import type {ActionResult, ReferencableActionResult, Reference, SeriesActionParams} from '../types';
+import type {IChartApi, ISeriesApi, SeriesType, SeriesDataItemTypeMap, SeriesPartialOptionsMap} from 'lightweight-charts';
+import type {ActionResult, ReferencableActionResult, Reference} from './utils';
+import type {PriceLineParams} from './lines';
+
 import {collection} from './collection';
 import {linesCollection} from './lines';
+
+export interface AreaSeriesParams {
+    id: string;
+    type: 'Area';
+    reactive?: boolean;
+    options?: SeriesPartialOptionsMap['Area'];
+    data: SeriesDataItemTypeMap['Area'][];
+    reference?: Reference<ISeriesApi<'Area'>>;
+    priceLines?: PriceLineParams[];
+}
+
+export interface BarSeriesParams {
+    id: string;
+    type: 'Bar';
+    reactive?: boolean;
+    options?: SeriesPartialOptionsMap['Bar'];
+    data: SeriesDataItemTypeMap['Bar'][];
+    reference?: Reference<ISeriesApi<'Bar'>>;
+    priceLines?: PriceLineParams[];
+}
+
+export interface CandlestickSeriesParams {
+    id: string;
+    type: 'Candlestick';
+    reactive?: boolean;
+    options?: SeriesPartialOptionsMap['Candlestick'];
+    data: SeriesDataItemTypeMap['Candlestick'][];
+    reference?: Reference<ISeriesApi<'Candlestick'>>;
+    priceLines?: PriceLineParams[];
+}
+
+export interface HistogramSeriesParams {
+    id: string;
+    type: 'Histogram';
+    reactive?: boolean;
+    options?: SeriesPartialOptionsMap['Histogram'];
+    data: SeriesDataItemTypeMap['Histogram'][];
+    reference?: Reference<ISeriesApi<'Histogram'>>;
+    priceLines?: PriceLineParams[];
+}
+
+export interface LineSeriesParams {
+    id: string;
+    type: 'Line';
+    reactive?: boolean;
+    options?: SeriesPartialOptionsMap['Line'];
+    data: SeriesDataItemTypeMap['Line'][];
+    reference?: Reference<ISeriesApi<'Line'>>;
+    priceLines?: PriceLineParams[];
+}
+
+export type BaselineSeriesParams = 'Baseline' extends SeriesType ? {
+    id: string;
+    type: 'Baseline';
+    reactive?: boolean;
+    options?: SeriesPartialOptionsMap['Baseline'];
+    data: SeriesDataItemTypeMap['Baseline'][];
+    reference?: Reference<ISeriesApi<'Baseline'>>;
+    priceLines?: PriceLineParams[];
+} : never;
+
+export type SeriesActionParams =
+    | AreaSeriesParams
+    | BarSeriesParams
+    | CandlestickSeriesParams
+    | HistogramSeriesParams
+    | LineSeriesParams
+    | BaselineSeriesParams
 
 export type SeriesParams = Omit<SeriesActionParams, 'reference'>;
 

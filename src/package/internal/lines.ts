@@ -1,6 +1,13 @@
-import type {IPriceLine, ISeriesApi, SeriesType} from 'lightweight-charts';
-import type {ActionResult, Reference, PriceLineParams, ReferencableActionResult} from '../types';
+import type {IPriceLine, ISeriesApi, SeriesType, PriceLineOptions} from 'lightweight-charts';
+import type {ActionResult, ReferencableActionResult, Reference} from './utils';
+
 import {collection} from './collection';
+
+export interface PriceLineParams {
+    id: string;
+    options: PriceLineOptions;
+    reference?: Reference<IPriceLine>;
+}
 
 export type PriceLineActionResult = ReferencableActionResult<PriceLineParams, IPriceLine>;
 

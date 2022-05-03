@@ -11,6 +11,7 @@ export {default as PriceLine} from './components/price-line.svelte';
 export {default as PriceScale} from './components/price-scale.svelte';
 export {default as TimeScale} from './components/time-scale.svelte';
 
+/** @deprecated */
 export type {ChartActionParams} from './internal/chart';
 export type {$$PROPS as ChartProps, $$EVENTS as ChartEventArgs, $$EVENTS_DETAIL as ChartEventDetails} from './components/chart.interface';
 export type {$$PROPS as AreaSeriesProps} from './components/area-series.interface';
@@ -22,7 +23,9 @@ export type {$$PROPS as LinePropsSeriesProps} from './components/line-series.int
 export type {$$PROPS as PriceLineProps} from './components/price-line.interface';
 export type {$$PROPS as PriceScaleProps} from './components/price-scale.interface';
 export type {$$PROPS as TimeScaleProps, $$EVENTS as TimeScaleEventArgs, $$EVENTS_DETAIL as TimeScaleEventDetails} from './components/time-scale.interface';
-export type {Reference} from './types';
+export type {Reference} from './internal/utils';
 
+/** @deprecated Use <Chart> component instead */
 export {chart};
+/** @deprecated Use <Chart> component instead */
 export default chart;

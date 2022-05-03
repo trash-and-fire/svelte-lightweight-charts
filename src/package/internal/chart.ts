@@ -1,11 +1,13 @@
-import {
+import type {
     ChartOptions,
-    createChart,
     DeepPartial,
     IChartApi,
     MouseEventHandler,
 } from 'lightweight-charts';
-import type {ActionResult, Reference, SeriesActionParams} from '../types';
+import type {SeriesActionParams} from './series';
+import type {ActionResult, Reference} from './utils';
+
+import {createChart} from 'lightweight-charts';
 import {seriesCollection} from './series';
 
 export interface ChartActionParams<T extends Array<SeriesActionParams>> {
