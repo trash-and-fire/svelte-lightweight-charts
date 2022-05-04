@@ -3,9 +3,9 @@ import type {
     IPriceScaleApi,
     PriceScaleOptions,
 } from 'lightweight-charts';
-import type {Reference} from '../types';
+import type {Reference} from '../internal/utils';
 
-export interface $$PROPS extends DeepPartial<PriceScaleOptions>{
+export interface $$PROPS extends DeepPartial<PriceScaleOptions> {
     id: string;
     ref?: Reference<IPriceScaleApi>;
 }

@@ -1,5 +1,21 @@
-import type {IChartApi, ITimeScaleApi} from 'lightweight-charts';
-import type {Reference, TimeScaleParams, ReferencableActionResult} from '../types';
+import type {
+    IChartApi,
+    ITimeScaleApi,
+    DeepPartial,
+    LogicalRangeChangeEventHandler,
+    SizeChangeEventHandler,
+    TimeRangeChangeEventHandler,
+    TimeScaleOptions
+} from 'lightweight-charts';
+import type {ReferencableActionResult, Reference} from './utils';
+
+export interface TimeScaleParams {
+    options?: DeepPartial<TimeScaleOptions>;
+    reference?: Reference<ITimeScaleApi>;
+    onVisibleTimeRangeChange?: TimeRangeChangeEventHandler;
+    onVisibleLogicalRangeChange?: LogicalRangeChangeEventHandler;
+    onSizeChange?: SizeChangeEventHandler;
+}
 
 export type TimeScaleActionResult = ReferencableActionResult<TimeScaleParams, ITimeScaleApi>;
 
@@ -93,7 +109,7 @@ export function timeScale(target: IChartApi, params: TimeScaleParams): TimeScale
             if (onSizeChange) {
                 subject.unsubscribeSizeChange(onSizeChange);
             }
-            
+
             reference?.(null);
         }
     };

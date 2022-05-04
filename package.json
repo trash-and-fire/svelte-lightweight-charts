@@ -26,6 +26,7 @@
   "files": [
     "**"
   ],
+  "sideEffects": false,
   "devDependencies": {
     "@babel/core": "7.14.0",
     "@babel/preset-env": "7.14.1",

@@ -3,7 +3,7 @@ import type {
     ISeriesApi,
     SeriesDataItemTypeMap
 } from 'lightweight-charts';
-import type {Reference} from '../types';
+import type {Reference} from '../internal/utils';
 
 export interface $$PROPS extends HistogramSeriesPartialOptions {
     ref?: Reference<ISeriesApi<'Histogram'>>;
