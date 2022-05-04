@@ -1,12 +1,14 @@
 import type {IChartApi, IPriceLine, IPriceScaleApi, ISeriesApi, ITimeScaleApi, SeriesType} from 'lightweight-charts';
-import type {PriceLineParams, PriceScaleParams, Reference, TimeScaleParams} from '../../types';
-import type {PriceLineActionResult} from '../../internal/lines';
+import type {PriceLineActionResult, PriceLineParams} from '../../internal/lines';
+import type {Reference} from '../../internal/utils';
+import type {PriceScaleActionResult, PriceScaleParams} from '../../internal/price-scale';
+import type {TimeScaleActionResult, TimeScaleParams} from '../../internal/time-scale';
 
 import {afterUpdate, getContext, onMount, setContext} from 'svelte';
 import {series, SeriesActionResult, SeriesParams} from '../../internal/series';
 import {line} from '../../internal/lines';
-import {timeScale, TimeScaleActionResult} from '../../internal/time-scale';
-import {priceScale, PriceScaleActionResult} from '../../internal/price-scale';
+import {timeScale} from '../../internal/time-scale';
+import {priceScale} from '../../internal/price-scale';
 
 export type Context = IChartApi | ISeriesApi<SeriesType>;
 

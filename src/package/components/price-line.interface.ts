@@ -1,7 +1,7 @@
 import type {
     PriceLineOptions, IPriceLine
 } from 'lightweight-charts';
-import type {Reference} from '../types';
+import type {Reference} from '../internal/utils';
 
 export interface $$PROPS extends PriceLineOptions {
     ref?: Reference<IPriceLine>;

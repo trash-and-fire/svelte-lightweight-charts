@@ -18,8 +18,7 @@ npm install lightweight-charts svelte-lightweight-charts
 
 ```svelte
 <script>
-    import Chart from "svelte-lightweight-charts/components/chart.svelte";
-    import LineSeries from "svelte-lightweight-charts/components/line-series.svelte";
+    import { Chart, LineSeries } from "svelte-lightweight-charts";
     const data = [
         { time: '2019-04-11', value: 80.01 },
         { time: '2019-04-12', value: 96.63 },
