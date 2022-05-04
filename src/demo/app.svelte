@@ -12,10 +12,14 @@
         Reference,
         ChartEventArgs,
         TimeScaleEventArgs,
+        LineSeriesProps,
+        AreaSeriesProps,
+        HistogramSeriesProps,
+        BarSeriesProps,
+        CandlestickSeriesProps,
+        BaselineSeriesProps,
+        PriceLineProps,
     } from 'svelte-lightweight-charts';
-
-    import type {PriceLineParams} from 'svelte-lightweight-charts/internal/lines';
-    import type {SeriesActionParams, HistogramSeriesParams} from 'svelte-lightweight-charts/internal/series';
 
     import {LineStyle} from 'lightweight-charts';
     import {BAR_DATA, HISTOGRAM_DATA, LINE_DATA} from './data-series';
@@ -43,20 +47,26 @@
         | ISeriesApi<'Baseline'>
         ;
 
+    type EverySeriesProps =
+        | LineSeriesProps
+        | AreaSeriesProps
+        | HistogramSeriesProps
+        | BarSeriesProps
+        | CandlestickSeriesProps
+        | BaselineSeriesProps
+    ;
+
     export let reference: Reference<IChartApi> | undefined = undefined;
 
     const SERIES_TYPES: SeriesType[] = ['Area', 'Bar', 'Histogram', 'Candlestick', 'Line', 'Baseline'];
 
-    const lines: PriceLineParams[] = [{
-        id: 'price',
-        options: {
-            price: 41.0,
-            color: 'green',
-            lineWidth: 2,
-            lineStyle: LineStyle.Dotted,
-            axisLabelVisible: true,
-            title: 'P/L 500',
-        },
+    let lines: PriceLineProps[] = [{
+        price: 41.0,
+        color: 'green',
+        lineWidth: 2,
+        lineStyle: LineStyle.Dotted,
+        axisLabelVisible: true,
+        title: 'P/L 500',
     }];
 
     let width = 400;
@@ -72,8 +82,8 @@
 
     let start: Date;
     let day: Date;
-    let mainProps: SeriesActionParams;
-    let volumeProps: HistogramSeriesParams;
+    let mainProps: EverySeriesProps;
+    let volumeProps: HistogramSeriesProps;
 
     $: {
         mainProps = createMainSeriesProps(seriesType);
@@ -84,15 +94,9 @@
     let mainSeries: EverySeriesApi | null = null;
     let volume: ISeriesApi<'Histogram'> | null = null;
 
-    let mainSeriesComponent: EverySeriesApi | null = null;
-    let volumeComponent: ISeriesApi<'Histogram'> | null = null;
-
     $: if (start !== day) {
         updateSeriesData(mainSeries, day);
         updateVolumeData(volume, day);
-
-        updateSeriesData(mainSeriesComponent, day);
-        updateVolumeData(volumeComponent, day);
     }
 
     let showVolume = true;
@@ -132,19 +136,16 @@
 
         switch (drawMode) {
             case 'draw-priceline': {
-                const line: PriceLineParams = {
-                    id: 'limit',
-                    options: {
-                        price: price,
-                        color: '#be1238',
-                        lineWidth: 2,
-                        lineStyle: LineStyle.Solid,
-                        axisLabelVisible: true,
-                        title: 'limit',
-                    }
+                const line: PriceLineProps = {
+                    price: price,
+                    color: '#be1238',
+                    lineWidth: 2,
+                    lineStyle: LineStyle.Solid,
+                    axisLabelVisible: true,
+                    title: 'limit',
                 };
-                mainProps = shallowCopy(mainProps)
-                mainProps.priceLines = [...lines, line];
+                const [stable] = lines;
+                lines = [stable, line];
                 break;
             }
         }
@@ -210,71 +211,51 @@
         }
     }
 
-    function createMainSeriesProps(type: SeriesType): SeriesActionParams {
+    function createMainSeriesProps(type: SeriesType): EverySeriesProps {
         switch (type) {
             case 'Area':
                 return {
-                    id: 'main',
-                    type,
                     data: [...LINE_DATA],
-                    priceLines: lines,
-                    reference: (ref: ISeriesApi<'Area'> | null) => {
+                    ref: (ref: ISeriesApi<'Area'> | null) => {
                         mainSeries = ref;
                     }
                 }
             case 'Line':
                 return {
-                    id: 'main',
-                    type,
                     data: [...LINE_DATA],
-                    priceLines: lines,
-                    reference: (ref: ISeriesApi<'Line'> | null) => {
+                    ref: (ref: ISeriesApi<'Line'> | null) => {
                         mainSeries = ref;
                     }
                 }
             case 'Bar':
                 return {
-                    id: 'main',
-                    type,
                     data: [...BAR_DATA],
-                    priceLines: lines,
-                    reference: (ref: ISeriesApi<'Bar'> | null) => {
+                    ref: (ref: ISeriesApi<'Bar'> | null) => {
                         mainSeries = ref;
                     },
                 }
             case 'Candlestick':
                 return {
-                    id: 'main',
-                    type,
                     data: [...BAR_DATA],
-                    priceLines: lines,
-                    reference: (ref: ISeriesApi<'Candlestick'> | null) => {
+                    ref: (ref: ISeriesApi<'Candlestick'> | null) => {
                         mainSeries = ref;
                     },
                 }
             case 'Histogram':
                 return {
-                    id: 'main',
-                    type,
                     data: [...HISTOGRAM_DATA],
-                    priceLines: lines,
-                    reference: (ref: ISeriesApi<'Histogram'> | null) => {
+                    ref: (ref: ISeriesApi<'Histogram'> | null) => {
                         mainSeries = ref;
                     },
                 }
             case 'Baseline':
                 return {
-                    id: 'main',
-                    type,
                     data: [...LINE_DATA],
-                    options: {
-                        baseValue: {
-                            type: "price",
-                            price: 38,
-                        },
+                    baseValue: {
+                        type: "price",
+                        price: 38,
                     },
-                    priceLines: lines,
-                    reference: (ref: ISeriesApi<'Baseline'> | null) => {
+                    ref: (ref: ISeriesApi<'Baseline'> | null) => {
                         mainSeries = ref;
                     }
                 }
@@ -283,23 +264,19 @@
         }
     }
 
-    function createVolumeProps(): HistogramSeriesParams {
+    function createVolumeProps(): HistogramSeriesProps {
         return {
-            id: 'volume-' + performance.now(),
-            type: 'Histogram',
-            options: {
-                color: '#26a69a',
-                priceFormat: {
-                    type: 'volume',
-                },
-                priceScaleId: '',
-                scaleMargins: {
-                    top: 0.8,
-                    bottom: 0,
-                },
+            color: '#26a69a',
+            priceFormat: {
+                type: 'volume',
+            },
+            priceScaleId: '',
+            scaleMargins: {
+                top: 0.8,
+                bottom: 0,
             },
             data: [...HISTOGRAM_DATA],
-            reference: (ref: ISeriesApi<'Histogram'> | null) => volume = ref,
+            ref: (ref: ISeriesApi<'Histogram'> | null) => volume = ref,
         }
     }
 
@@ -324,8 +301,8 @@
         }
     }
 
-    function containsLineData(api: EverySeriesApi): api is ISeriesApi<'Line'> | ISeriesApi<'Area'> {
-        return api.seriesType() === 'Line' || api.seriesType() === 'Area';
+    function containsLineData(api: EverySeriesApi): api is ISeriesApi<'Line'> | ISeriesApi<'Area'> | ISeriesApi<'Baseline'> {
+        return api.seriesType() === 'Line' || api.seriesType() === 'Area' || api.seriesType() === 'Baseline';
     }
 
     function containsBarData(api: EverySeriesApi): api is ISeriesApi<'Bar'> | ISeriesApi<'Candlestick'> {
@@ -340,16 +317,12 @@
         api?.update({time: date.toISOString().slice(0, 10), value: (20097125.00 - Math.random() * 10000000)});
     }
 
-    function shallowCopy<T extends object>(value: T): T {
-        return {...value};
-    }
-
     function handleMainComponentReference(ref: EverySeriesApi | null): void {
-        mainSeriesComponent = ref;
+        mainSeries = ref;
     }
 
     function handleVolumeComponentReference(ref: ISeriesApi<'Histogram'> | null): void {
-        volumeComponent = ref;
+        volume = ref;
     }
 
     let timeScaleInfo: Record<string, unknown> = {};
@@ -432,85 +405,78 @@
                 on:visibleLogicalRangeChange={handleTimeScaleEvent}
                 on:sizeChange={handleTimeScaleEvent}
             />
-            {#if mainProps.type === 'Area' }
+            {#if seriesType === 'Area' }
                 <AreaSeries
-                    {...(mainProps.options ?? {})}
+                    {...mainProps}
                     priceScaleId={priceScaleId}
-                    data={mainProps.data}
                     ref={handleMainComponentReference}
                 >
-                    {#each lines as line (line.id)}
-                        <PriceLine {...line.options}/>
+                    {#each lines as line (line.title)}
+                        <PriceLine {...line}/>
                     {/each}
                 </AreaSeries>
             {/if}
-            {#if mainProps.type === 'Line' }
+            {#if seriesType === 'Line' }
                 <LineSeries
-                    {...(mainProps.options ?? {})}
+                    {...mainProps}
                     priceScaleId={priceScaleId}
-                    data={mainProps.data}
                     ref={handleMainComponentReference}
                 >
-                    {#each lines as line (line.id)}
-                        <PriceLine {...line.options}/>
+                    {#each lines as line (line.title)}
+                        <PriceLine {...line}/>
                     {/each}
                 </LineSeries>
             {/if}
-            {#if mainProps.type === 'Histogram'}
+            {#if seriesType === 'Histogram'}
                 <HistogramSeries
-                    {...(mainProps.options ?? {})}
+                    {...mainProps}
                     priceScaleId={priceScaleId}
-                    data={mainProps.data}
                     ref={handleMainComponentReference}
                 >
-                    {#each lines as line (line.id)}
-                        <PriceLine {...line.options}/>
+                    {#each lines as line (line.title)}
+                        <PriceLine {...line}/>
                     {/each}
                 </HistogramSeries>
             {/if}
-            {#if mainProps.type === 'Bar'}
+            {#if seriesType === 'Bar'}
                 <BarSeries
-                    {...(mainProps.options ?? {})}
+                    {...mainProps}
                     priceScaleId={priceScaleId}
-                    data={mainProps.data}
                     ref={handleMainComponentReference}
                 >
-                    {#each lines as line (line.id)}
-                        <PriceLine {...line.options}/>
+                    {#each lines as line (line.title)}
+                        <PriceLine {...line}/>
                     {/each}
                 </BarSeries>
             {/if}
-            {#if mainProps.type === 'Candlestick'}
+            {#if seriesType === 'Candlestick'}
                 <CandlestickSeries
-                    {...(mainProps.options ?? {})}
+                    {...mainProps}
                     priceScaleId={priceScaleId}
-                    data={mainProps.data}
                     ref={handleMainComponentReference}
                 >
-                    {#each lines as line (line.id)}
-                        <PriceLine {...line.options}/>
+                    {#each lines as line (line.title)}
+                        <PriceLine {...line}/>
                     {/each}
                 </CandlestickSeries>
             {/if}
-            {#if mainProps.type === 'Baseline'}
+            {#if seriesType === 'Baseline'}
                 <BaselineSeries
-                    {...(mainProps.options ?? {})}
+                    {...mainProps}
                     priceScaleId={priceScaleId}
-                    data={mainProps.data}
                     ref={handleMainComponentReference}
                 >
-                    {#each lines as line (line.id)}
-                        <PriceLine {...line.options}/>
+                    {#each lines as line (line.title)}
+                        <PriceLine {...line}/>
                     {/each}
                 </BaselineSeries>
             {/if}
             {#if showVolume}
-                {#key volumeProps.id}
-                    <HistogramSeries
-                        {...(volumeProps.options ?? {})}
-                        data={volumeProps.data}
-                        ref={handleVolumeComponentReference}
-                    />
+                {#key seriesType}
+                <HistogramSeries
+                    {...volumeProps}
+                    ref={handleVolumeComponentReference}
+                />
                 {/key}
             {/if}
         </Chart>
