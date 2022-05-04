@@ -3,7 +3,7 @@ import type {
     ISeriesApi,
     SeriesDataItemTypeMap
 } from 'lightweight-charts';
-import type {Reference} from "../internal/utils";
+import type {Reference} from '../internal/utils';
 
 export interface $$PROPS extends BarSeriesPartialOptions {
     ref?: Reference<ISeriesApi<'Bar'>>;
