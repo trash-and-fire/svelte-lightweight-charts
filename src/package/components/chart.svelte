@@ -88,7 +88,7 @@
 
 <div
     {...attrs}
-    use:element={container?.ref}
+    use:element={container ? container.ref : undefined}
     use:chart={{
         options,
         onCrosshairMove: handleCrosshairMove,
