@@ -23,6 +23,7 @@
     "charts"
   ],
   "main": "index.js",
+  "module": "index.js",
   "files": [
     "**"
   ],
@@ -79,7 +80,8 @@
     "validate": "svelte-check"
   },
   "peerDependencies": {
-    "lightweight-charts": ">=3.3.0"
+    "lightweight-charts": ">=3.3.0",
+    "svelte": ">=3.44.0"
   },
   "husky": {
     "hooks": {
