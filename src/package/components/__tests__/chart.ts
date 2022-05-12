@@ -3,7 +3,7 @@ import {describe, it, expect, jest, beforeEach} from '@jest/globals';
 import {tick} from 'svelte';
 
 jest.unstable_mockModule('lightweight-charts', async () => ({}));
-jest.unstable_mockModule('../..', async () => ({ chart: CHART_ACTION }));
+jest.unstable_mockModule('../../internal/chart', async () => ({ chart: CHART_ACTION }));
 
 const CHART_ACTION_OBJECT = {
     update: jest.fn<unknown, [ChartActionParams<[]>]>(),
