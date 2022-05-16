@@ -38,9 +38,7 @@
 </div>
 <script>
     import {LineStyle} from 'lightweight-charts';
-    import Chart from 'svelte-lightweight-charts/components/chart.svelte';
-    import LineSeries from 'svelte-lightweight-charts/components/line-series.svelte';
-    import PriceLine from 'svelte-lightweight-charts/components/price-line.svelte';
+    import {Chart, LineSeries, PriceLine} from 'svelte-lightweight-charts';
 
     // eslint-disable-next-line @typescript-eslint/typedef,@typescript-eslint/explicit-function-return-type
     function handleReference(ref) {
