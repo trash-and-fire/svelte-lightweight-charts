@@ -1,21 +1,68 @@
 <h1>Moving Average</h1>
-<Chart width={600} height={300} crosshair={{mode: CrosshairMode.Normal}}>
-    <CandlestickSeries
-        data={candles}
-    />
-    <LineSeries
-        data={sma}
-        color="rgba(4, 111, 232, 1)"
-        lineWidth={2}
-    />
-</Chart>
+<div class="container">
+    <Chart
+        width={600}
+        height={300}
+        crosshair={{mode: CrosshairMode.Normal}}
+        on:crosshairMove={handleCrosshairMove}
+    >
+        <CandlestickSeries
+            data={candles}
+        />
+        <LineSeries
+            data={sma}
+            color="rgba(4, 111, 232, 1)"
+            lineWidth={2}
+            ref={(api) => ref = api}
+        />
+    </Chart>
+    <div class="sma-legend">
+        MA10 <span style="color: rgba(4, 111, 232, 1)">{value}</span>
+    </div>
+</div>
+
+<style>
+    .container {
+        position: relative;
+        font-family: 'Trebuchet MS', Roboto, Ubuntu, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    .sma-legend {
+        position: absolute;
+        top: 3px;
+        left: 3px;
+        width: 96px;
+        height: 70px;
+        padding: 8px;
+        font-size: 14px;
+        background-color: rgba(255, 255, 255, 0.23);
+        text-align: left;
+        z-index: 1000;
+        pointer-events: none;
+    }
+</style>
 
 <script>
     import {CrosshairMode} from 'lightweight-charts';
     import {Chart, LineSeries, CandlestickSeries} from 'svelte-lightweight-charts';
 
+    let value = 'n/a';
+    let ref;
+
     const candles = generateBarsData();
     const sma = calculateSMA(candles, 10);
+
+    function handleCrosshairMove(e) {
+        const {detail} = e;
+        const price = detail.seriesPrices.get(ref);
+        if (price !== undefined) {
+            value = (Math.round(price * 100) / 100).toFixed(2);
+        } else {
+            value = 'n/a';
+        }
+    }
 
     function calculateSMA(data, count) {
         const avg = (data) => {
