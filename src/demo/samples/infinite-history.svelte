@@ -14,9 +14,7 @@
 </div>
 
 <script>
-    import Chart from 'svelte-lightweight-charts/components/chart.svelte';
-    import CandlestickSeries from 'svelte-lightweight-charts/components/candlestick-series.svelte';
-    import TimeScale from 'svelte-lightweight-charts/components/time-scale.svelte';
+    import {Chart, CandlestickSeries, TimeScale} from 'svelte-lightweight-charts';
 
     let timeScale;
     let candleSeries;
