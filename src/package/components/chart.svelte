@@ -3,12 +3,12 @@
 <script lang="ts">
     import type {ChartOptions, IChartApi, DeepPartial, MouseEventParams} from 'lightweight-charts';
     import type {$$EVENTS_DETAIL, $$PROPS} from './chart.interface';
-    import type {Reference} from '../types';
+    import type {Reference} from '../index';
 
     import {createEventDispatcher} from 'svelte';
     import {element} from './internal/element';
     import ContextProvider from './internal/context-provider.svelte';
-    import {chart} from '../index';
+    import {chart} from '../internal/chart';
 
     const dispatch = createEventDispatcher<$$EVENTS_DETAIL>();
 
@@ -88,7 +88,7 @@
 
 <div
     {...attrs}
-    use:element={container?.ref}
+    use:element={container ? container.ref : undefined}
     use:chart={{
         options,
         onCrosshairMove: handleCrosshairMove,

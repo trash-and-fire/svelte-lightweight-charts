@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "svelte-lightweight-charts",
-  "version": "1.4.0-repl",
+  "version": "1.6.3",
   "description": "Svelte wrapper for financial lightweight charts built with HTML5 canvas",
   "license": "MIT",
   "repository": {
@@ -23,9 +23,11 @@
     "charts"
   ],
   "main": "index.js",
+  "module": "index.js",
   "files": [
     "**"
   ],
+  "sideEffects": false,
   "devDependencies": {
     "@babel/core": "7.14.0",
     "@babel/preset-env": "7.14.1",
@@ -78,7 +80,8 @@
     "validate": "svelte-check"
   },
   "peerDependencies": {
-    "lightweight-charts": ">=3.3.0"
+    "lightweight-charts": ">=3.3.0",
+    "svelte": ">=3.44.0"
   },
   "husky": {
     "hooks": {

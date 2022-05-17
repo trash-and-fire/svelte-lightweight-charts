@@ -5,31 +5,26 @@ import {describe, it, expect, jest, beforeEach} from '@jest/globals';
 
 jest.unstable_mockModule('lightweight-charts', async () => ({}));
 
-const TIME_SCALE_API = {
-    subscribeVisibleTimeRangeChange: jest.fn(),
-    unsubscribeVisibleTimeRangeChange: jest.fn(),
-    subscribeVisibleLogicalRangeChange: jest.fn(),
-    unsubscribeVisibleLogicalRangeChange: jest.fn(),
-    subscribeSizeChange: jest.fn(),
-    unsubscribeSizeChange: jest.fn(),
+const PRICE_SCALE_API = {
     applyOptions: jest.fn(),
 };
 const CHART_API = {
-    timeScale: jest.fn(() => TIME_SCALE_API),
+    priceScale: jest.fn(() => PRICE_SCALE_API),
 } as unknown as IChartApi;
 
 
-describe('TimeScale component', () => {
+describe('PriceScale component', () => {
     beforeEach(() => {
        jest.clearAllMocks();
     });
 
     it('should mount', async () => {
-        const { default: TimeScale } = await import('../time-scale.svelte');
+        const { default: PriceScale } = await import('../price-scale.svelte');
 
-        new TimeScale({
+        new PriceScale({
             target: document.createElement('div'),
             props: {
+                id: 'left',
                 visible: false,
             },
             context: new Map([['lightweight-chart-context', CHART_API]]),
@@ -37,18 +32,19 @@ describe('TimeScale component', () => {
 
         await tick();
 
-        expect(CHART_API.timeScale).toHaveBeenCalledTimes(1);
-        expect(TIME_SCALE_API.applyOptions).toHaveBeenCalledWith({
+        expect(CHART_API.priceScale).toHaveBeenCalledTimes(1);
+        expect(PRICE_SCALE_API.applyOptions).toHaveBeenCalledWith({
             visible: false,
         });
     });
 
     it('should update', async () => {
-        const { default: TimeScale } = await import('../time-scale.svelte');
+        const { default: PriceScale } = await import('../price-scale.svelte');
 
-        const component = new TimeScale({
+        const component = new PriceScale({
             target: document.createElement('div'),
             props: {
+                id: 'left',
                 visible: false,
             },
             context: new Map([['lightweight-chart-context', CHART_API]]),
@@ -56,26 +52,28 @@ describe('TimeScale component', () => {
 
         await tick();
 
-        TIME_SCALE_API.applyOptions.mockClear();
+        PRICE_SCALE_API.applyOptions.mockClear();
 
         component.$set({
+            id: 'left',
             visible: true,
         });
 
         await tick();
 
-        expect(TIME_SCALE_API.applyOptions).toHaveBeenCalledTimes(1);
-        expect(TIME_SCALE_API.applyOptions).toHaveBeenCalledWith({
+        expect(PRICE_SCALE_API.applyOptions).toHaveBeenCalledTimes(1);
+        expect(PRICE_SCALE_API.applyOptions).toHaveBeenCalledWith({
             visible: true,
         });
     });
 
     it('should destroy', async () => {
-        const { default: TimeScale } = await import('../time-scale.svelte');
+        const { default: PriceScale } = await import('../price-scale.svelte');
 
-        const component = new TimeScale({
+        const component = new PriceScale({
             target: document.createElement('div'),
             props: {
+                id: 'left',
                 visible: false,
             },
             context: new Map([['lightweight-chart-context', CHART_API]]),
@@ -89,12 +87,13 @@ describe('TimeScale component', () => {
     });
 
     it('should manage reference', async () => {
-        const { default: TimeScale } = await import('../time-scale.svelte');
+        const { default: PriceScale } = await import('../price-scale.svelte');
 
         const reference = jest.fn();
-        const component = new TimeScale({
+        const component = new PriceScale({
             target: document.createElement('div'),
             props: {
+                id: 'left',
                 visible: false,
                 ref: reference,
             },
@@ -104,7 +103,7 @@ describe('TimeScale component', () => {
         await tick();
 
         expect(reference).toHaveBeenCalledTimes(1);
-        expect(reference).toHaveBeenCalledWith(TIME_SCALE_API);
+        expect(reference).toHaveBeenCalledWith(PRICE_SCALE_API);
 
         const next = jest.fn();
         component.$set({ ref: next });
@@ -114,7 +113,7 @@ describe('TimeScale component', () => {
         expect(reference).toHaveBeenCalledTimes(2);
         expect(reference).toHaveBeenCalledWith(null);
         expect(next).toHaveBeenCalledTimes(1);
-        expect(next).toHaveBeenCalledWith(TIME_SCALE_API);
+        expect(next).toHaveBeenCalledWith(PRICE_SCALE_API);
 
         component.$destroy();
 

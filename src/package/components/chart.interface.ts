@@ -4,15 +4,17 @@ import type {
     DeepPartial,
     MouseEventParams
 } from 'lightweight-charts';
-import type {Reference} from '../types';
+import type {Reference} from '../internal/utils';
+
+export interface ChartContainerProps {
+    ref?: Reference<HTMLElement>;
+    class?: string;
+    id?: string;
+}
 
 export interface $$PROPS extends DeepPartial<ChartOptions> {
     ref?: Reference<IChartApi>;
-    container?: {
-        ref?: Reference<HTMLElement>;
-        class?: string;
-        id?: string;
-    }
+    container?: ChartContainerProps;
 }
 
 export interface $$EVENTS_DETAIL {

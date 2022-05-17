@@ -1,11 +1,14 @@
-import type {IChartApi, IPriceLine, ISeriesApi, ITimeScaleApi, SeriesType} from 'lightweight-charts';
-import type {PriceLineParams, Reference, TimeScaleParams} from '../../types';
-import type {PriceLineActionResult} from '../../internal/lines';
+import type {IChartApi, IPriceLine, IPriceScaleApi, ISeriesApi, ITimeScaleApi, SeriesType} from 'lightweight-charts';
+import type {PriceLineActionResult, PriceLineParams} from '../../internal/lines';
+import type {Reference} from '../../internal/utils';
+import type {PriceScaleActionResult, PriceScaleParams} from '../../internal/price-scale';
+import type {TimeScaleActionResult, TimeScaleParams} from '../../internal/time-scale';
 
 import {afterUpdate, getContext, onMount, setContext} from 'svelte';
 import {series, SeriesActionResult, SeriesParams} from '../../internal/series';
 import {line} from '../../internal/lines';
-import {timeScale, TimeScaleActionResult} from '../../internal/time-scale';
+import {timeScale} from '../../internal/time-scale';
+import {priceScale} from '../../internal/price-scale';
 
 export type Context = IChartApi | ISeriesApi<SeriesType>;
 
@@ -71,6 +74,28 @@ export function useTimeScaleEffect(callback: () => [params: TimeScaleParams, ref
     onMount(() => {
         const [params] = callback();
         subject = timeScale(api, params);
+
+        return () => {
+            subject?.destroy();
+            subject = null;
+        }
+    });
+
+    afterUpdate(() => {
+        const [params, ref] = callback();
+        subject?.update(params);
+        subject?.updateReference(ref);
+    });
+}
+
+export function usePriceScaleEffect(callback: () => [params: PriceScaleParams, ref: Reference<IPriceScaleApi> | undefined]): void {
+    let subject: PriceScaleActionResult | null = null;
+
+    const api = context<IChartApi>();
+
+    onMount(() => {
+        const [params] = callback();
+        subject = priceScale(api, params);
 
         return () => {
             subject?.destroy();
