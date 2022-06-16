@@ -1,9 +1,9 @@
 import type {IChartApi, ISeriesApi, SeriesType, SeriesDataItemTypeMap, SeriesPartialOptionsMap} from 'lightweight-charts';
-import type {ActionResult, ReferencableActionResult, Reference} from './utils';
-import type {PriceLineParams} from './lines';
+import type {ActionResult, ReferencableActionResult, Reference} from './utils.js';
+import type {PriceLineParams} from './lines.js';
 
-import {collection} from './collection';
-import {linesCollection} from './lines';
+import {collection} from './collection.js';
+import {linesCollection} from './lines.js';
 
 export interface AreaSeriesParams {
     id: string;

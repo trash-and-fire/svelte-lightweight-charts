@@ -2,11 +2,11 @@
 
 <script lang="ts">
     import type {BarSeriesPartialOptions, ISeriesApi} from 'lightweight-charts';
-    import type {$$PROPS} from './bar-series.interface';
-    import type {Reference} from '../internal/utils';
+    import type {$$PROPS} from './bar-series.interface.js';
+    import type {Reference} from '../internal/utils.js';
 
     import ContextProvider from './internal/context-provider.svelte';
-    import {useSeriesEffect} from './internal/utils';
+    import {useSeriesEffect} from './internal/utils.js';
 
     /** Visibility of the label with the latest visible price on the price scale */
     export let lastValueVisible: $$PROPS['lastValueVisible'] = undefined;

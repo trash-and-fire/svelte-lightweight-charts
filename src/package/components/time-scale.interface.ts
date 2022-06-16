@@ -5,7 +5,7 @@ import type {
     DeepPartial,
     TimeScaleOptions,
 } from 'lightweight-charts';
-import type {Reference} from '../internal/utils';
+import type {Reference} from '../internal/utils.js';
 
 export interface $$PROPS extends DeepPartial<TimeScaleOptions> {
     ref?: Reference<ITimeScaleApi>;

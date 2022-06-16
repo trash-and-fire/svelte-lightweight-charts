@@ -4,7 +4,7 @@ import type {
     DeepPartial,
     MouseEventParams
 } from 'lightweight-charts';
-import type {Reference} from '../internal/utils';
+import type {Reference} from '../internal/utils.js';
 
 export interface ChartContainerProps {
     ref?: Reference<HTMLElement>;
