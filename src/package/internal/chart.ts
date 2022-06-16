@@ -100,7 +100,7 @@ export function chart<T extends Array<SeriesActionParams>>(
         destroy(): void {
             series.destroy();
             if (onClick) {
-                chart.unsubscribeCrosshairMove(onClick);
+                chart.unsubscribeClick(onClick);
             }
             if (onCrosshairMove) {
                 chart.unsubscribeCrosshairMove(onCrosshairMove);
