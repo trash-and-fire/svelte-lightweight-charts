@@ -1,5 +1,5 @@
-import type {ActionResult, ReferencableActionResult, Reference} from './utils';
-import {ensure} from './utils';
+import type {ActionResult, ReferencableActionResult, Reference} from './utils.js';
+import {ensure} from './utils.js';
 
 export function collection<T, K, P extends { id: string }, R extends ReferencableActionResult<P, K>>(
     target: T,

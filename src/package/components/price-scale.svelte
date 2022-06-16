@@ -2,9 +2,9 @@
 
 <script lang="ts">
     import type {PriceScaleOptions, DeepPartial} from 'lightweight-charts';
-    import type {$$PROPS} from './price-scale.interface';
+    import type {$$PROPS} from './price-scale.interface.js';
 
-    import {usePriceScaleEffect} from './internal/utils';
+    import {usePriceScaleEffect} from './internal/utils.js';
 
     export let id: string;
     /**

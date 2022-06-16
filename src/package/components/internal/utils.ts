@@ -1,11 +1,11 @@
 import type {IChartApi, IPriceLine, IPriceScaleApi, ISeriesApi, ITimeScaleApi, SeriesType} from 'lightweight-charts';
 import type {PriceLineActionResult, PriceLineParams} from '../../internal/lines';
-import type {Reference} from '../../internal/utils';
+import type {Reference} from '../../internal/utils.js';
 import type {PriceScaleActionResult, PriceScaleParams} from '../../internal/price-scale';
 import type {TimeScaleActionResult, TimeScaleParams} from '../../internal/time-scale';
 
 import {afterUpdate, getContext, onMount, setContext} from 'svelte';
-import {series, SeriesActionResult, SeriesParams} from '../../internal/series';
+import {series, SeriesActionResult, SeriesParams} from '../../internal/series.js';
 import {line} from '../../internal/lines';
 import {timeScale} from '../../internal/time-scale';
 import {priceScale} from '../../internal/price-scale';

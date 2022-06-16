@@ -1,6 +1,6 @@
 <script lang="ts">
-    import type {Context} from './utils';
-    import {context} from './utils';
+    import type {Context} from './utils.js';
+    import {context} from './utils.js';
 
     export let value: Context;
 

@@ -4,11 +4,11 @@ import type {
     IChartApi,
     MouseEventHandler,
 } from 'lightweight-charts';
-import type {SeriesActionParams} from './series';
-import type {ActionResult, Reference} from './utils';
+import type {SeriesActionParams} from './series.js';
+import type {ActionResult, Reference} from './utils.js';
 
 import {createChart} from 'lightweight-charts';
-import {seriesCollection} from './series';
+import {seriesCollection} from './series.js';
 
 export interface ChartActionParams<T extends Array<SeriesActionParams>> {
     options?: DeepPartial<ChartOptions>;

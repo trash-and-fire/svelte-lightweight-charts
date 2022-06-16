@@ -2,13 +2,13 @@
 
 <script lang="ts">
     import type {ChartOptions, IChartApi, DeepPartial, MouseEventParams} from 'lightweight-charts';
-    import type {$$EVENTS_DETAIL, $$PROPS} from './chart.interface';
-    import type {Reference} from '../index';
+    import type {$$EVENTS_DETAIL, $$PROPS} from './chart.interface.js';
+    import type {Reference} from '../internal/utils.js';
 
     import {createEventDispatcher} from 'svelte';
-    import {element} from './internal/element';
+    import {element} from './internal/element.js';
     import ContextProvider from './internal/context-provider.svelte';
-    import {chart} from '../internal/chart';
+    import {chart} from '../internal/chart.js';
 
     const dispatch = createEventDispatcher<$$EVENTS_DETAIL>();
 

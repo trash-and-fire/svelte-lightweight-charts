@@ -1,5 +1,5 @@
 import type {IChartApi, IPriceScaleApi, DeepPartial, PriceScaleOptions} from 'lightweight-charts';
-import type {ReferencableActionResult, Reference} from './utils';
+import type {ReferencableActionResult, Reference} from './utils.js';
 
 export interface PriceScaleParams {
     id: string;

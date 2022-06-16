@@ -2,10 +2,10 @@
 
 <script lang="ts">
     import type {LogicalRange, TimeRange, DeepPartial, TimeScaleOptions} from 'lightweight-charts';
-    import type {$$PROPS, $$EVENTS_DETAIL} from './time-scale.interface';
+    import type {$$PROPS, $$EVENTS_DETAIL} from './time-scale.interface.js';
 
     import {createEventDispatcher} from 'svelte';
-    import {useTimeScaleEffect} from './internal/utils';
+    import {useTimeScaleEffect} from './internal/utils.js';
 
     const dispatch = createEventDispatcher<$$EVENTS_DETAIL>();
 
