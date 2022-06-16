@@ -2,7 +2,7 @@
 
 <script lang="ts">
     import type {$$PROPS} from './server-chart.interface.js';
-    import {ChartOptions, DeepPartial} from 'lightweight-charts';
+    import type {ChartOptions, DeepPartial} from 'lightweight-charts';
 
     export let container: $$PROPS['container'] = undefined;
 
@@ -55,8 +55,7 @@
         handleScale,
     };
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const mute = ref;
+    (() => ({ref, options}))();
 
     // Dom container attributes
     let attrs: $$PROPS['container'] = {};
@@ -67,5 +66,5 @@
 </script>
 
 <div {...attrs}>
-    <div style:width={width + 'px'} style:height={height + 'px'}></div>
+    <div style={`width: ${width}px; height: ${height}px`}></div>
 </div>
