@@ -160,4 +160,4 @@ Package is written on TypeScript and transpiled to plain `*.js` and `*.svelte` f
 
 ## Related projects
 
-Need a wrapper for another framework? Check out my [lightweight-chart-react-wrapper](https://github.com/trash-and-fire/lightweight-charts-react-wrapper)
+Need a wrapper for another framework? Check out my [lightweight-charts-react-wrapper](https://github.com/trash-and-fire/lightweight-charts-react-wrapper)
