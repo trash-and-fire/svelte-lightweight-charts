@@ -163,14 +163,34 @@ You can pass any options from [`PriceLineOptions`](https://tradingview.github.io
 
 Use the `ref` property to get reference to a [`IPriceLine`](https://tradingview.github.io/lightweight-charts/docs/api/interfaces/IPriceLine) instance.
 
-#### Drawing line on click
+#### Line drawing on click
 
 You can draw price lines dynamically. For [example](https://svelte.dev/repl/3294790e6b5048a5abfb3d239405214b), you can draw a price line at a user-specified point.
 
-### Other components
+### Time scale
 
-- `<TimeScale>` - time-scale (`ITimeScaleApi`). It has to be nested inside `<Chart>` component.
-- `<PriceScale>` - price-scale (`IPriceScaleApi`). It has to be nested inside `<Chart>` component.
+`<TimeScale>` - the component is a binding to the current time scale of the current chart.
+This component has to be nested inside a chart component and should not have duplicates. Each chart has only one time scale.
+
+You can pass any option from [`TimeScaleOptions`](https://tradingview.github.io/lightweight-charts/docs/api/interfaces/TimeScaleOptions) as separate property.
+
+Events:
+- [`on:visibleTimeRangeChange`](https://tradingview.github.io/lightweight-charts/docs/api/interfaces/ITimeScaleApi#subscribevisibletimerangechange) - `(event: CustomEvent<TimeRange | null>) => void`
+- [`on:visibleLogicalRangeChange`](https://tradingview.github.io/lightweight-charts/docs/api/interfaces/ITimeScaleApi#subscribevisiblelogicalrangechange) - `(event: CustomEvent<LogicalRange | null>) => void`
+- [`on:sizeChange`](https://tradingview.github.io/lightweight-charts/docs/api/interfaces/ITimeScaleApi#subscribesizechange) - `(event: CustomEvent<{ width: number; height: number }>) => void`
+
+Use the `ref` property to get reference to a [`ITimeScaleApi`](https://tradingview.github.io/lightweight-charts/docs/api/interfaces/ITimeScaleApi) instance.
+
+Note: don't use `ChartOptions['timeScale']` and `<TimeScale>` component at the same time. This can lead to uncontrolled overwriting of options.
+
+### Price scale
+
+`<PriceScale>` - the component is a bindings to a certain price scale.
+This component has to be nested inside chart component and requires an `id` property. Two price scales with the same `id` within the same chart result in undefined behaviour. 
+
+You can pass any option from [`PriceScaleOptions`](https://tradingview.github.io/lightweight-charts/docs/api/interfaces/PriceScaleOptions) as separate property.
+
+Note: don't use `ChartOptions['leftPriceScale']'` or `ChartOptions['rightPriceScale']` or `ChartOptions['overlayPriceScale']` and `<PriceScale>` at the same time. This can lead to uncontrolled overwriting of options.
 
 ## Typescript
 Package is written on TypeScript and transpiled to plain `*.js` and `*.svelte` files. Definition files (including `*.svelte.d.ts`) are provided with package. It is a good place to find list of available properties that can be passed to each component.
