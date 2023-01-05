@@ -1,45 +1,13 @@
 {
   "samples": {
-    "moving-average.svelte": {
-      "hash": 323543195,
-      "uid": "8338a68cb00b42fe856dee282d0090e9",
-      "files": []
-    },
-    "infinite-history.svelte": {
-      "hash": -804066061,
-      "uid": "0efb2840a9844ed5a1d84f2a1c9a2269",
-      "files": []
-    },
-    "realtime-emulation.svelte": {
-      "hash": -1591696663,
-      "uid": "c06c05db84a0466199ddd40c6622903c",
-      "files": []
-    },
-    "volume-study.svelte": {
-      "hash": -404684914,
-      "uid": "12adbb1bf1fe42c094ff525ad9540e0e",
-      "files": []
-    },
-    "custom-price-formatter.svelte": {
-      "hash": -1728912973,
-      "uid": "9b755e215dd545c3beb5a799555ce5f8",
-      "files": [
-        "components/switcher.svelte"
-      ]
-    },
-    "legend.svelte": {
-      "hash": -987260487,
-      "uid": "1b431bf3d75948769855d14c55bbc5f7",
+    "bar-chart.svelte": {
+      "hash": -60586666,
+      "uid": "9340f52a3b9241d1aa25ed8a8c7cfdef",
       "files": []
     },
     "candlestick-chart.svelte": {
       "hash": 99157861,
       "uid": "bba23a1f54ff40978d4321755c7446a0",
-      "files": []
-    },
-    "bar-chart.svelte": {
-      "hash": -60586666,
-      "uid": "9340f52a3b9241d1aa25ed8a8c7cfdef",
       "files": []
     },
     "custom-font-family.svelte": {
@@ -49,15 +17,19 @@
         "components/switcher.svelte"
       ]
     },
-    "two-price-scales.svelte": {
-      "hash": -552186412,
-      "uid": "61bf1108624b4f40b6f11bc91b212752",
-      "files": []
+    "custom-locale.svelte": {
+      "hash": -114093505,
+      "uid": "d3e6adf11a464012b16bc229de917255",
+      "files": [
+        "components/switcher.svelte"
+      ]
     },
-    "price-lines-with-titles.svelte": {
-      "hash": 1184653996,
-      "uid": "9dd182e8d9974e9780e284e2943346dd",
-      "files": []
+    "custom-price-formatter.svelte": {
+      "hash": -1728912973,
+      "uid": "9b755e215dd545c3beb5a799555ce5f8",
+      "files": [
+        "components/switcher.svelte"
+      ]
     },
     "custom-themes.svelte": {
       "hash": 1335783652,
@@ -71,12 +43,45 @@
       "uid": "d2c8423038894f68b58097fd0aae2193",
       "files": []
     },
-    "custom-locale.svelte": {
-      "hash": -114093505,
-      "uid": "d3e6adf11a464012b16bc229de917255",
-      "files": [
-        "components/switcher.svelte"
-      ]
+    "infinite-history.svelte": {
+      "hash": -804066061,
+      "uid": "0efb2840a9844ed5a1d84f2a1c9a2269",
+      "files": []
+    },
+    "legend.svelte": {
+      "hash": -987260487,
+      "uid": "1b431bf3d75948769855d14c55bbc5f7",
+      "files": []
+    },
+    "moving-average.svelte": {
+      "hash": 323543195,
+      "uid": "8338a68cb00b42fe856dee282d0090e9",
+      "files": []
+    },
+    "price-lines-with-titles.svelte": {
+      "hash": 1184653996,
+      "uid": "9dd182e8d9974e9780e284e2943346dd",
+      "files": []
+    },
+    "realtime-emulation.svelte": {
+      "hash": -1591696663,
+      "uid": "c06c05db84a0466199ddd40c6622903c",
+      "files": []
+    },
+    "two-price-scales.svelte": {
+      "hash": -552186412,
+      "uid": "61bf1108624b4f40b6f11bc91b212752",
+      "files": []
+    },
+    "volume-study.svelte": {
+      "hash": -404684914,
+      "uid": "12adbb1bf1fe42c094ff525ad9540e0e",
+      "files": []
+    },
+    "synchronized-charts.svelte": {
+      "hash": 553587067,
+      "uid": "9175d726c7a24c39a855f0a50547d968",
+      "files": []
     }
   },
   "components": {
