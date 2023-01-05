@@ -37,6 +37,23 @@ npm install lightweight-charts svelte-lightweight-charts
 </Chart>
 ```
 
+### SSR and SvelteKit
+
+`lightweight-charts` are not currently compatible with the node environment. Direct import of this module will throw an exception.
+
+I made an experimental version of the package that should solve this problem. To install the next version, run:
+```bash
+npm install svelte-lightweight-charts@next
+```
+Add to your `svelte.config.js`:
+```
+vite: {
+    ssr: {
+        noExternal: ['svelte-lightweight-charts', 'lightweight-charts']
+    }
+}
+```
+
 ## Getting reference to lightweight-chart objects
 
 You can use the `ref` property to get a reference to a lightweight-chart api-instance from any component.
@@ -47,6 +64,10 @@ You can use the `ref` property to get a reference to a lightweight-chart api-ins
 <Chart width={400} height={300} ref={(ref) => chartApi = ref}/>
 <button on:click={() => chartApi.timeScale().fitContent()}>Fit Content</button>
 ```
+The value of `ref` property must be a function: `(api: T | null) => void`.
+
+It is guaranteed that ref-callback will be called with some value when the component is mounted and with null value when the component is unmounted.
+If you change the ref-callback, then the previous callback will be called with a null value, and the next callback will be called with the actual value.
 
 ## Components
 
@@ -77,7 +98,7 @@ It might be helpful to [auto-size](https://svelte.dev/repl/22c14c4729d44d65a6934
             observer.disconnect();
         }
         if (!element) {
-                return;
+            return;
         }
         observer = new ResizeObserver(([entry]) => {
             width = entry.contentRect.width;
@@ -116,11 +137,64 @@ To pass a data to a series you can use the `data` property. Look [here](https://
 By default `data` represents only the **initial** data. Any subsequent data update does not update series.
 If you want to change this behavior please add [`reactive={true}`](https://svelte.dev/repl/0efb2840a9844ed5a1d84f2a1c9a2269) to your series component. In this case series will apply a new data if it is not reference equal to previous array. 
 
-### Other components
+### Price line
 
-- `<PriceLine>` - price line (`IPriceLine`). It has to be nested inside `<[Type]Series>` component.
-- `<TimeScale>` - time-scale (`ITimeScaleApi`). It has to be nested inside `<Chart>` component.
-- `<PriceScale>` - price-scale (`IPriceScaleApi`). It has to be nested inside `<Chart>` component.
+To draw price line add `<PriceLine>` component inside any series.
+```svelte
+    <Chart width={600} height={300}>
+        <LineSeries data={data}>
+            <PriceLine
+                title="minimum price"
+                price={minimumPrice}
+            />
+            <PriceLine
+                title="average price"
+                price={avgPrice}
+            />
+            <PriceLine
+                title="maximum price"
+                price={maximumPrice}
+            />
+        </LineSeries>
+    </Chart>
+```
+
+You can pass any options from [`PriceLineOptions`](https://tradingview.github.io/lightweight-charts/docs/api/interfaces/PriceLineOptions) as separate property. The `price` property is mandatory in dev mode.
+
+Use the `ref` property to get reference to a [`IPriceLine`](https://tradingview.github.io/lightweight-charts/docs/api/interfaces/IPriceLine) instance.
+
+#### Line drawing on click
+
+You can draw price lines dynamically. For [example](https://svelte.dev/repl/3294790e6b5048a5abfb3d239405214b), you can draw a price line at a user-specified point.
+
+### Time scale
+
+`<TimeScale>` - the component is a binding to the current time scale of the current chart.
+This component has to be nested inside a chart component and should not have duplicates. Each chart has only one time scale.
+
+You can pass any option from [`TimeScaleOptions`](https://tradingview.github.io/lightweight-charts/docs/api/interfaces/TimeScaleOptions) as separate property.
+
+Events:
+- [`on:visibleTimeRangeChange`](https://tradingview.github.io/lightweight-charts/docs/api/interfaces/ITimeScaleApi#subscribevisibletimerangechange) - `(event: CustomEvent<TimeRange | null>) => void`
+- [`on:visibleLogicalRangeChange`](https://tradingview.github.io/lightweight-charts/docs/api/interfaces/ITimeScaleApi#subscribevisiblelogicalrangechange) - `(event: CustomEvent<LogicalRange | null>) => void`
+- [`on:sizeChange`](https://tradingview.github.io/lightweight-charts/docs/api/interfaces/ITimeScaleApi#subscribesizechange) - `(event: CustomEvent<{ width: number; height: number }>) => void`
+
+Use the `ref` property to get reference to a [`ITimeScaleApi`](https://tradingview.github.io/lightweight-charts/docs/api/interfaces/ITimeScaleApi) instance.
+
+Note: don't use `ChartOptions['timeScale']` and `<TimeScale>` component at the same time. This can lead to uncontrolled overwriting of options.
+
+### Price scale
+
+`<PriceScale>` - the component is a bindings to a certain price scale.
+This component has to be nested inside chart component and requires an `id` property. Two price scales with the same `id` within the same chart result in undefined behaviour. 
+
+You can pass any option from [`PriceScaleOptions`](https://tradingview.github.io/lightweight-charts/docs/api/interfaces/PriceScaleOptions) as separate property.
+
+Note: don't use `ChartOptions['leftPriceScale']'` or `ChartOptions['rightPriceScale']` or `ChartOptions['overlayPriceScale']` and `<PriceScale>` at the same time. This can lead to uncontrolled overwriting of options.
 
 ## Typescript
 Package is written on TypeScript and transpiled to plain `*.js` and `*.svelte` files. Definition files (including `*.svelte.d.ts`) are provided with package. It is a good place to find list of available properties that can be passed to each component.
+
+## Related projects
+
+Need a wrapper for another framework? Check out my [lightweight-charts-react-wrapper](https://github.com/trash-and-fire/lightweight-charts-react-wrapper)
