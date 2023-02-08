@@ -9,6 +9,8 @@
         height: 30px;
         margin-top: 8px;
         color: #2196F3;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+        font-size: 14px;
     }
 
     .switcher-item {
