@@ -30,6 +30,12 @@
     "**"
   ],
   "sideEffects": false,
+  "engines": {
+    "npm": "^8.5.0",
+    "pnpm": "^7.27.0",
+    "node": ">=16.14.2"
+  },
+  "packageManager": "pnpm@7.27.0",
   "devDependencies": {
     "@babel/core": "7.14.0",
     "@babel/preset-env": "7.14.1",
@@ -94,9 +100,6 @@
   },
   "lint-staged": {
     "*.js|*.ts|*.svelte": "eslint --cache --fix"
-  },
-  "engines": {
-    "node": ">=10.3.0"
   },
   "jest": {
     "testEnvironment": "jsdom",
