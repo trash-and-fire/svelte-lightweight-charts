@@ -78,7 +78,7 @@ module.exports = {
                 "eslint:recommended",
                 "plugin:node/recommended"
             ],
-            files: ['.eslintrc.js', 'webpack.config.js', 'gulpfile.js', 'repl-maker.js', 'scripts/**/*.{js,cjs}'],
+            files: ['.eslintrc.cjs', 'webpack.config.cjs', 'gulpfile.cjs', 'repl-maker.cjs', 'scripts/**/*.{js,cjs}'],
             parserOptions: {
                 "ecmaVersion": 2017
             },

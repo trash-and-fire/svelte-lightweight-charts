@@ -9,7 +9,7 @@ const {spawn} = require('child_process');
 const crc = require('crc-32');
 const {argv} = require('yargs');
 
-const SvelteReplRepository = require('./repl-maker');
+const SvelteReplRepository = require('./repl-maker.cjs');
 
 function convertToTypings(content, file) {
     const filename = file.basename[0].toUpperCase() + file.basename.slice(1);

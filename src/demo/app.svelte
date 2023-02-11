@@ -23,7 +23,8 @@
 
     import {LineStyle} from 'lightweight-charts';
     import {onMount} from 'svelte';
-    import {BAR_DATA, HISTOGRAM_DATA, LINE_DATA} from './data-series.js';
+    // eslint-disable-next-line import/extensions
+    import {BAR_DATA, HISTOGRAM_DATA, LINE_DATA} from './data-series';
 
     import {
         Chart,
