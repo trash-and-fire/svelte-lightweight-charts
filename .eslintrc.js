@@ -44,6 +44,7 @@ function typescriptRules(annotations) {
             }
         ],
         "@typescript-eslint/no-inferrable-types": "off",
+        "import/extensions": ["error", "always"],
     };
     if (annotations !== false) {
         result["@typescript-eslint/typedef"] = [
@@ -67,6 +68,10 @@ function typescriptRules(annotations) {
 
 module.exports = {
     root: true,
+    plugins: [
+        'eslint-plugin-import',
+    ],
+    ignorePatterns: ["dist/*"],
     overrides: [
         {
             extends: [

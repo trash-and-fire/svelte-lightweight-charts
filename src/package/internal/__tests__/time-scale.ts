@@ -1,5 +1,5 @@
 import type {IChartApi} from 'lightweight-charts';
-import type {TimeScaleParams} from '../../types';
+import type {TimeScaleParams} from '../time-scale';
 
 import {beforeEach, describe, expect, it, jest} from '@jest/globals';
 
@@ -24,21 +24,21 @@ describe('Synthetic action: "time-scale"', () => {
     });
 
     it('should create synthetic action object', async () => {
-        const {timeScale} = await import('../time-scale');
+        const {timeScale} = await import('../time-scale.js');
 
         const handle = timeScale(CHART_API, {});
         expect(handle).toBeDefined();
     });
 
     it('should call "timeScale" on chart when created', async () => {
-        const {timeScale} = await import('../time-scale');
+        const {timeScale} = await import('../time-scale.js');
 
         timeScale(CHART_API, {});
         expect(CHART_API.timeScale).toHaveBeenCalledTimes(1);
     });
 
     it('should handle event listeners', async () => {
-        const {timeScale} = await import('../time-scale');
+        const {timeScale} = await import('../time-scale.js');
 
         const params: TimeScaleParams = {
             onSizeChange: jest.fn(),
@@ -86,7 +86,7 @@ describe('Synthetic action: "time-scale"', () => {
     });
 
     it('should handle reference', async () => {
-        const {timeScale} = await import('../time-scale');
+        const {timeScale} = await import('../time-scale.js');
 
         const handle = timeScale(CHART_API, {});
 
@@ -111,7 +111,7 @@ describe('Synthetic action: "time-scale"', () => {
     });
 
     it('should handle options', async () => {
-        const {timeScale} = await import('../time-scale');
+        const {timeScale} = await import('../time-scale.js');
 
         const params: TimeScaleParams = {
             options: {},

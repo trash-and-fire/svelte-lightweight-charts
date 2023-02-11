@@ -6,9 +6,9 @@ import type {TimeScaleActionResult, TimeScaleParams} from '../../internal/time-s
 
 import {afterUpdate, getContext, onMount, setContext} from 'svelte';
 import {series, SeriesActionResult, SeriesParams} from '../../internal/series.js';
-import {line} from '../../internal/lines';
-import {timeScale} from '../../internal/time-scale';
-import {priceScale} from '../../internal/price-scale';
+import {line} from '../../internal/lines.js';
+import {timeScale} from '../../internal/time-scale.js';
+import {priceScale} from '../../internal/price-scale.js';
 
 export type Context = IChartApi | ISeriesApi<SeriesType>;
 

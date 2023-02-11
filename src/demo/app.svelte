@@ -22,8 +22,8 @@
     } from 'svelte-lightweight-charts';
 
     import {LineStyle} from 'lightweight-charts';
-    import {BAR_DATA, HISTOGRAM_DATA, LINE_DATA} from './data-series';
     import {onMount} from 'svelte';
+    import {BAR_DATA, HISTOGRAM_DATA, LINE_DATA} from './data-series.js';
 
     import {
         Chart,

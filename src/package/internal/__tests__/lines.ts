@@ -26,7 +26,7 @@ describe('Synthetic action: "lines"', () => {
        jest.clearAllMocks();
     });
     it('should create synthetic action object', async () => {
-        const {line} = await import('../lines');
+        const {line} = await import('../lines.js');
 
         const handle = line(SERIES_API, {
             id: 'price',
@@ -36,7 +36,7 @@ describe('Synthetic action: "lines"', () => {
     });
 
     it('should call "createPriceLine" on series when created', async () => {
-        const {line} = await import('../lines');
+        const {line} = await import('../lines.js');
 
         line(SERIES_API, {
             id: 'price',
@@ -47,7 +47,7 @@ describe('Synthetic action: "lines"', () => {
     });
 
     it('should call "removePriceLine" on series when destroyed', async () => {
-        const {line} = await import('../lines');
+        const {line} = await import('../lines.js');
 
         const handle = line(SERIES_API, {
             id: 'price',
@@ -60,7 +60,7 @@ describe('Synthetic action: "lines"', () => {
     });
 
     it('should call "applyOptions" on line when updated', async () => {
-        const {line} = await import('../lines');
+        const {line} = await import('../lines.js');
 
         const handle = line(SERIES_API, {
             id: 'price',
@@ -73,7 +73,7 @@ describe('Synthetic action: "lines"', () => {
     });
 
     it('should handle reference', async () => {
-        const {line} = await import('../lines');
+        const {line} = await import('../lines.js');
 
         const handle = line(SERIES_API, {
             id: 'price',
