@@ -8,16 +8,13 @@ import type {SeriesActionParams} from './series.js';
 import type {ActionResult, Reference} from './utils.js';
 
 import {createChart} from 'lightweight-charts';
-import {seriesCollection} from './series.js';
 
 export interface ChartActionParams<T extends Array<SeriesActionParams>> {
     options?: DeepPartial<ChartOptions>;
-    series?: T;
     reference?: Reference<IChartApi>;
     onClick?: MouseEventHandler;
     onCrosshairMove?: MouseEventHandler;
 }
-
 
 export function chart<T extends Array<SeriesActionParams>>(
     node: HTMLElement,
@@ -35,8 +32,6 @@ export function chart<T extends Array<SeriesActionParams>>(
 
     const chart = createChart(node, options);
     reference?.(chart);
-
-    const series = seriesCollection(chart, params.series);
 
     if (onClick) {
         chart.subscribeClick(onClick);
@@ -75,8 +70,6 @@ export function chart<T extends Array<SeriesActionParams>>(
                 options = nextOptions;
             }
 
-            series.update(nextParams.series);
-
             if (nextOnClick !== onClick) {
                 if (onClick) {
                     chart.unsubscribeClick(onClick);
@@ -98,7 +91,6 @@ export function chart<T extends Array<SeriesActionParams>>(
             }
         },
         destroy(): void {
-            series.destroy();
             if (onClick) {
                 chart.unsubscribeClick(onClick);
             }

@@ -1,8 +1,7 @@
 import type {IChartApi, ISeriesApi, SeriesType, SeriesDataItemTypeMap, SeriesPartialOptionsMap} from 'lightweight-charts';
-import type {ActionResult, ReferencableActionResult, Reference} from './utils.js';
+import type {ReferencableActionResult, Reference} from './utils.js';
 import type {PriceLineParams} from './lines.js';
 
-import {collection} from './collection.js';
 import {linesCollection} from './lines.js';
 
 export interface AreaSeriesParams {
@@ -76,15 +75,6 @@ export type SeriesActionParams =
 export type SeriesParams = Omit<SeriesActionParams, 'reference'>;
 
 export type SeriesActionResult<T extends SeriesParams> = ReferencableActionResult<T, ISeriesApi<T['type']>>;
-
-export function seriesCollection(target: IChartApi, params: SeriesActionParams[] = []): ActionResult<SeriesActionParams[] | undefined> {
-    return collection(
-        target,
-        params,
-        series,
-        (p: SeriesActionParams) => p.reference as Reference<ISeriesApi<SeriesType>>
-    );
-}
 
 export function series<T extends SeriesParams>(target: IChartApi, params: T): SeriesActionResult<T> {
     let subject = createSeries(target, params);
