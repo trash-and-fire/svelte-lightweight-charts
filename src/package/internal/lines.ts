@@ -1,7 +1,5 @@
 import type {IPriceLine, ISeriesApi, SeriesType, PriceLineOptions} from 'lightweight-charts';
-import type {ActionResult, ReferencableActionResult, Reference} from './utils.js';
-
-import {collection} from './collection.js';
+import type {ReferencableActionResult, Reference} from './utils.js';
 
 export interface PriceLineParams {
     id: string;
@@ -10,13 +8,6 @@ export interface PriceLineParams {
 }
 
 export type PriceLineActionResult = ReferencableActionResult<PriceLineParams, IPriceLine>;
-
-export function linesCollection<T extends SeriesType>(
-    target: ISeriesApi<T>,
-    params: PriceLineParams[] = []
-): ActionResult<PriceLineParams[] | undefined> {
-    return collection(target, params, line, (p: PriceLineParams) => p.reference);
-}
 
 export function line<T extends SeriesType>(
     target: ISeriesApi<T>,
