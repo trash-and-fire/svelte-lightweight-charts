@@ -22,6 +22,8 @@
     "charting",
     "charts"
   ],
+  "type": "module",
+  "exports": "./index.js",
   "main": "index.js",
   "module": "index.js",
   "files": [
@@ -37,11 +39,12 @@
     "@typescript-eslint/eslint-plugin": "5.4.0",
     "@typescript-eslint/parser": "5.4.0",
     "axios": "0.23.0",
-    "babel-jest": "27.3.1",
+    "babel-jest": "28.1.1",
     "crc-32": "1.2.0",
     "cross-env": "7.0.3",
     "css-loader": "5.0.1",
     "eslint": "8.2.0",
+    "eslint-plugin-import": "2.27.5",
     "eslint-plugin-node": "11.1.0",
     "eslint-plugin-svelte3": "3.2.1",
     "fork-ts-checker-webpack-plugin": "6.1.1",
@@ -51,7 +54,8 @@
     "gulp-transform": "3.0.5",
     "html-webpack-plugin": "5.3.1",
     "husky": "4.3.8",
-    "jest": "27.3.1",
+    "jest": "28.1.1",
+    "jest-environment-jsdom": "28.1.1",
     "lightweight-charts": "3.7.0",
     "lint-staged": "10.5.4",
     "lodash": "4.17.21",
@@ -72,10 +76,10 @@
   "scripts": {
     "test": "node --experimental-vm-modules --no-warnings node_modules/jest/bin/jest.js",
     "prepublishOnly": "npm run build-package",
-    "build-package": "gulp build",
+    "build-package": "gulp build -f gulpfile.cjs",
     "build-demo": "npm run build-package && cross-env NODE_ENV=production webpack --bail",
     "start": "npm run build-package && webpack serve --content-base src/demo/public",
-    "samples": "gulp samples",
+    "samples": "gulp samples -f gulpfile.cjs",
     "lint": "eslint .",
     "validate": "svelte-check"
   },
@@ -118,7 +122,10 @@
     ],
     "transformIgnorePatterns": [
       "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|ts|tsx)$"
-    ]
+    ],
+    "moduleNameMapper": {
+      "(.*)\\.js": "$1"
+    }
   },
   "babel": {
     "presets": [

@@ -9,7 +9,7 @@ const {spawn} = require('child_process');
 const crc = require('crc-32');
 const {argv} = require('yargs');
 
-const SvelteReplRepository = require('./repl-maker');
+const SvelteReplRepository = require('./repl-maker.cjs');
 
 function convertToTypings(content, file) {
     const filename = file.basename[0].toUpperCase() + file.basename.slice(1);
@@ -85,7 +85,7 @@ function typescript() {
 function index() {
     return src(['./dist/index.d.ts'])
         .pipe(transform('utf8', (content) => {
-            return String(content).replace(/\.interface'/g, '.svelte\'');
+            return String(content).replace(/\.interface.js'/g, '.svelte\'');
         }))
         .pipe(dest('./dist'));
 }

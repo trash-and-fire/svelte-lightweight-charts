@@ -44,6 +44,7 @@ function typescriptRules(annotations) {
             }
         ],
         "@typescript-eslint/no-inferrable-types": "off",
+        "import/extensions": ["error", "always"],
     };
     if (annotations !== false) {
         result["@typescript-eslint/typedef"] = [
@@ -67,13 +68,17 @@ function typescriptRules(annotations) {
 
 module.exports = {
     root: true,
+    plugins: [
+        'eslint-plugin-import',
+    ],
+    ignorePatterns: ["dist/*"],
     overrides: [
         {
             extends: [
                 "eslint:recommended",
                 "plugin:node/recommended"
             ],
-            files: ['.eslintrc.js', 'webpack.config.js', 'gulpfile.js', 'repl-maker.js', 'scripts/**/*.{js,cjs}'],
+            files: ['.eslintrc.cjs', 'webpack.config.cjs', 'gulpfile.cjs', 'repl-maker.cjs', 'scripts/**/*.{js,cjs}'],
             parserOptions: {
                 "ecmaVersion": 2017
             },

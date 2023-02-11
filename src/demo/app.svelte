@@ -22,8 +22,9 @@
     } from 'svelte-lightweight-charts';
 
     import {LineStyle} from 'lightweight-charts';
-    import {BAR_DATA, HISTOGRAM_DATA, LINE_DATA} from './data-series';
     import {onMount} from 'svelte';
+    // eslint-disable-next-line import/extensions
+    import {BAR_DATA, HISTOGRAM_DATA, LINE_DATA} from './data-series';
 
     import {
         Chart,

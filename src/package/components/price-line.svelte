@@ -2,9 +2,9 @@
 
 <script lang="ts">
     import type {PriceLineOptions} from 'lightweight-charts';
-    import type {$$PROPS} from './price-line.interface';
+    import type {$$PROPS} from './price-line.interface.js';
 
-    import {useLineEffect} from './internal/utils';
+    import {useLineEffect} from './internal/utils.js';
 
     export let price: $$PROPS['price'];
     export let color: $$PROPS['color'];

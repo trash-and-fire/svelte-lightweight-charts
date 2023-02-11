@@ -1,6 +1,6 @@
 import {jest, describe, it, expect, beforeEach} from '@jest/globals';
-import {collection} from '../collection';
-import {ReferencableActionResult, Reference} from '../utils';
+import {collection} from '../collection.js';
+import type {ReferencableActionResult, Reference} from '../utils.js';
 
 type Params = { id: string, reference: Reference<object> };
 

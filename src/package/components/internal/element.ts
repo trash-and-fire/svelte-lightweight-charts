@@ -1,4 +1,4 @@
-import type {ActionResult, Reference} from '../../internal/utils';
+import type {ActionResult, Reference} from '../../internal/utils.js';
 
 export function element(
     node: HTMLElement,
