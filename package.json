@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "svelte-lightweight-charts",
-  "version": "1.6.3",
+  "version": "2.0.0",
   "description": "Svelte wrapper for financial lightweight charts built with HTML5 canvas",
   "license": "MIT",
   "repository": {
@@ -22,65 +22,75 @@
     "charting",
     "charts"
   ],
+  "type": "module",
+  "exports": "./index.js",
   "main": "index.js",
   "module": "index.js",
   "files": [
     "**"
   ],
   "sideEffects": false,
+  "engines": {
+    "npm": "^8.5.0",
+    "pnpm": "^7.27.0",
+    "node": ">=16.14.2"
+  },
+  "packageManager": "pnpm@7.27.0",
   "devDependencies": {
-    "@babel/core": "7.14.0",
-    "@babel/preset-env": "7.14.1",
+    "@babel/core": "7.20.12",
+    "@babel/preset-env": "7.20.2",
     "@babel/preset-typescript": "7.13.0",
-    "@tsconfig/svelte": "1.0.10",
-    "@types/jest": "27.0.2",
-    "@typescript-eslint/eslint-plugin": "5.4.0",
-    "@typescript-eslint/parser": "5.4.0",
+    "@jest/globals": "29.4.2",
+    "@types/jest": "29.4.0",
+    "@typescript-eslint/eslint-plugin": "5.51.0",
+    "@typescript-eslint/parser": "5.51.0",
     "axios": "0.23.0",
-    "babel-jest": "27.3.1",
+    "babel-jest": "29.4.2",
     "crc-32": "1.2.0",
     "cross-env": "7.0.3",
-    "css-loader": "5.0.1",
-    "eslint": "8.2.0",
+    "css-loader": "6.7.3",
+    "eslint": "8.34.0",
+    "eslint-plugin-import": "2.27.5",
     "eslint-plugin-node": "11.1.0",
-    "eslint-plugin-svelte3": "3.2.1",
-    "fork-ts-checker-webpack-plugin": "6.1.1",
+    "eslint-plugin-svelte3": "4.0.0",
+    "fork-ts-checker-webpack-plugin": "7.3.0",
     "gulp": "4.0.2",
     "gulp-clean": "0.4.0",
     "gulp-rename": "2.0.0",
     "gulp-transform": "3.0.5",
-    "html-webpack-plugin": "5.3.1",
+    "html-webpack-plugin": "5.5.0",
     "husky": "4.3.8",
-    "jest": "27.3.1",
-    "lightweight-charts": "3.7.0",
+    "jest": "29.4.2",
+    "jest-environment-jsdom": "29.4.2",
+    "lightweight-charts": "4.0.0",
     "lint-staged": "10.5.4",
     "lodash": "4.17.21",
-    "mini-css-extract-plugin": "1.3.4",
+    "mini-css-extract-plugin": "2.7.2",
     "plugin-error": "1.0.1",
-    "svelte": "3.44.0",
-    "svelte-check": "1.3.0",
+    "svelte": "3.55.1",
+    "svelte-check": "3.0.3",
     "svelte-loader": "3.0.0",
-    "svelte-preprocess": "4.9.8",
-    "ts-loader": "8.0.4",
-    "tslib": "2.0.1",
-    "typescript": "4.2.4",
-    "webpack": "5.23.0",
-    "webpack-cli": "4.9.1",
-    "webpack-dev-server": "3.11.2",
+    "svelte-preprocess": "5.0.1",
+    "ts-loader": "9.4.2",
+    "tslib": "2.5.0",
+    "typescript": "4.9.5",
+    "webpack": "5.75.0",
+    "webpack-cli": "5.0.1",
+    "webpack-dev-server": "4.11.1",
     "yargs": "16.2.0"
   },
   "scripts": {
     "test": "node --experimental-vm-modules --no-warnings node_modules/jest/bin/jest.js",
     "prepublishOnly": "npm run build-package",
-    "build-package": "gulp build",
+    "build-package": "gulp build -f gulpfile.cjs",
     "build-demo": "npm run build-package && cross-env NODE_ENV=production webpack --bail",
-    "start": "npm run build-package && webpack serve --content-base src/demo/public",
-    "samples": "gulp samples",
+    "start": "npm run build-package && webpack serve --no-static",
+    "samples": "gulp samples -f gulpfile.cjs",
     "lint": "eslint .",
     "validate": "svelte-check"
   },
   "peerDependencies": {
-    "lightweight-charts": ">=3.3.0",
+    "lightweight-charts": ">=4.0.0",
     "svelte": ">=3.44.0"
   },
   "husky": {
@@ -90,9 +100,6 @@
   },
   "lint-staged": {
     "*.js|*.ts|*.svelte": "eslint --cache --fix"
-  },
-  "engines": {
-    "node": ">=10.3.0"
   },
   "jest": {
     "testEnvironment": "jsdom",
@@ -118,7 +125,10 @@
     ],
     "transformIgnorePatterns": [
       "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|ts|tsx)$"
-    ]
+    ],
+    "moduleNameMapper": {
+      "(.*)\\.js": "$1"
+    }
   },
   "babel": {
     "presets": [

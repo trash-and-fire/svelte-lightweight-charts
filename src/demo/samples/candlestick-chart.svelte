@@ -12,14 +12,17 @@
 </Chart>
 
 <script>
-    import {CrosshairMode} from 'lightweight-charts';
+    import {ColorType, CrosshairMode} from 'lightweight-charts';
     import {Chart, CandlestickSeries} from 'svelte-lightweight-charts';
 
     const options = {
         width: 600,
         height: 300,
         layout: {
-            backgroundColor: '#000000',
+            background: {
+                type: ColorType.Solid,
+                color: '#000000',
+            },
             textColor: 'rgba(255, 255, 255, 0.9)',
         },
         grid: {

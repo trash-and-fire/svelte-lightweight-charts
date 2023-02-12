@@ -9,7 +9,7 @@ const {spawn} = require('child_process');
 const crc = require('crc-32');
 const {argv} = require('yargs');
 
-const SvelteReplRepository = require('./repl-maker');
+const SvelteReplRepository = require('./repl-maker.cjs');
 
 function convertToTypings(content, file) {
     const filename = file.basename[0].toUpperCase() + file.basename.slice(1);
@@ -30,10 +30,11 @@ function typings() {
         .pipe(dest('./dist'));
 }
 
-async function applyPreprocess(content, file) {
-    const ts = require('svelte-preprocess').typescript();
-    ts.filename = file.basename;
-    // TODO: remove source mapping url
+async function applyPreprocess(content, file, options) {
+    const ts = require('svelte-preprocess').typescript(options ?? {
+        tsconfigFile: './tsconfig.build.json',
+    });
+    ts.filename = file.path;
     const garbage = require('svelte-preprocess').replace([
         [/<!--[^]*?-->|<script(\s[^]*?)?(?:>([^]*?)<\/script>|\/>)/gi, (value, attributes) => {
             if (attributes !== undefined && attributes.includes('lang="ts"')) {
@@ -85,7 +86,7 @@ function typescript() {
 function index() {
     return src(['./dist/index.d.ts'])
         .pipe(transform('utf8', (content) => {
-            return String(content).replace(/\.interface'/g, '.svelte\'');
+            return String(content).replace(/\.interface.js'/g, '.svelte\'');
         }))
         .pipe(dest('./dist'));
 }
@@ -105,7 +106,7 @@ function samples(...args) {
 
     const resolveComponents = () => src(['./src/demo/samples/components/*.svelte'])
         .pipe(transform('utf8', (contents, file) => {
-            return applyPreprocess(contents, file).then((code) => {
+            return applyPreprocess(contents, file, {}).then((code) => {
                 components.set(`components/${file.basename}`, {
                     hash: crc.str(contents),
                     name: file.basename,

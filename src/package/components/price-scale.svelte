@@ -2,9 +2,9 @@
 
 <script lang="ts">
     import type {PriceScaleOptions, DeepPartial} from 'lightweight-charts';
-    import type {$$PROPS} from './price-scale.interface';
+    import type {$$PROPS} from './price-scale.interface.js';
 
-    import {usePriceScaleEffect} from './internal/utils';
+    import {usePriceScaleEffect} from './internal/utils.js';
 
     export let id: string;
     /**
@@ -35,13 +35,18 @@
      */
     export let borderColor: $$PROPS['borderColor'] | undefined = undefined;
     /**
+     * Price scale text color.
+     * If not provided {@link LayoutOptions.textColor} is used.
+     */
+    export let textColor: $$PROPS['textColor'] | undefined = undefined;
+    /**
      * Show top and bottom corner labels only if entire text is visible.
      */
     export let entireTextOnly: $$PROPS['entireTextOnly'] | undefined = undefined;
     /** Indicates if this price scale visible. Ignored by overlay price scales. */
     export let visible: $$PROPS['visible'] | undefined = undefined;
     /** Draw small horizontal line on price axis labels. */
-    export let drawTicks: $$PROPS['drawTicks'] | undefined = undefined;
+    export let ticksVisible: $$PROPS['ticksVisible'] | undefined = undefined;
 
     export let ref: $$PROPS['ref'] = undefined;
 
@@ -53,9 +58,10 @@
         scaleMargins,
         borderVisible,
         borderColor,
+        textColor,
         entireTextOnly,
         visible,
-        drawTicks,
+        ticksVisible,
     };
 
     $: options = {
@@ -66,9 +72,10 @@
         scaleMargins,
         borderVisible,
         borderColor,
+        textColor,
         entireTextOnly,
         visible,
-        drawTicks,
+        ticksVisible,
     };
 
     usePriceScaleEffect(() => [

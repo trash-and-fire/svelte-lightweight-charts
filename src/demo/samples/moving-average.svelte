@@ -56,9 +56,9 @@
 
     function handleCrosshairMove(e) {
         const {detail} = e;
-        const price = detail.seriesPrices.get(ref);
-        if (price !== undefined) {
-            value = (Math.round(price * 100) / 100).toFixed(2);
+        const point = detail.seriesData.get(ref);
+        if (point !== undefined) {
+            value = (Math.round(point.value * 100) / 100).toFixed(2);
         } else {
             value = 'n/a';
         }

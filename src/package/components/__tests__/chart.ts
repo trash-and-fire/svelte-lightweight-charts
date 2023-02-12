@@ -1,16 +1,19 @@
-import type {ChartActionParams} from '../../index';
+import type {ChartActionParams} from '../../internal/chart';
+import type {ActionResult, Action, Reference} from '../../internal/utils';
+
 import {describe, it, expect, jest, beforeEach} from '@jest/globals';
 import {tick} from 'svelte';
+import {ColorType} from 'lightweight-charts';
 
 jest.unstable_mockModule('lightweight-charts', async () => ({}));
 jest.unstable_mockModule('../../internal/chart', async () => ({ chart: CHART_ACTION }));
 
 const CHART_ACTION_OBJECT = {
-    update: jest.fn<unknown, [ChartActionParams<[]>]>(),
+    update: jest.fn<ActionResult<ChartActionParams>['update']>(),
     destroy: jest.fn(),
 };
 
-const CHART_ACTION = jest.fn<unknown, [HTMLElement, ChartActionParams<[]>]>(() => CHART_ACTION_OBJECT);
+const CHART_ACTION = jest.fn<Action<HTMLElement, ChartActionParams>>(() => CHART_ACTION_OBJECT);
 
 describe('Chart component', () => {
     beforeEach(() => {
@@ -60,7 +63,10 @@ describe('Chart component', () => {
             width: 100,
             height: 100,
             layout: {
-                backgroundColor: '#FFFFFF',
+                background: {
+                    type: ColorType.Solid,
+                    color: '#FFFFFF',
+                },
                 textColor: '#FFFFFF',
                 fontSize: 14,
                 fontFamily: 'Arial',
@@ -76,7 +82,10 @@ describe('Chart component', () => {
             width: 100,
             height: 100,
             layout: {
-                backgroundColor: '#FFFFFF',
+                background: {
+                    type: ColorType.Solid,
+                    color: '#FFFFFF',
+                },
                 textColor: '#FFFFFF',
                 fontSize: 14,
                 fontFamily: 'Arial',
@@ -106,7 +115,7 @@ describe('Chart component', () => {
 
     it('should handle dom reference', async () => {
         const { default: Chart } = await import('../chart.svelte');
-        const ref = jest.fn<HTMLElement | null, []>();
+        const ref = jest.fn<Reference<HTMLElement>>();
         const target = document.createElement('div');
         const component = new Chart({
             target,
@@ -136,7 +145,7 @@ describe('Chart component', () => {
 
         expect(ref).toHaveBeenCalledTimes(1);
 
-        const nextRef = jest.fn<HTMLElement | null, []>();
+        const nextRef = jest.fn<Reference<HTMLElement>>();
         component.$set({
             width: 100,
             height: 100,

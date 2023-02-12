@@ -1,10 +1,10 @@
 <svelte:options immutable={true}/>
 
 <script lang="ts">
-    import type {PriceLineOptions} from 'lightweight-charts';
-    import type {$$PROPS} from './price-line.interface';
+    import type {CreatePriceLineOptions} from 'lightweight-charts';
+    import type {$$PROPS} from './price-line.interface.js';
 
-    import {useLineEffect} from './internal/utils';
+    import {useLineEffect} from './internal/utils.js';
 
     export let price: $$PROPS['price'];
     export let color: $$PROPS['color'];
@@ -15,7 +15,7 @@
 
     export let ref: $$PROPS['ref'] = undefined;
 
-    let options: PriceLineOptions = {
+    let options: CreatePriceLineOptions = {
         price,
         color,
         lineWidth,

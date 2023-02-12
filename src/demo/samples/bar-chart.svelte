@@ -4,14 +4,17 @@
 </Chart>
 
 <script>
-    import {CrosshairMode} from 'lightweight-charts';
+    import {ColorType, CrosshairMode} from 'lightweight-charts';
     import {Chart, BarSeries} from 'svelte-lightweight-charts';
 
     const options = {
         width: 600,
         height: 300,
         layout: {
-            backgroundColor: '#ffffff',
+            background: {
+                type: ColorType.Solid,
+                color: '#ffffff',
+            },
             textColor: 'rgba(33, 56, 77, 1)',
         },
         crosshair: {

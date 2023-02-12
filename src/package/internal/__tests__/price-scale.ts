@@ -1,5 +1,5 @@
 import type {IChartApi} from 'lightweight-charts';
-import type {PriceScaleParams} from '../../types';
+import type {PriceScaleParams} from '../price-scale';
 
 import {beforeEach, describe, expect, it, jest} from '@jest/globals';
 
@@ -18,14 +18,14 @@ describe('Synthetic action: "price-scale"', () => {
     });
 
     it('should create synthetic action object', async () => {
-        const {priceScale} = await import('../price-scale');
+        const {priceScale} = await import('../price-scale.js');
 
         const handle = priceScale(CHART_API, { id: 'left' });
         expect(handle).toBeDefined();
     });
 
     it('should call "priceScale" on chart when created', async () => {
-        const {priceScale} = await import('../price-scale');
+        const {priceScale} = await import('../price-scale.js');
 
         priceScale(CHART_API, { id: 'left'});
         expect(CHART_API.priceScale).toHaveBeenCalledTimes(1);
@@ -33,7 +33,7 @@ describe('Synthetic action: "price-scale"', () => {
     });
 
     it('should handle reference', async () => {
-        const {priceScale} = await import('../price-scale');
+        const {priceScale} = await import('../price-scale.js');
 
         const handle = priceScale(CHART_API, { id: 'left' });
 
@@ -58,7 +58,7 @@ describe('Synthetic action: "price-scale"', () => {
     });
 
     it('should handle options', async () => {
-        const {priceScale} = await import('../price-scale');
+        const {priceScale} = await import('../price-scale.js');
 
         const params: PriceScaleParams = {
             id: 'left',

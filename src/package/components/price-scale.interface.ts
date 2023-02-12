@@ -3,7 +3,7 @@ import type {
     IPriceScaleApi,
     PriceScaleOptions,
 } from 'lightweight-charts';
-import type {Reference} from '../internal/utils';
+import type {Reference} from '../internal/utils.js';
 
 export interface $$PROPS extends DeepPartial<PriceScaleOptions> {
     id: string;

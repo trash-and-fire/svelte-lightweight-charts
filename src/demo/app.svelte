@@ -22,8 +22,9 @@
     } from 'svelte-lightweight-charts';
 
     import {LineStyle} from 'lightweight-charts';
-    import {BAR_DATA, HISTOGRAM_DATA, LINE_DATA} from './data-series';
     import {onMount} from 'svelte';
+    // eslint-disable-next-line import/extensions
+    import {BAR_DATA, HISTOGRAM_DATA, LINE_DATA} from './data-series';
 
     import {
         Chart,
@@ -270,11 +271,7 @@
             priceFormat: {
                 type: 'volume',
             },
-            priceScaleId: '',
-            scaleMargins: {
-                top: 0.8,
-                bottom: 0,
-            },
+            priceScaleId: 'volume',
             data: [...HISTOGRAM_DATA],
             ref: (ref: ISeriesApi<'Histogram'> | null) => volume = ref,
         }
@@ -479,6 +476,10 @@
                 />
                 {/key}
             {/if}
+            <PriceScale
+                id="volume"
+                scaleMargins={{ top: 0.8, bottom: 0 }}
+            />
         </Chart>
     </fieldset>
     <fieldset>

@@ -1,18 +1,8 @@
-import type {IChartApi, SeriesDataItemTypeMap, SeriesType} from 'lightweight-charts';
-import type {LineSeriesParams} from '../../types';
+import type {IChartApi, LineData, SeriesDataItemTypeMap, SeriesType, UTCTimestamp} from 'lightweight-charts';
 
 import {beforeEach, describe, expect, it, jest} from '@jest/globals';
 
 jest.unstable_mockModule('lightweight-charts', async () => ({}));
-jest.unstable_mockModule('../lines', async () => ({
-    linesCollection: COLLECTION,
-}));
-
-const COLLECTION = jest.fn(() => COLLECTION_ACTION);
-const COLLECTION_ACTION = {
-    update: jest.fn(),
-    destroy: jest.fn(),
-};
 
 const SERIES_API = {
     seriesType: jest.fn(() => 'Line'),
@@ -31,7 +21,7 @@ describe('Synthetic action: series', function () {
     });
 
     it('should create synthetic action object', async () => {
-        const {series} = await import('../series');
+        const {series} = await import('../series.js');
 
         const subject = series(CHART_API, {
             id: 'series',
@@ -43,7 +33,7 @@ describe('Synthetic action: series', function () {
     });
 
     it('should call "addLineSeries" when created', async () => {
-        const {series} = await import('../series');
+        const {series} = await import('../series.js');
 
         const options = {};
         series(CHART_API, {
@@ -58,7 +48,7 @@ describe('Synthetic action: series', function () {
     });
 
     it('should call "setData" when created', async () => {
-        const {series} = await import('../series');
+        const {series} = await import('../series.js');
 
         const data: SeriesDataItemTypeMap['Line'][] = [];
         series(CHART_API, {
@@ -71,46 +61,8 @@ describe('Synthetic action: series', function () {
         expect(SERIES_API.setData).toHaveBeenCalledWith(data);
     });
 
-    it('should call "collection" when created', async () => {
-        const {series} = await import('../series');
-
-        series(CHART_API, {
-            id: 'series',
-            type: 'Line',
-            data: [],
-            priceLines: [{
-                id: 'price',
-                options: {
-                    color: '#FFFFFF',
-                    price: 0,
-                    lineWidth: 1,
-                    lineStyle: 0,
-                    title: 'price',
-                    axisLabelVisible: false,
-                }
-            }],
-        });
-
-        expect(COLLECTION).toHaveBeenCalledTimes(1);
-        expect(COLLECTION).toHaveBeenCalledWith(
-            SERIES_API,
-            [{
-                id: 'price',
-                options: {
-                    color: '#FFFFFF',
-                    price: 0,
-                    lineWidth: 1,
-                    lineStyle: 0,
-                    title: 'price',
-                    axisLabelVisible: false,
-                }
-            }],
-
-        );
-    });
-
     it('should call "removeSeries" when destroyed', async () => {
-        const {series} = await import('../series');
+        const {series} = await import('../series.js');
 
         const subject = series(CHART_API, {
             id: 'series',
@@ -123,59 +75,8 @@ describe('Synthetic action: series', function () {
         expect(CHART_API.removeSeries).toHaveBeenCalledWith(SERIES_API);
     });
 
-    it('should destroy lines collection when destroyed', async () => {
-        const {series} = await import('../series');
-
-        const subject = series(CHART_API, {
-            id: 'series',
-            type: 'Line',
-            data: [],
-        });
-        subject.destroy();
-
-        expect(COLLECTION_ACTION.destroy).toHaveBeenCalledTimes(1);
-    });
-
     it('should call "applyOptions" when updated', async () => {
-        const {series} = await import('../series');
-
-        const params: Omit<LineSeriesParams, 'reference'> = {
-            id: 'series',
-            type: 'Line',
-            data: [],
-        };
-        const subject = series(CHART_API, params);
-        subject.update({
-            ...params,
-            priceLines: [{
-                id: 'price',
-                options: {
-                    color: '#FFFFFF',
-                    price: 0,
-                    lineWidth: 1,
-                    lineStyle: 0,
-                    title: 'price',
-                    axisLabelVisible: false,
-                }
-            }],
-        });
-
-        expect(COLLECTION_ACTION.update).toHaveBeenCalledTimes(1);
-        expect(COLLECTION_ACTION.update).toHaveBeenCalledWith([{
-            id: 'price',
-            options: {
-                color: '#FFFFFF',
-                price: 0,
-                lineWidth: 1,
-                lineStyle: 0,
-                title: 'price',
-                axisLabelVisible: false,
-            }
-        }]);
-    });
-
-    it('should update lines collection when updated', async () => {
-        const {series} = await import('../series');
+        const {series} = await import('../series.js');
 
         const subject = series(CHART_API, {
             id: 'series',
@@ -199,7 +100,7 @@ describe('Synthetic action: series', function () {
     });
 
     it('should handle reference', async () => {
-        const {series} = await import('../series');
+        const {series} = await import('../series.js');
 
         const subject = series(CHART_API, {
             id: 'series',
@@ -228,7 +129,7 @@ describe('Synthetic action: series', function () {
     });
 
     it('should call "createAreaSeries" when series type changed', async () => {
-        const {series} = await import('../series');
+        const {series} = await import('../series.js');
 
         const subject = series(CHART_API, {
             id: 'series',
@@ -251,7 +152,7 @@ describe('Synthetic action: series', function () {
     });
 
     it('should destroy previous lines when series type changed', async () => {
-        const {series} = await import('../series');
+        const {series} = await import('../series.js');
 
         const subject = series(CHART_API, {
             id: 'series',
@@ -268,12 +169,10 @@ describe('Synthetic action: series', function () {
             data: [],
             options: {},
         });
-
-        expect(COLLECTION_ACTION.destroy).toHaveBeenCalledTimes(1);
     });
 
     it('should handle reference when series type changed', async () => {
-        const {series} = await import('../series');
+        const {series} = await import('../series.js');
 
         const subject = series(CHART_API, {
             id: 'series',
@@ -298,14 +197,14 @@ describe('Synthetic action: series', function () {
         expect(reference).toHaveBeenNthCalledWith(2, SERIES_API);
     });
 
-    it('should update date when reactive', async () => {
-        const {series} = await import('../series');
+    it('should update data when reactive', async () => {
+        const {series} = await import('../series.js');
 
         const subject = series(CHART_API, {
             id: 'series',
             type: 'Line' as SeriesType,
             reactive: true,
-            data: [],
+            data: [] as LineData[],
             options: {},
         });
 
@@ -317,6 +216,7 @@ describe('Synthetic action: series', function () {
             type: 'Line' as SeriesType,
             reactive: true,
             data: [{
+                time: 0 as UTCTimestamp,
                 value: 123,
             }],
             options: {},
@@ -324,17 +224,18 @@ describe('Synthetic action: series', function () {
 
         expect(SERIES_API.setData).toHaveBeenCalledTimes(2);
         expect(SERIES_API.setData).toHaveBeenLastCalledWith([{
+            time: 0,
             value: 123,
         }]);
     });
 
-    it('should not update date when not reactive', async () => {
-        const {series} = await import('../series');
+    it('should not update data when not reactive', async () => {
+        const {series} = await import('../series.js');
 
         const subject = series(CHART_API, {
             id: 'series',
             type: 'Line' as SeriesType,
-            data: [],
+            data: [] as LineData[],
             options: {},
         });
 
@@ -345,6 +246,7 @@ describe('Synthetic action: series', function () {
             id: 'series',
             type: 'Line' as SeriesType,
             data: [{
+                time: 0 as UTCTimestamp,
                 value: 123,
             }],
             options: {},

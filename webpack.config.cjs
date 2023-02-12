@@ -15,8 +15,6 @@ module.exports = {
     resolve: {
         alias: Object.assign({
             'svelte-lightweight-charts': path.resolve(__dirname, './dist'),
-        }, prod ? {} : {
-            'lightweight-charts': 'lightweight-charts/dist/lightweight-charts.esm.development.js',
         }),
         extensions: ['.mjs', '.js', '.ts', '.svelte'],
     },

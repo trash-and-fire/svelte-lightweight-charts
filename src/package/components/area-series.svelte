@@ -2,11 +2,11 @@
 
 <script lang="ts">
     import type {AreaSeriesPartialOptions, ISeriesApi} from 'lightweight-charts';
-    import type {$$PROPS} from './area-series.interface';
-    import type {Reference} from '../internal/utils';
+    import type {$$PROPS} from './area-series.interface.js';
+    import type {Reference} from '../internal/utils.js';
 
     import ContextProvider from './internal/context-provider.svelte';
-    import {useSeriesEffect} from './internal/utils';
+    import {useSeriesEffect} from './internal/utils.js';
 
     /** Visibility of the label with the latest visible price on the price scale */
     export let lastValueVisible: $$PROPS['lastValueVisible'] = undefined;
@@ -38,10 +38,10 @@
     export let baseLineStyle: $$PROPS['baseLineStyle'] = undefined;
     /** function that overrides calculating of visible prices range */
     export let autoscaleInfoProvider: $$PROPS['autoscaleInfoProvider'] = undefined;
-    export let scaleMargins: $$PROPS['scaleMargins'] = undefined;
 
     export let topColor: $$PROPS['topColor'] = undefined;
     export let bottomColor: $$PROPS['bottomColor'] = undefined;
+    export let invertFilledArea: $$PROPS['invertFilledArea'] = undefined;
     export let lineColor: $$PROPS['lineColor'] = undefined;
     export let lineStyle: $$PROPS['lineStyle'] = undefined;
     export let lineWidth: $$PROPS['lineWidth'] = undefined;
@@ -73,9 +73,9 @@
         baseLineWidth,
         baseLineStyle,
         autoscaleInfoProvider,
-        scaleMargins,
         topColor,
         bottomColor,
+        invertFilledArea,
         lineColor,
         lineStyle,
         lineWidth,

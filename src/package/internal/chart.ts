@@ -4,25 +4,21 @@ import type {
     IChartApi,
     MouseEventHandler,
 } from 'lightweight-charts';
-import type {SeriesActionParams} from './series';
-import type {ActionResult, Reference} from './utils';
+import type {ActionResult, Reference} from './utils.js';
 
 import {createChart} from 'lightweight-charts';
-import {seriesCollection} from './series';
 
-export interface ChartActionParams<T extends Array<SeriesActionParams>> {
+export interface ChartActionParams {
     options?: DeepPartial<ChartOptions>;
-    series?: T;
     reference?: Reference<IChartApi>;
     onClick?: MouseEventHandler;
     onCrosshairMove?: MouseEventHandler;
 }
 
-
-export function chart<T extends Array<SeriesActionParams>>(
+export function chart(
     node: HTMLElement,
-    params: ChartActionParams<T>
-): ActionResult<ChartActionParams<T>> {
+    params: ChartActionParams
+): ActionResult<ChartActionParams> {
     let {
         options,
         reference,
@@ -36,8 +32,6 @@ export function chart<T extends Array<SeriesActionParams>>(
     const chart = createChart(node, options);
     reference?.(chart);
 
-    const series = seriesCollection(chart, params.series);
-
     if (onClick) {
         chart.subscribeClick(onClick);
     }
@@ -47,7 +41,7 @@ export function chart<T extends Array<SeriesActionParams>>(
     }
 
     return {
-        update(nextParams: ChartActionParams<T>): void {
+        update(nextParams: ChartActionParams): void {
             const {
                 options: nextOptions,
                 reference: nextReference,
@@ -75,8 +69,6 @@ export function chart<T extends Array<SeriesActionParams>>(
                 options = nextOptions;
             }
 
-            series.update(nextParams.series);
-
             if (nextOnClick !== onClick) {
                 if (onClick) {
                     chart.unsubscribeClick(onClick);
@@ -98,7 +90,6 @@ export function chart<T extends Array<SeriesActionParams>>(
             }
         },
         destroy(): void {
-            series.destroy();
             if (onClick) {
                 chart.unsubscribeClick(onClick);
             }

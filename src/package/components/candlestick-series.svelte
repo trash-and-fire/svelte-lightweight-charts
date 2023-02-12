@@ -2,11 +2,11 @@
 
 <script lang="ts">
     import type {CandlestickSeriesPartialOptions, ISeriesApi} from 'lightweight-charts';
-    import type {$$PROPS} from './candlestick-series.interface';
-    import type {Reference} from '../internal/utils';
+    import type {$$PROPS} from './candlestick-series.interface.js';
+    import type {Reference} from '../internal/utils.js';
 
     import ContextProvider from './internal/context-provider.svelte';
-    import {useSeriesEffect} from './internal/utils';
+    import {useSeriesEffect} from './internal/utils.js';
 
     /** Visibility of the label with the latest visible price on the price scale */
     export let lastValueVisible: $$PROPS['lastValueVisible'] = undefined;
@@ -38,7 +38,6 @@
     export let baseLineStyle: $$PROPS['baseLineStyle'] = undefined;
     /** function that overrides calculating of visible prices range */
     export let autoscaleInfoProvider: $$PROPS['autoscaleInfoProvider'] = undefined;
-    export let scaleMargins: $$PROPS['scaleMargins'] = undefined;
 
     /** Color of rising candlesticks */
     export let upColor: $$PROPS['upColor'] = undefined;
@@ -89,7 +88,6 @@
         baseLineWidth,
         baseLineStyle,
         autoscaleInfoProvider,
-        scaleMargins,
         upColor,
         downColor,
         wickColor,

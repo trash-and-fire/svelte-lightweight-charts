@@ -1,9 +1,5 @@
 import type {IChartApi, ISeriesApi, SeriesType, SeriesDataItemTypeMap, SeriesPartialOptionsMap} from 'lightweight-charts';
-import type {ActionResult, ReferencableActionResult, Reference} from './utils';
-import type {PriceLineParams} from './lines';
-
-import {collection} from './collection';
-import {linesCollection} from './lines';
+import type {ReferencableActionResult, Reference} from './utils.js';
 
 export interface AreaSeriesParams {
     id: string;
@@ -12,7 +8,6 @@ export interface AreaSeriesParams {
     options?: SeriesPartialOptionsMap['Area'];
     data: SeriesDataItemTypeMap['Area'][];
     reference?: Reference<ISeriesApi<'Area'>>;
-    priceLines?: PriceLineParams[];
 }
 
 export interface BarSeriesParams {
@@ -22,7 +17,6 @@ export interface BarSeriesParams {
     options?: SeriesPartialOptionsMap['Bar'];
     data: SeriesDataItemTypeMap['Bar'][];
     reference?: Reference<ISeriesApi<'Bar'>>;
-    priceLines?: PriceLineParams[];
 }
 
 export interface CandlestickSeriesParams {
@@ -32,7 +26,6 @@ export interface CandlestickSeriesParams {
     options?: SeriesPartialOptionsMap['Candlestick'];
     data: SeriesDataItemTypeMap['Candlestick'][];
     reference?: Reference<ISeriesApi<'Candlestick'>>;
-    priceLines?: PriceLineParams[];
 }
 
 export interface HistogramSeriesParams {
@@ -42,7 +35,6 @@ export interface HistogramSeriesParams {
     options?: SeriesPartialOptionsMap['Histogram'];
     data: SeriesDataItemTypeMap['Histogram'][];
     reference?: Reference<ISeriesApi<'Histogram'>>;
-    priceLines?: PriceLineParams[];
 }
 
 export interface LineSeriesParams {
@@ -52,7 +44,6 @@ export interface LineSeriesParams {
     options?: SeriesPartialOptionsMap['Line'];
     data: SeriesDataItemTypeMap['Line'][];
     reference?: Reference<ISeriesApi<'Line'>>;
-    priceLines?: PriceLineParams[];
 }
 
 export type BaselineSeriesParams = 'Baseline' extends SeriesType ? {
@@ -62,7 +53,6 @@ export type BaselineSeriesParams = 'Baseline' extends SeriesType ? {
     options?: SeriesPartialOptionsMap['Baseline'];
     data: SeriesDataItemTypeMap['Baseline'][];
     reference?: Reference<ISeriesApi<'Baseline'>>;
-    priceLines?: PriceLineParams[];
 } : never;
 
 export type SeriesActionParams =
@@ -77,31 +67,19 @@ export type SeriesParams = Omit<SeriesActionParams, 'reference'>;
 
 export type SeriesActionResult<T extends SeriesParams> = ReferencableActionResult<T, ISeriesApi<T['type']>>;
 
-export function seriesCollection(target: IChartApi, params: SeriesActionParams[] = []): ActionResult<SeriesActionParams[] | undefined> {
-    return collection(
-        target,
-        params,
-        series,
-        (p: SeriesActionParams) => p.reference as Reference<ISeriesApi<SeriesType>>
-    );
-}
-
 export function series<T extends SeriesParams>(target: IChartApi, params: T): SeriesActionResult<T> {
     let subject = createSeries(target, params);
     let reference: Reference<ISeriesApi<SeriesType>>;
 
-    let lines = linesCollection(subject, params.priceLines);
     let data = params.reactive ? params.data : null;
 
     return {
         update(nextParams: SeriesParams): void {
             if (nextParams.type !== subject.seriesType()) {
-                lines.destroy();
                 target.removeSeries(subject);
                 reference?.(null);
                 subject = createSeries(target, nextParams);
                 reference?.(subject);
-                lines = linesCollection(subject, params.priceLines);
                 return;
             }
 
@@ -117,8 +95,6 @@ export function series<T extends SeriesParams>(target: IChartApi, params: T): Se
                 data = nextParams.data;
                 subject.setData(data);
             }
-
-            lines.update(nextParams.priceLines);
         },
         updateReference(nextReference: Reference<ISeriesApi<T['type']>>): void {
             if (nextReference !== reference) {
@@ -128,7 +104,6 @@ export function series<T extends SeriesParams>(target: IChartApi, params: T): Se
             }
         },
         destroy(): void {
-            lines.destroy();
             reference?.(null);
             target.removeSeries(subject);
         }
