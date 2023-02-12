@@ -37,8 +37,8 @@
   },
   "packageManager": "pnpm@7.27.0",
   "devDependencies": {
-    "@babel/core": "7.14.0",
-    "@babel/preset-env": "7.14.1",
+    "@babel/core": "7.20.12",
+    "@babel/preset-env": "7.20.2",
     "@babel/preset-typescript": "7.13.0",
     "@tsconfig/svelte": "1.0.10",
     "@types/jest": "27.0.2",
