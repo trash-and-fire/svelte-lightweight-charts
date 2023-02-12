@@ -40,6 +40,7 @@
     "@babel/core": "7.20.12",
     "@babel/preset-env": "7.20.2",
     "@babel/preset-typescript": "7.13.0",
+    "@jest/globals": "29.4.2",
     "@types/jest": "29.4.0",
     "@typescript-eslint/eslint-plugin": "5.51.0",
     "@typescript-eslint/parser": "5.51.0",
@@ -142,8 +143,5 @@
       ],
       "@babel/preset-typescript"
     ]
-  },
-  "dependencies": {
-    "@jest/globals": "29.4.2"
   }
 }
