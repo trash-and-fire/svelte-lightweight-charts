@@ -4,22 +4,21 @@ import type {
     IChartApi,
     MouseEventHandler,
 } from 'lightweight-charts';
-import type {SeriesActionParams} from './series.js';
 import type {ActionResult, Reference} from './utils.js';
 
 import {createChart} from 'lightweight-charts';
 
-export interface ChartActionParams<T extends Array<SeriesActionParams>> {
+export interface ChartActionParams {
     options?: DeepPartial<ChartOptions>;
     reference?: Reference<IChartApi>;
     onClick?: MouseEventHandler;
     onCrosshairMove?: MouseEventHandler;
 }
 
-export function chart<T extends Array<SeriesActionParams>>(
+export function chart(
     node: HTMLElement,
-    params: ChartActionParams<T>
-): ActionResult<ChartActionParams<T>> {
+    params: ChartActionParams
+): ActionResult<ChartActionParams> {
     let {
         options,
         reference,
@@ -42,7 +41,7 @@ export function chart<T extends Array<SeriesActionParams>>(
     }
 
     return {
-        update(nextParams: ChartActionParams<T>): void {
+        update(nextParams: ChartActionParams): void {
             const {
                 options: nextOptions,
                 reference: nextReference,
