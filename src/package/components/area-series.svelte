@@ -41,6 +41,7 @@
 
     export let topColor: $$PROPS['topColor'] = undefined;
     export let bottomColor: $$PROPS['bottomColor'] = undefined;
+    export let invertFilledArea: $$PROPS['invertFilledArea'] = undefined;
     export let lineColor: $$PROPS['lineColor'] = undefined;
     export let lineStyle: $$PROPS['lineStyle'] = undefined;
     export let lineWidth: $$PROPS['lineWidth'] = undefined;
@@ -74,6 +75,7 @@
         autoscaleInfoProvider,
         topColor,
         bottomColor,
+        invertFilledArea,
         lineColor,
         lineStyle,
         lineWidth,
