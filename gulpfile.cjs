@@ -31,9 +31,10 @@ function typings() {
 }
 
 async function applyPreprocess(content, file) {
-    const ts = require('svelte-preprocess').typescript();
-    ts.filename = file.basename;
-    // TODO: remove source mapping url
+    const ts = require('svelte-preprocess').typescript({
+        tsconfigFile: './tsconfig.build.json',
+    });
+    ts.filename = file.path;
     const garbage = require('svelte-preprocess').replace([
         [/<!--[^]*?-->|<script(\s[^]*?)?(?:>([^]*?)<\/script>|\/>)/gi, (value, attributes) => {
             if (attributes !== undefined && attributes.includes('lang="ts"')) {

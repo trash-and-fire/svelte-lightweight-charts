@@ -18,7 +18,7 @@
     {#each components as component (component)}
         <div class="item">
             {#if component.href !== undefined}
-                <a class="link" target="_blank" href={component.href} title="Show in REPL">
+                <a class="link" target="_blank" href={component.href} title="Show in REPL" rel="noreferrer">
                     <svg width="18" height="15" viewBox="0 0 18 15" xmlns="http://www.w3.org/2000/svg">
                         <g stroke="currentColor" fill="none">
                             <path d="M12.5 2.5l5 5-5 5M10.5.5l-3 14M5.5 2.5l-5 5 5 5"></path>
