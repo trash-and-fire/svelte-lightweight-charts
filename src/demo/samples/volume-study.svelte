@@ -9,15 +9,19 @@
     />
     <HistogramSeries
         data={volume}
-        priceScaleId=""
+        priceScaleId="volume"
         color="#26a69a"
         priceFormat={{type: 'volume'}}
+    />
+    <PriceScale
+        id="volume"
         scaleMargins={{top: 0.8, bottom: 0}}
     />
 </Chart>
 
 <script>
-    import {Chart, AreaSeries, HistogramSeries} from 'svelte-lightweight-charts';
+    import {ColorType} from 'lightweight-charts';
+    import {Chart, AreaSeries, HistogramSeries, PriceScale} from 'svelte-lightweight-charts';
 
     const options = {
         width: 600,
@@ -30,7 +34,10 @@
             borderVisible: false,
         },
         layout: {
-            backgroundColor: '#131722',
+            background: {
+                type: ColorType.Solid,
+                color: '#131722',
+            },
             textColor: '#d1d4dc',
         },
         grid: {

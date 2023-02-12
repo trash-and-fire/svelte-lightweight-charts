@@ -38,7 +38,6 @@
     export let baseLineStyle: $$PROPS['baseLineStyle'] = undefined;
     /** function that overrides calculating of visible prices range */
     export let autoscaleInfoProvider: $$PROPS['autoscaleInfoProvider'] = undefined;
-    export let scaleMargins: $$PROPS['scaleMargins'] = undefined;
 
     /**
      * Base value of the series.
@@ -119,7 +118,6 @@
         baseLineWidth,
         baseLineStyle,
         autoscaleInfoProvider,
-        scaleMargins,
         baseValue,
         topFillColor1,
         topFillColor2,

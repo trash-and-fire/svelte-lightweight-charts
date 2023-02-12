@@ -1,9 +1,9 @@
-import type {IPriceLine, ISeriesApi, SeriesType, PriceLineOptions} from 'lightweight-charts';
+import type {IPriceLine, ISeriesApi, SeriesType, CreatePriceLineOptions} from 'lightweight-charts';
 import type {ReferencableActionResult, Reference} from './utils.js';
 
 export interface PriceLineParams {
     id: string;
-    options: PriceLineOptions;
+    options: CreatePriceLineOptions;
     reference?: Reference<IPriceLine>;
 }
 

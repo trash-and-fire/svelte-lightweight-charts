@@ -5,6 +5,7 @@
 <Switcher list={AVAILABLE_THEMES} bind:value={selected}/>
 
 <script>
+    import {ColorType} from 'lightweight-charts';
     import {Chart, AreaSeries} from 'svelte-lightweight-charts';
     import Switcher from './components/switcher.svelte';
 
@@ -12,7 +13,10 @@
         Dark: {
             chart: {
                 layout: {
-                    backgroundColor: '#2B2B43',
+                    background: {
+                        type: ColorType.Solid,
+                        color: '#2B2B43',
+                    },
                     lineColor: '#2B2B43',
                     textColor: '#D9D9D9',
                 },
@@ -40,7 +44,10 @@
         Light: {
             chart: {
                 layout: {
-                    backgroundColor: '#FFFFFF',
+                    background: {
+                        type: ColorType.Solid,
+                        color: '#FFFFFF',
+                    },
                     lineColor: '#2B2B43',
                     textColor: '#191919',
                 },

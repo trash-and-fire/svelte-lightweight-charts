@@ -38,7 +38,6 @@
     export let baseLineStyle: $$PROPS['baseLineStyle'] = undefined;
     /** function that overrides calculating of visible prices range */
     export let autoscaleInfoProvider: $$PROPS['autoscaleInfoProvider'] = undefined;
-    export let scaleMargins: $$PROPS['scaleMargins'] = undefined;
 
     /** Color of rising candlesticks */
     export let upColor: $$PROPS['upColor'] = undefined;
@@ -89,7 +88,6 @@
         baseLineWidth,
         baseLineStyle,
         autoscaleInfoProvider,
-        scaleMargins,
         upColor,
         downColor,
         wickColor,

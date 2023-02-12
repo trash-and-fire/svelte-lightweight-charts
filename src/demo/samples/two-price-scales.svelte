@@ -14,7 +14,7 @@
 </Chart>
 
 <script>
-    import {CrosshairMode} from 'lightweight-charts';
+    import {ColorType, CrosshairMode} from 'lightweight-charts';
     import {Chart, CandlestickSeries, LineSeries} from 'svelte-lightweight-charts';
 
     const options = {
@@ -29,7 +29,10 @@
             borderColor: 'rgba(197, 203, 206, 1)',
         },
         layout: {
-            backgroundColor: '#ffffff',
+            background: {
+                type: ColorType.Solid,
+                color: '#FFFFFF',
+            },
             textColor: 'rgba(33, 56, 77, 1)',
         },
         grid: {

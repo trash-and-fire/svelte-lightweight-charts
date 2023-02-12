@@ -32,6 +32,7 @@
 </style>
 
 <script>
+    import {ColorType} from 'lightweight-charts';
     import {Chart, AreaSeries} from 'svelte-lightweight-charts';
 
     let areaSeries = null;
@@ -44,8 +45,8 @@
 
     function handleCrosshairMove({detail: param}) {
         if (param.time) {
-            const price = param.seriesPrices.get(areaSeries);
-            legend = 'ETC USD 7D VWAP' + '  ' + price.toFixed(2);
+            const point = param.seriesData.get(areaSeries);
+            legend = 'ETC USD 7D VWAP' + '  ' + point.value.toFixed(2);
         } else {
             legend = 'ETC USD 7D VWAP';
         }
@@ -56,7 +57,10 @@
         height: 300,
         layout: {
             textColor: '#d1d4dc',
-            backgroundColor: '#000000',
+            background: {
+                type: ColorType.Solid,
+                color: '#000000',
+            },
         },
         rightPriceScale: {
             scaleMargins: {
