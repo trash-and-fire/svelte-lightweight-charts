@@ -30,8 +30,8 @@ function typings() {
         .pipe(dest('./dist'));
 }
 
-async function applyPreprocess(content, file) {
-    const ts = require('svelte-preprocess').typescript({
+async function applyPreprocess(content, file, options) {
+    const ts = require('svelte-preprocess').typescript(options ?? {
         tsconfigFile: './tsconfig.build.json',
     });
     ts.filename = file.path;
@@ -106,7 +106,7 @@ function samples(...args) {
 
     const resolveComponents = () => src(['./src/demo/samples/components/*.svelte'])
         .pipe(transform('utf8', (contents, file) => {
-            return applyPreprocess(contents, file).then((code) => {
+            return applyPreprocess(contents, file, {}).then((code) => {
                 components.set(`components/${file.basename}`, {
                     hash: crc.str(contents),
                     name: file.basename,
