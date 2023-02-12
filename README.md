@@ -37,23 +37,6 @@ npm install lightweight-charts svelte-lightweight-charts
 </Chart>
 ```
 
-### SSR and SvelteKit
-
-`lightweight-charts` are not currently compatible with the node environment. Direct import of this module will throw an exception.
-
-I made an experimental version of the package that should solve this problem. To install the next version, run:
-```bash
-npm install svelte-lightweight-charts@next
-```
-Add to your `svelte.config.js`:
-```
-vite: {
-    ssr: {
-        noExternal: ['svelte-lightweight-charts', 'lightweight-charts']
-    }
-}
-```
-
 ## Getting reference to lightweight-chart objects
 
 You can use the `ref` property to get a reference to a lightweight-chart api-instance from any component.
@@ -198,3 +181,9 @@ Package is written on TypeScript and transpiled to plain `*.js` and `*.svelte` f
 ## Related projects
 
 Need a wrapper for another framework? Check out my [lightweight-charts-react-wrapper](https://github.com/trash-and-fire/lightweight-charts-react-wrapper)
+
+## Licence
+
+MIT
+
+Review the license [requirements](https://github.com/tradingview/lightweight-charts#license) for the required "attribution notice" in the Lightweight Chart Repository.
