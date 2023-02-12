@@ -5,7 +5,6 @@ specifiers:
   '@babel/preset-env': 7.20.2
   '@babel/preset-typescript': 7.13.0
   '@jest/globals': 29.4.2
-  '@tsconfig/svelte': 1.0.10
   '@types/jest': 29.4.0
   '@typescript-eslint/eslint-plugin': 5.4.0
   '@typescript-eslint/parser': 5.4.0
@@ -51,7 +50,6 @@ devDependencies:
   '@babel/core': 7.20.12
   '@babel/preset-env': 7.20.2_@babel+core@7.20.12
   '@babel/preset-typescript': 7.13.0_@babel+core@7.20.12
-  '@tsconfig/svelte': 1.0.10
   '@types/jest': 29.4.0
   '@typescript-eslint/eslint-plugin': 5.4.0_jsjjlipo6wo7d3kaby6tlau7ji
   '@typescript-eslint/parser': 5.4.0_5moco2t3t4vue2rvoh37ecare4
@@ -1609,10 +1607,6 @@ packages:
   /@tootallnate/once/2.0.0:
     resolution: {integrity: sha512-XCuKFP5PS55gnMVu3dty8KPatLqUoy/ZYzDzAGCQ8JNFCkLXzmI7vNHCR+XpbZaMWQK/vQubr7PkYq8g470J/A==}
     engines: {node: '>= 10'}
-    dev: true
-
-  /@tsconfig/svelte/1.0.10:
-    resolution: {integrity: sha512-EBrpH2iXXfaf/9z81koiDYkp2mlwW2XzFcAqn6qh7VKyP8zBvHHAQzNhY+W9vH5arAjmGAm5g8ElWq6YmXm3ig==}
     dev: true
 
   /@types/babel__core/7.20.0:
