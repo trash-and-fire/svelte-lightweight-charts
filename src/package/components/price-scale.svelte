@@ -41,7 +41,7 @@
     /** Indicates if this price scale visible. Ignored by overlay price scales. */
     export let visible: $$PROPS['visible'] | undefined = undefined;
     /** Draw small horizontal line on price axis labels. */
-    export let drawTicks: $$PROPS['drawTicks'] | undefined = undefined;
+    export let ticksVisible: $$PROPS['ticksVisible'] | undefined = undefined;
 
     export let ref: $$PROPS['ref'] = undefined;
 
@@ -55,7 +55,7 @@
         borderColor,
         entireTextOnly,
         visible,
-        drawTicks,
+        ticksVisible,
     };
 
     $: options = {
@@ -68,7 +68,7 @@
         borderColor,
         entireTextOnly,
         visible,
-        drawTicks,
+        ticksVisible,
     };
 
     usePriceScaleEffect(() => [
