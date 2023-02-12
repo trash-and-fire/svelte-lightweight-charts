@@ -80,12 +80,12 @@ module.exports = {
             ],
             files: ['.eslintrc.cjs', 'webpack.config.cjs', 'gulpfile.cjs', 'repl-maker.cjs', 'scripts/**/*.{js,cjs}'],
             parserOptions: {
-                "ecmaVersion": 2017
+                "ecmaVersion": 2020
             },
             env: {
                 node: true,
                 browser: false,
-                es6: true
+                es2020: true,
             },
             rules: {
                 "node/no-unpublished-require": "off",
