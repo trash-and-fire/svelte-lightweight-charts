@@ -10,6 +10,7 @@
 </Chart>
 
 <script>
+    import {ColorType} from 'lightweight-charts';
     import {Chart, AreaSeries} from 'svelte-lightweight-charts';
 
     const watermark = {
@@ -31,7 +32,10 @@
             },
         },
         layout: {
-            backgroundColor: '#ffffff',
+            background: {
+                type: ColorType.Solid,
+                color: '#FFFFFF',
+            },
             textColor: '#333',
         },
         grid: {

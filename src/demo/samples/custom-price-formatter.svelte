@@ -11,7 +11,7 @@
 </Chart>
 
 <script>
-    import {CrosshairMode} from 'lightweight-charts';
+    import {ColorType, CrosshairMode} from 'lightweight-charts';
     import {Chart, AreaSeries} from 'svelte-lightweight-charts';
     import Switcher from './components/switcher.svelte';
 
@@ -37,7 +37,10 @@
             mode: CrosshairMode.Normal,
         },
         layout: {
-            backgroundColor: '#000',
+            background: {
+                type: ColorType.Solid,
+                color: '#000',
+            },
             textColor: 'rgba(255, 255, 255, 0.8)',
         },
         grid: {

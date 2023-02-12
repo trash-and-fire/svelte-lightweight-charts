@@ -32,6 +32,7 @@
 </style>
 
 <script>
+    import {ColorType} from 'lightweight-charts';
     import {Chart, AreaSeries} from 'svelte-lightweight-charts';
 
     let areaSeries = null;
@@ -56,7 +57,10 @@
         height: 300,
         layout: {
             textColor: '#d1d4dc',
-            backgroundColor: '#000000',
+            background: {
+                type: ColorType.Solid,
+                color: '#000000',
+            },
         },
         rightPriceScale: {
             scaleMargins: {

@@ -37,7 +37,7 @@
     </Chart>
 </div>
 <script>
-    import {LineStyle} from 'lightweight-charts';
+    import {ColorType, LineStyle} from 'lightweight-charts';
     import {Chart, LineSeries, PriceLine} from 'svelte-lightweight-charts';
 
     // eslint-disable-next-line @typescript-eslint/typedef,@typescript-eslint/explicit-function-return-type
@@ -50,7 +50,10 @@
         height: 300,
         layout: {
             textColor: '#d1d4dc',
-            backgroundColor: '#000000',
+            background: {
+                type: ColorType.Solid,
+                color: '#000000',
+            },
         },
         rightPriceScale: {
             scaleMargins: {

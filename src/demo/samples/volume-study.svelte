@@ -20,6 +20,7 @@
 </Chart>
 
 <script>
+    import {ColorType} from 'lightweight-charts';
     import {Chart, AreaSeries, HistogramSeries, PriceScale} from 'svelte-lightweight-charts';
 
     const options = {
@@ -33,7 +34,10 @@
             borderVisible: false,
         },
         layout: {
-            backgroundColor: '#131722',
+            background: {
+                type: ColorType.Solid,
+                color: '#131722',
+            },
             textColor: '#d1d4dc',
         },
         grid: {
