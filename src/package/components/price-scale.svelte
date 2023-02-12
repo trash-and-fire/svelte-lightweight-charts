@@ -35,6 +35,11 @@
      */
     export let borderColor: $$PROPS['borderColor'] | undefined = undefined;
     /**
+     * Price scale text color.
+     * If not provided {@link LayoutOptions.textColor} is used.
+     */
+    export let textColor: $$PROPS['textColor'] | undefined = undefined;
+    /**
      * Show top and bottom corner labels only if entire text is visible.
      */
     export let entireTextOnly: $$PROPS['entireTextOnly'] | undefined = undefined;
@@ -53,6 +58,7 @@
         scaleMargins,
         borderVisible,
         borderColor,
+        textColor,
         entireTextOnly,
         visible,
         ticksVisible,
@@ -66,6 +72,7 @@
         scaleMargins,
         borderVisible,
         borderColor,
+        textColor,
         entireTextOnly,
         visible,
         ticksVisible,
