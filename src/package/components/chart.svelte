@@ -40,6 +40,9 @@
     export let handleScroll: $$PROPS['handleScroll'] = undefined;
     /** Structure that describes scaling behavior or boolean flag that disables/enables all kinds of scales */
     export let handleScale: $$PROPS['handleScale'] = undefined;
+    /** Kinetic scroll options */
+    export let kineticScroll: $$PROPS['kineticScroll'] = undefined;
+    export let trackingMode: $$PROPS['trackingMode'] = undefined;
 
     export let ref: $$PROPS['ref'] = undefined;
 
@@ -58,6 +61,8 @@
         localization,
         handleScroll,
         handleScale,
+        kineticScroll,
+        trackingMode,
     };
 
     let reference: IChartApi | null = null;
