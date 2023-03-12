@@ -72,11 +72,13 @@
 
     let width = 400;
     let height = 300;
+    let autoSize = false;
 
     let options: DeepPartial<ChartOptions>;
     $: options = {
         width,
         height,
+        autoSize,
     };
 
     let seriesType: SeriesType = 'Area';
@@ -346,6 +348,9 @@
             <input type="range" bind:value={height} name="height" id="height" min="100" max="1000" step="50">
             {height}
         </label>
+        <label>
+            <input type="checkbox" bind:checked={autoSize} name="autosize" id="autosize"> Autosize
+        </label>
     </fieldset>
     <fieldset name="series">
         <legend>Main Series type:</legend>
@@ -381,7 +386,7 @@
             {...options}
             ref={handleReference}
             container={{
-                class: 'chart',
+                class: autoSize ? 'autosize' : 'chart',
                 // eslint-disable-next-line no-console
                 ref: console.log
             }}
@@ -490,5 +495,9 @@
 
 
 <style>
-
+    :global(.autosize) {
+        aspect-ratio: 16 / 9;
+        width: 80%;
+        margin: auto;
+    }
 </style>
