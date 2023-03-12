@@ -10,6 +10,7 @@ export interface ChartContainerProps {
     ref?: Reference<HTMLElement>;
     class?: string;
     id?: string;
+    style?: string;
 }
 
 export interface $$PROPS extends DeepPartial<ChartOptions> {

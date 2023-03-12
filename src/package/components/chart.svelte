@@ -111,6 +111,7 @@
 
 <div
     {...attrs}
+    style={autoSize ? attrs.style : (`width: ${width}px; height: ${height}px;` + attrs.style)}
     use:element={container ? container.ref : undefined}
     use:chart={{
         options,
