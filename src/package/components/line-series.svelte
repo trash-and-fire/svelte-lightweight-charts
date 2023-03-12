@@ -52,6 +52,7 @@
 
     export let data: $$PROPS['data'] = [];
     export let reactive: $$PROPS['reactive'] = false;
+    export let markers: NonNullable<$$PROPS['markers']> = [];
 
     let options: LineSeriesPartialOptions;
     $: options = {
@@ -98,6 +99,7 @@
             reactive,
             options,
             data,
+            markers,
         },
         handleReference,
     ]);

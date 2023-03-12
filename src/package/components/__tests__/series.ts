@@ -7,6 +7,7 @@ jest.unstable_mockModule('lightweight-charts', async () => ({}));
 const SERIES_API = {
     applyOptions: jest.fn(),
     setData: jest.fn(),
+    setMarkers: jest.fn(),
     seriesType: jest.fn(),
     createPriceLine: jest.fn(),
 };
@@ -27,7 +28,9 @@ describe.each([
     ['Histogram', 'histogram-series', 'addHistogramSeries'],
     ['Line', 'line-series', 'addLineSeries'],
     ['Baseline', 'baseline-series', 'addBaselineSeries'],
-])('%sSeries component', (type: SeriesType, name: string, method: keyof typeof CHART_API) => {
+] satisfies [
+    SeriesType, string, keyof typeof CHART_API
+][])('%sSeries component', (type: SeriesType, name: string, method: keyof typeof CHART_API) => {
     beforeAll(() => {
         SERIES_API.seriesType = jest.fn(() => type);
     });
@@ -42,8 +45,18 @@ describe.each([
         new Series({
             target: document.createElement('div'),
             props: {
-                data: [],
+                data: [
+                    {time: '2018-10-19', open: 180.34, high: 180.99, low: 178.57, close: 179.85},
+                ],
                 title: 'Series',
+                markers: [
+                    {
+                        time: '2018-10-19',
+                        position: 'aboveBar', color: '#f68410',
+                        shape: 'circle',
+                        text: 'D'
+                    }
+                ]
             },
             context: new Map([['lightweight-chart-context', CHART_API]]),
         });
@@ -55,7 +68,18 @@ describe.each([
             title: 'Series',
         });
         expect(SERIES_API.setData).toHaveBeenCalledTimes(1);
-        expect(SERIES_API.setData).toHaveBeenCalledWith([]);
+        expect(SERIES_API.setData).toHaveBeenCalledWith([
+            {time: '2018-10-19', open: 180.34, high: 180.99, low: 178.57, close: 179.85},
+        ]);
+        expect(SERIES_API.setMarkers).toHaveBeenCalledTimes(1);
+        expect(SERIES_API.setMarkers).toHaveBeenCalledWith([
+            {
+                time: '2018-10-19',
+                position: 'aboveBar', color: '#f68410',
+                shape: 'circle',
+                text: 'D'
+            }
+        ]);
     });
 
     it('should update', async () => {
@@ -64,8 +88,18 @@ describe.each([
         const component = new Series({
             target: document.createElement('div'),
             props: {
-                data: [],
+                data: [
+                    {time: '2018-10-19', open: 180.34, high: 180.99, low: 178.57, close: 179.85},
+                ],
                 title: 'Series',
+                markers: [
+                    {
+                        time: '2018-10-19',
+                        position: 'aboveBar', color: '#f68410',
+                        shape: 'circle',
+                        text: 'D'
+                    }
+                ]
             },
             context: new Map([['lightweight-chart-context', CHART_API]]),
         });
@@ -73,11 +107,13 @@ describe.each([
         await tick();
 
        SERIES_API.applyOptions.mockClear();
+       SERIES_API.setMarkers.mockClear();
 
         component.$set({
             data: [],
             title: 'Series',
             visible: true,
+            markers: [],
         });
 
         await tick();
@@ -87,6 +123,9 @@ describe.each([
             title: 'Series',
             visible: true,
         }]);
+
+        expect(SERIES_API.setMarkers).toHaveBeenCalledTimes(1);
+        expect(SERIES_API.setMarkers).toHaveBeenCalledWith([]);
     });
 
     it('should destroy', async () => {
