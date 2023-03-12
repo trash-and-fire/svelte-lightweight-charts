@@ -3,6 +3,7 @@
 ## 2.1.0
 
 - Added `markers` property to `<[Type]Series>` components.
+- Supported `autoSize` option on `<Chart>` component.
 
 ## 2.0.0
 
