@@ -8,10 +8,12 @@ const SERIES_API = {
     seriesType: jest.fn(() => 'Line'),
     applyOptions: jest.fn(),
     setData: jest.fn(),
+    setMarkers: jest.fn(),
 };
 const CHART_API = {
     addLineSeries: jest.fn(() => SERIES_API),
     addAreaSeries: jest.fn(() => SERIES_API),
+    addCandlestickSeries: jest.fn(() => SERIES_API),
     removeSeries: jest.fn(),
 } as unknown as IChartApi;
 
@@ -27,6 +29,7 @@ describe('Synthetic action: series', function () {
             id: 'series',
             type: 'Line',
             data: [],
+            markers: [],
         });
 
         expect(subject).toBeDefined();
@@ -40,6 +43,7 @@ describe('Synthetic action: series', function () {
             id: 'series',
             type: 'Line',
             data: [],
+            markers: [],
             options,
         });
 
@@ -55,6 +59,7 @@ describe('Synthetic action: series', function () {
             id: 'series',
             type: 'Line',
             data,
+            markers: [],
         });
 
         expect(SERIES_API.setData).toHaveBeenCalledTimes(1);
@@ -68,6 +73,7 @@ describe('Synthetic action: series', function () {
             id: 'series',
             type: 'Line',
             data: [],
+            markers: [],
         });
         subject.destroy();
 
@@ -83,6 +89,7 @@ describe('Synthetic action: series', function () {
             type: 'Line',
             data: [],
             options: {},
+            markers: [],
         });
         subject.update({
             id: 'series',
@@ -91,6 +98,7 @@ describe('Synthetic action: series', function () {
             options: {
                 color: '#FFFFFF'
             },
+            markers: [],
         });
 
         expect(SERIES_API.applyOptions).toHaveBeenCalledTimes(1);
@@ -106,6 +114,7 @@ describe('Synthetic action: series', function () {
             id: 'series',
             type: 'Line',
             data: [],
+            markers: [],
         });
 
         const initial = jest.fn();
@@ -136,6 +145,7 @@ describe('Synthetic action: series', function () {
             type: 'Line' as SeriesType,
             data: [],
             options: {},
+            markers: [],
         });
 
         jest.clearAllMocks();
@@ -145,6 +155,7 @@ describe('Synthetic action: series', function () {
             type: 'Area',
             data: [],
             options: {},
+            markers: [],
         });
 
         expect(CHART_API.addAreaSeries).toHaveBeenCalledTimes(1);
@@ -159,6 +170,7 @@ describe('Synthetic action: series', function () {
             type: 'Line' as SeriesType,
             data: [],
             options: {},
+            markers: [],
         });
 
         jest.clearAllMocks();
@@ -168,6 +180,7 @@ describe('Synthetic action: series', function () {
             type: 'Area',
             data: [],
             options: {},
+            markers: [],
         });
     });
 
@@ -179,6 +192,7 @@ describe('Synthetic action: series', function () {
             type: 'Line' as SeriesType,
             data: [],
             options: {},
+            markers: [],
         });
         const reference = jest.fn();
         subject.updateReference(reference);
@@ -190,6 +204,7 @@ describe('Synthetic action: series', function () {
             type: 'Area',
             data: [],
             options: {},
+            markers: [],
         });
 
         expect(reference).toHaveBeenCalledTimes(2);
@@ -206,6 +221,7 @@ describe('Synthetic action: series', function () {
             reactive: true,
             data: [] as LineData[],
             options: {},
+            markers: [],
         });
 
         expect(SERIES_API.setData).toHaveBeenCalledTimes(1);
@@ -220,6 +236,7 @@ describe('Synthetic action: series', function () {
                 value: 123,
             }],
             options: {},
+            markers: [],
         });
 
         expect(SERIES_API.setData).toHaveBeenCalledTimes(2);
@@ -237,6 +254,7 @@ describe('Synthetic action: series', function () {
             type: 'Line' as SeriesType,
             data: [] as LineData[],
             options: {},
+            markers: [],
         });
 
         expect(SERIES_API.setData).toHaveBeenCalledTimes(1);
@@ -250,8 +268,53 @@ describe('Synthetic action: series', function () {
                 value: 123,
             }],
             options: {},
+            markers: [],
         });
 
         expect(SERIES_API.setData).toHaveBeenCalledTimes(1);
+    });
+
+    it('should set markers', async () => {
+        const {series} = await import('../series.js');
+
+        const subject = series(CHART_API, {
+            id: 'series',
+            type: 'Candlestick' as SeriesType,
+            data: [
+                {time: '2018-10-19', open: 180.34, high: 180.99, low: 178.57, close: 179.85},
+            ],
+            options: {},
+            markers: [
+                {
+                    time: '2018-10-19',
+                    position: 'aboveBar', color: '#f68410',
+                    shape: 'circle',
+                    text: 'D'
+                }
+            ]
+        });
+
+        expect(SERIES_API.setMarkers).toHaveBeenCalledTimes(1);
+        expect(SERIES_API.setMarkers).toHaveBeenLastCalledWith([
+            {
+                time: '2018-10-19',
+                position: 'aboveBar', color: '#f68410',
+                shape: 'circle',
+                text: 'D'
+            }
+        ]);
+
+        subject.update({
+            id: 'series',
+            type: 'Candlestick' as SeriesType,
+            data: [
+                {time: '2018-10-19', open: 180.34, high: 180.99, low: 178.57, close: 179.85},
+            ],
+            options: {},
+            markers: [],
+        });
+
+        expect(SERIES_API.setMarkers).toHaveBeenCalledTimes(2);
+        expect(SERIES_API.setMarkers).toHaveBeenLastCalledWith([]);
     });
 });

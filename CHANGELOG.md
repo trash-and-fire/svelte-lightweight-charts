@@ -1,5 +1,9 @@
 # Svelte Lightweight Charts changelog
 
+## 2.1.0
+
+- Added `markers` property to `<[Type]Series>` components.
+
 ## 2.0.0
 
 This major release raises the required `lightweight-charts` package version to 4.0.0 providing support for new features from the package.
