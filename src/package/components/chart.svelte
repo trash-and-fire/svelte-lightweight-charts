@@ -94,7 +94,7 @@
     })(ref);
 
     // Dom container attributes
-    let attrs: $$PROPS['container'] = {};
+    let attrs: NonNullable<$$PROPS['container']> = {};
     $: {
         attrs = Object.assign({}, container);
         delete attrs.ref;
