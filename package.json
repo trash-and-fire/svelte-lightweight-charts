@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "svelte-lightweight-charts",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Svelte wrapper for financial lightweight charts built with HTML5 canvas",
   "license": "MIT",
   "repository": {
