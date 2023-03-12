@@ -3,6 +3,7 @@
 ## 2.1.0
 
 - Added `markers` property to `<[Type]Series>` components.
+- Supported `kineticScroll` and `trackingMode` options on `<Chart>` component.
 - Supported `autoSize` option on `<Chart>` component.
 - Reduced layout shift on SSR. The chart component will reserve the specified width and height if the chart is not auto-sized.
 

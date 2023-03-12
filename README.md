@@ -65,32 +65,31 @@ container?: {
     ref?: (element: HTMLElement | null) => void;
     class?: string;
     id?: string;
+    style?: string;
 }
 ```
-It might be helpful to [auto-size](https://svelte.dev/repl/22c14c4729d44d65a69346d1e3cc6e89) your chart container via ResizeObserver. 
+If you need a reference to the containing dom element you can use `ref` property. It might be useful to setup IntersectionObserver on this dom element.
+
+Use `class` or `style` properties with `<Chart autoSize={true}/>` to set up an adaptive chart: 
 ```svelte
-<Chart {width} {height} container={{ref}}>
-    <CandlestickSeries {data}/>
+<Chart
+    autoSize={true}
+    container={{class: 'chart-container'}}
+>
+    <LineSeries data={data}/>
 </Chart>
-<script>
-    let observer;
-    let width = 600;
-    let height = 300;
-    let ref = (element) => {
-        if (observer) {
-            observer.disconnect();
-        }
-        if (!element) {
-            return;
-        }
-        observer = new ResizeObserver(([entry]) => {
-            width = entry.contentRect.width;
-            height = entry.contentRect.height;
-        });
-        observer.observe(element);
-    }
-</script>
+<style>
+:global(.chart-container) {
+    aspect-ratio: 16 / 9;
+    width: 80%;
+    margin: auto;
+}
+</style>
 ```
+
+#### SSR
+The chart component will reserve the specified `width` and `height` during SSR if the chart is not auto-sized. 
+
 Events:
 - [`on:crosshairMove`](https://tradingview.github.io/lightweight-charts/docs/api/interfaces/IChartApi#subscribeclick): `(event: CustomEvent<MouseEventParams>) => void`
 - [`on:click`](https://tradingview.github.io/lightweight-charts/docs/api/interfaces/IChartApi#subscribecrosshairmove): `(event: CustomEvent<MouseEventParams>) => void`
@@ -119,6 +118,9 @@ To pass a data to a series you can use the `data` property. Look [here](https://
 
 By default `data` represents only the **initial** data. Any subsequent data update does not update series.
 If you want to change this behavior please add [`reactive={true}`](https://svelte.dev/repl/0efb2840a9844ed5a1d84f2a1c9a2269) to your series component. In this case series will apply a new data if it is not reference equal to previous array.
+
+#### Passing markers
+To pass markers to a series you can use the `markers` property. Markers should be an array of `SeriesMarker<Time>`.
 
 ### Price line
 
