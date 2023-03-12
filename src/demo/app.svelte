@@ -388,7 +388,8 @@
             container={{
                 class: autoSize ? 'autosize' : 'chart',
                 // eslint-disable-next-line no-console
-                ref: console.log
+                ref: console.log,
+                style: 'background: red',
             }}
             on:crosshairMove={handleCrosshairMove}
             on:click={handleClick}
