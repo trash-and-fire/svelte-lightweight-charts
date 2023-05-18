@@ -50,6 +50,7 @@
     export let crosshairMarkerRadius: $$PROPS['crosshairMarkerRadius'] = undefined;
     export let crosshairMarkerBorderColor: $$PROPS['crosshairMarkerBorderColor'] = undefined;
     export let crosshairMarkerBackgroundColor: $$PROPS['crosshairMarkerBackgroundColor'] = undefined;
+    export let lastPriceAnimation: $$PROPS['lastPriceAnimation'] = undefined;
 
     export let ref: $$PROPS['ref'] = undefined;
 
@@ -85,6 +86,7 @@
         crosshairMarkerBorderColor,
         crosshairMarkerRadius,
         crosshairMarkerVisible,
+        lastPriceAnimation,
     };
 
     let reference: ISeriesApi<'Area'> | null = null;
