@@ -3,6 +3,7 @@ import type {
     DeepPartial,
     IChartApi,
     MouseEventHandler,
+    Time,
 } from 'lightweight-charts';
 import type {ActionResult, Reference} from './utils.js';
 
@@ -11,8 +12,8 @@ import {createChart} from 'lightweight-charts';
 export interface ChartActionParams {
     options?: DeepPartial<ChartOptions>;
     reference?: Reference<IChartApi>;
-    onClick?: MouseEventHandler;
-    onCrosshairMove?: MouseEventHandler;
+    onClick?: MouseEventHandler<Time>;
+    onCrosshairMove?: MouseEventHandler<Time>;
 }
 
 export function chart(

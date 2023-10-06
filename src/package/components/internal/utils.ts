@@ -1,4 +1,4 @@
-import type {IChartApi, IPriceLine, IPriceScaleApi, ISeriesApi, ITimeScaleApi, SeriesType} from 'lightweight-charts';
+import type {IChartApi, IPriceLine, IPriceScaleApi, ISeriesApi, ITimeScaleApi, SeriesType, Time} from 'lightweight-charts';
 import type {PriceLineActionResult, PriceLineParams} from '../../internal/lines';
 import type {Reference} from '../../internal/utils.js';
 import type {PriceScaleActionResult, PriceScaleParams} from '../../internal/price-scale';
@@ -66,7 +66,7 @@ export function useLineEffect(callback: () => [params: PriceLineParams, ref: Ref
     });
 }
 
-export function useTimeScaleEffect(callback: () => [params: TimeScaleParams, ref: Reference<ITimeScaleApi> | undefined]): void {
+export function useTimeScaleEffect(callback: () => [params: TimeScaleParams, ref: Reference<ITimeScaleApi<Time>> | undefined]): void {
     let subject: TimeScaleActionResult | null = null;
 
     const api = context<IChartApi>();

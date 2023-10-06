@@ -77,9 +77,12 @@ export type SeriesActionParams =
     | LineSeriesParams
     | BaselineSeriesParams
 
-export type SeriesParams = Omit<SeriesActionParams, 'reference'>;
+export type DistributiveOmit<T, K extends keyof T> = T extends unknown ? Pick<T, Exclude<keyof T, K>> : never;
+
+export type SeriesParams = DistributiveOmit<SeriesActionParams, 'reference'>;
 
 export type SeriesActionResult<T extends SeriesParams> = ReferencableActionResult<T, ISeriesApi<T['type']>>;
+export type DistributedSeriesApi<T extends { type: SeriesType }> = T extends unknown ? ISeriesApi<T['type']> : never;
 
 export function series<T extends SeriesParams>(target: IChartApi, params: T): SeriesActionResult<T> {
     let subject = createSeries(target, params);
@@ -116,7 +119,7 @@ export function series<T extends SeriesParams>(target: IChartApi, params: T): Se
                 subject.setMarkers(markers);
             }
         },
-        updateReference(nextReference: Reference<ISeriesApi<T['type']>>): void {
+        updateReference(nextReference: Reference<ISeriesApi<SeriesType>>): void {
             if (nextReference !== reference) {
                 reference?.(null)
                 reference = nextReference;
@@ -130,10 +133,8 @@ export function series<T extends SeriesParams>(target: IChartApi, params: T): Se
     };
 }
 
-function createSeries<T extends SeriesActionParams>(
-    chart: IChartApi,
-    params: SeriesActionParams
-): ISeriesApi<T['type']> {
+
+function createSeries(chart: IChartApi, params: SeriesActionParams): DistributedSeriesApi<SeriesActionParams> {
     switch (params.type) {
         case 'Area': {
             const series = chart.addAreaSeries(params.options);

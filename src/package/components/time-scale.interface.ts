@@ -1,6 +1,7 @@
 import type {
     ITimeScaleApi,
-    TimeRange,
+    Time,
+    Range,
     LogicalRange,
     DeepPartial,
     TimeScaleOptions,
@@ -8,11 +9,11 @@ import type {
 import type {Reference} from '../internal/utils.js';
 
 export interface $$PROPS extends DeepPartial<TimeScaleOptions> {
-    ref?: Reference<ITimeScaleApi>;
+    ref?: Reference<ITimeScaleApi<Time>>;
 }
 
 export interface $$EVENTS_DETAIL {
-    visibleTimeRangeChange: TimeRange | null;
+    visibleTimeRangeChange: Range<Time> | null;
     visibleLogicalRangeChange: LogicalRange | null;
     sizeChange: { width: number; height: number };
 }
