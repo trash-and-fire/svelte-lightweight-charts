@@ -17,6 +17,7 @@ specifiers:
   eslint-plugin-import: 2.27.5
   eslint-plugin-node: 11.1.0
   eslint-plugin-svelte3: 4.0.0
+  fancy-canvas: 2.1.0
   fork-ts-checker-webpack-plugin: 7.3.0
   gulp: 4.0.2
   gulp-clean: 0.4.0
@@ -60,6 +61,7 @@ devDependencies:
   eslint-plugin-import: 2.27.5_62tsymtiqxebhmxuag4hg3gx2m
   eslint-plugin-node: 11.1.0_eslint@8.34.0
   eslint-plugin-svelte3: 4.0.0_dbthnr4b2bdkhyiebwn7su3hnq
+  fancy-canvas: 2.1.0
   fork-ts-checker-webpack-plugin: 7.3.0_hhrrucqyg4eysmfpujvov2ym5u
   gulp: 4.0.2
   gulp-clean: 0.4.0

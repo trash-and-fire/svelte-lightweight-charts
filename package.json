@@ -53,6 +53,7 @@
     "eslint-plugin-import": "2.27.5",
     "eslint-plugin-node": "11.1.0",
     "eslint-plugin-svelte3": "4.0.0",
+    "fancy-canvas": "2.1.0",
     "fork-ts-checker-webpack-plugin": "7.3.0",
     "gulp": "4.0.2",
     "gulp-clean": "0.4.0",
