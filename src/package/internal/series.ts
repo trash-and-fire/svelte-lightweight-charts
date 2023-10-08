@@ -4,8 +4,10 @@ import type {
     SeriesType,
     SeriesDataItemTypeMap,
     SeriesPartialOptionsMap,
+    SeriesOptionsMap,
     SeriesMarker,
     Time,
+    ICustomSeriesPaneView,
 } from 'lightweight-charts';
 import type {ReferencableActionResult, Reference} from './utils.js';
 
@@ -69,6 +71,17 @@ export type BaselineSeriesParams = 'Baseline' extends SeriesType ? {
     reference?: Reference<ISeriesApi<'Baseline'>>;
 } : never;
 
+export type CustomSeriesParams = 'Custom' extends SeriesType ? {
+    id: string;
+    type: 'Custom',
+    view: ICustomSeriesPaneView<Time, SeriesDataItemTypeMap['Custom'], SeriesOptionsMap['Custom']>
+    reactive?: boolean;
+    options?: SeriesPartialOptionsMap['Custom'];
+    data: SeriesDataItemTypeMap['Custom'][];
+    markers: SeriesMarker<Time>[];
+    reference?: Reference<ISeriesApi<'Custom'>>;
+} : never;
+
 export type SeriesActionParams =
     | AreaSeriesParams
     | BarSeriesParams
@@ -76,8 +89,9 @@ export type SeriesActionParams =
     | HistogramSeriesParams
     | LineSeriesParams
     | BaselineSeriesParams
+    | CustomSeriesParams
 
-export type DistributiveOmit<T, K extends keyof T> = T extends unknown ? Pick<T, Exclude<keyof T, K>> : never;
+export type DistributiveOmit<T, K extends keyof T> = T extends unknown ? Omit<T, K> : never;
 
 export type SeriesParams = DistributiveOmit<SeriesActionParams, 'reference'>;
 
@@ -90,6 +104,7 @@ export function series<T extends SeriesParams>(target: IChartApi, params: T): Se
 
     let data = params.reactive ? params.data : null;
     let markers = params.markers;
+    let view = params.type === 'Custom' ? params.view : null;
 
     return {
         update(nextParams: SeriesParams): void {
@@ -98,6 +113,16 @@ export function series<T extends SeriesParams>(target: IChartApi, params: T): Se
                 reference?.(null);
                 subject = createSeries(target, nextParams);
                 reference?.(subject);
+                view = nextParams.type === 'Custom' ? nextParams.view : null;
+                return;
+            }
+
+            if (nextParams.type === 'Custom' && subject.seriesType() === 'Custom' && nextParams.view !== view) {
+                target.removeSeries(subject);
+                reference?.(null);
+                subject = createSeries(target, nextParams);
+                reference?.(subject);
+                view = nextParams.view;
                 return;
             }
 
@@ -168,6 +193,12 @@ function createSeries(chart: IChartApi, params: SeriesActionParams): Distributed
         }
         case 'Baseline': {
             const series = chart.addBaselineSeries(params.options);
+            series.setData(params.data);
+            series.setMarkers(params.markers);
+            return series;
+        }
+        case 'Custom': {
+            const series = chart.addCustomSeries(params.view, params.options);
             series.setData(params.data);
             series.setMarkers(params.markers);
             return series;
