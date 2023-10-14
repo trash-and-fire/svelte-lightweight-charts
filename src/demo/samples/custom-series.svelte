@@ -18,6 +18,10 @@
 </Chart>
 
 <script lang="ts">
+    import type {
+        BitmapCoordinatesRenderingScope,
+        CanvasRenderingTarget2D,
+    } from 'fancy-canvas';
     import {Chart, CustomSeries} from 'svelte-lightweight-charts';
     import {
         CustomData,
@@ -33,15 +37,12 @@
         ICustomSeriesPaneRenderer,
         PriceToCoordinateConverter,
         LineData,
+        IChartApi,
     } from 'lightweight-charts';
-    import {
-        BitmapCoordinatesRenderingScope,
-        CanvasRenderingTarget2D,
-    } from 'fancy-canvas';
     import {onMount} from 'svelte';
 
-    let container;
-    let chart;
+    let container: HTMLElement | null = null;
+    let chart: IChartApi | null = null;
 
     const greenStyle: Partial<BrushableAreaStyle> = {
         lineColor: 'rgb(4,153,129)',
@@ -69,6 +70,10 @@
 
     onMount(
         () => {
+            if (chart === null || container === null) {
+                return;
+            }
+
             chart.timeScale().fitContent();
 
             interface MouseState {
@@ -84,6 +89,10 @@
             };
 
             function determinePaneXLogical(mouseX: number): Logical | null {
+                if (chart === null || container === null) {
+                    return null;
+                }
+
                 const chartBox = container.getBoundingClientRect();
                 const x = mouseX - chartBox.left - chart.priceScale('left').width();
                 if (x < 0 || x > chart.timeScale().width()) return null;
@@ -118,7 +127,7 @@
                             },
                         ],
                         ...fadeStyle,
-                    } as Partial<BrushableAreaSeriesOptions>;
+                    } as unknown as Partial<BrushableAreaSeriesOptions>;
                 }
             });
 
@@ -145,7 +154,7 @@
     /**
      * BrushableArea Series Data
      */
-    export interface BrushableAreaData extends CustomData {
+    interface BrushableAreaData extends CustomData {
         value: number;
     }
 
@@ -185,11 +194,7 @@
         TData,
         BrushableAreaSeriesOptions
     > {
-        _renderer: BrushableAreaSeriesRenderer<TData>;
-
-        constructor() {
-            this._renderer = new BrushableAreaSeriesRenderer();
-        }
+        _renderer: BrushableAreaSeriesRenderer<TData> = new BrushableAreaSeriesRenderer();
 
         priceValueBuilder(plotRow: TData): CustomSeriesPricePlotValues {
             return [plotRow.value];
@@ -220,7 +225,7 @@
         y: number;
     }
 
-    export class BrushableAreaSeriesRenderer<TData extends BrushableAreaData> implements ICustomSeriesPaneRenderer {
+    class BrushableAreaSeriesRenderer<TData extends BrushableAreaData> implements ICustomSeriesPaneRenderer {
         _data: PaneRendererCustomData<Time, TData> | null = null;
         _options: BrushableAreaSeriesOptions | null = null;
 
