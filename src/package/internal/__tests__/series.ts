@@ -317,4 +317,12 @@ describe('Synthetic action: series', function () {
         expect(SERIES_API.setMarkers).toHaveBeenCalledTimes(2);
         expect(SERIES_API.setMarkers).toHaveBeenLastCalledWith([]);
     });
+
+    it('should recreate custom series when view changed', () => {
+        // TODO
+    });
+
+    it('should recreate custom series when [type, view]: ["custom", "view1"] -> ["line", null] -> ["custom", "view2"] -> ["custom", "view1"]', () => {
+        // TODO
+    });
 });

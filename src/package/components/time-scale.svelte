@@ -1,7 +1,7 @@
 <svelte:options immutable={true}/>
 
 <script lang="ts">
-    import type {LogicalRange, TimeRange, DeepPartial, TimeScaleOptions} from 'lightweight-charts';
+    import type {LogicalRange, Range, Time, DeepPartial, TimeScaleOptions} from 'lightweight-charts';
     import type {$$PROPS, $$EVENTS_DETAIL} from './time-scale.interface.js';
 
     import {createEventDispatcher} from 'svelte';
@@ -104,7 +104,7 @@
         tickMarkFormatter,
     };
 
-    function handleVisibleTimeRangeChange(timeRange: TimeRange | null): void {
+    function handleVisibleTimeRangeChange(timeRange: Range<Time> | null): void {
         dispatch('visibleTimeRangeChange', timeRange);
     }
 

@@ -5,19 +5,20 @@ import type {
     LogicalRangeChangeEventHandler,
     SizeChangeEventHandler,
     TimeRangeChangeEventHandler,
-    TimeScaleOptions
+    TimeScaleOptions,
+    Time,
 } from 'lightweight-charts';
 import type {ReferencableActionResult, Reference} from './utils.js';
 
 export interface TimeScaleParams {
     options?: DeepPartial<TimeScaleOptions>;
-    reference?: Reference<ITimeScaleApi>;
-    onVisibleTimeRangeChange?: TimeRangeChangeEventHandler;
+    reference?: Reference<ITimeScaleApi<Time>>;
+    onVisibleTimeRangeChange?: TimeRangeChangeEventHandler<Time>;
     onVisibleLogicalRangeChange?: LogicalRangeChangeEventHandler;
     onSizeChange?: SizeChangeEventHandler;
 }
 
-export type TimeScaleActionResult = ReferencableActionResult<TimeScaleParams, ITimeScaleApi>;
+export type TimeScaleActionResult = ReferencableActionResult<TimeScaleParams, ITimeScaleApi<Time>>;
 
 export function timeScale(target: IChartApi, params: TimeScaleParams): TimeScaleActionResult {
     let {
@@ -28,7 +29,7 @@ export function timeScale(target: IChartApi, params: TimeScaleParams): TimeScale
     } = params;
 
     const subject = target.timeScale();
-    let reference: Reference<ITimeScaleApi>;
+    let reference: Reference<ITimeScaleApi<Time>>;
 
     if (options) {
         subject.applyOptions(options);
@@ -90,7 +91,7 @@ export function timeScale(target: IChartApi, params: TimeScaleParams): TimeScale
                 }
             }
         },
-        updateReference(nextReference: Reference<ITimeScaleApi>): void {
+        updateReference(nextReference: Reference<ITimeScaleApi<Time>>): void {
             if (nextReference !== reference) {
                 reference?.(null)
                 reference = nextReference;

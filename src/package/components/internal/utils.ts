@@ -1,14 +1,16 @@
-import type {IChartApi, IPriceLine, IPriceScaleApi, ISeriesApi, ITimeScaleApi, SeriesType} from 'lightweight-charts';
+import type {IChartApi, IPriceLine, IPriceScaleApi, ISeriesApi, ITimeScaleApi, SeriesType, Time} from 'lightweight-charts';
 import type {PriceLineActionResult, PriceLineParams} from '../../internal/lines';
 import type {Reference} from '../../internal/utils.js';
 import type {PriceScaleActionResult, PriceScaleParams} from '../../internal/price-scale';
 import type {TimeScaleActionResult, TimeScaleParams} from '../../internal/time-scale';
+import type {SeriesPrimitiveActionResult, SeriesPrimitiveParams} from '../../internal/series-primitive';
 
 import {afterUpdate, getContext, onMount, setContext} from 'svelte';
 import {series, SeriesActionResult, SeriesParams} from '../../internal/series.js';
 import {line} from '../../internal/lines.js';
 import {timeScale} from '../../internal/time-scale.js';
 import {priceScale} from '../../internal/price-scale.js';
+import {seriesPrimitive} from '../../internal/series-primitive.js';
 
 export type Context = IChartApi | ISeriesApi<SeriesType>;
 
@@ -66,7 +68,7 @@ export function useLineEffect(callback: () => [params: PriceLineParams, ref: Ref
     });
 }
 
-export function useTimeScaleEffect(callback: () => [params: TimeScaleParams, ref: Reference<ITimeScaleApi> | undefined]): void {
+export function useTimeScaleEffect(callback: () => [params: TimeScaleParams, ref: Reference<ITimeScaleApi<Time>> | undefined]): void {
     let subject: TimeScaleActionResult | null = null;
 
     const api = context<IChartApi>();
@@ -107,5 +109,30 @@ export function usePriceScaleEffect(callback: () => [params: PriceScaleParams, r
         const [params, ref] = callback();
         subject?.update(params);
         subject?.updateReference(ref);
+    });
+}
+
+export function useSeriesPrimitiveEffect<
+    S extends SeriesType,
+    O = object,
+    T = Time
+>(callback: () => [params: SeriesPrimitiveParams<O, T>]): void {
+    let subject: SeriesPrimitiveActionResult<O, T> | null = null;
+
+    const api = context<ISeriesApi<S>>();
+
+    onMount(() => {
+        const [params] = callback();
+        subject = seriesPrimitive<O, S, T>(api as unknown as ISeriesApi<S, T>, params);
+
+        return () => {
+            subject?.destroy();
+            subject = null;
+        }
+    });
+
+    afterUpdate(() => {
+        const [params] = callback();
+        subject?.update(params);
     });
 }
