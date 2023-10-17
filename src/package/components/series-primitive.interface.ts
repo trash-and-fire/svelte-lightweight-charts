@@ -1,7 +1,11 @@
-import type {Time, ISeriesPrimitive} from 'lightweight-charts';
+import type {Time} from 'lightweight-charts';
+import type {IReactiveSeriesPrimitive} from '../internal/series-primitive.js';
 
-export interface $$PROPS<T = Time> {
-    view: ISeriesPrimitive<T>;
+export type {IReactiveSeriesPrimitive};
+
+export interface $$PROPS<O = object, T = Time> {
+    options: O;
+    view: IReactiveSeriesPrimitive<O, T>;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface

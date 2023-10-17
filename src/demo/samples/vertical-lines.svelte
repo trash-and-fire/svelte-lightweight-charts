@@ -1,38 +1,36 @@
 <h1>Vertical Lines</h1>
-<Chart width={600} height={300} ref={(ref) => chart = ref}>
-    <LineSeries data={data} ref={(ref) => series = ref}>
-        {#if series !== null && chart !== null}
-        <SeriesPrimitive view={new VertLine(chart, series, data[data.length - 50].time, {
-            showLabel: true,
-            labelText: 'Hello',
-        })}/>
-        {/if}
-        {#if series !== null && chart !== null}
-        <SeriesPrimitive view={new VertLine(chart, series, data[data.length - 25].time, {
-            showLabel: false,
-            color: 'red',
-            width: 2,
-        })}/>
-        {/if}
+<Chart width={600} height={300}>
+    <LineSeries data={data}>
+        <SeriesPrimitive
+            view={new VertLine(data[data.length - 50].time)}
+            options={{showLabel: true, color: selected, labelText: 'Hello'}}
+        />
+        <SeriesPrimitive
+            view={new VertLine(data[data.length - 25].time)}
+            options={{showLabel: false, color: selected, width: 2}}
+        />
     </LineSeries>
 </Chart>
+<Switcher list={AVAILABLE_COLORS} bind:value={selected}/>
 <script lang="ts">
-    import {CanvasRenderingTarget2D} from 'fancy-canvas';
-    import {
+    import type {CanvasRenderingTarget2D} from 'fancy-canvas';
+    import type {
         ISeriesPrimitivePaneRenderer,
         ISeriesPrimitiveAxisView,
         ISeriesPrimitivePaneView,
-        ISeriesPrimitive,
         Coordinate,
         Time,
         IChartApi,
         ISeriesApi,
         SeriesType,
+        SeriesAttachedParameter,
     } from 'lightweight-charts';
-    import {Chart, LineSeries, SeriesPrimitive} from 'svelte-lightweight-charts';
+    import {Chart, LineSeries, SeriesPrimitive, IReactiveSeriesPrimitive} from 'svelte-lightweight-charts';
+    import Switcher from './components/switcher.svelte';
 
-    let chart: IChartApi | null = null;
-    let series: ISeriesApi<SeriesType> | null = null;
+    const AVAILABLE_COLORS = ['red', 'green', 'blue'];
+
+    let selected = AVAILABLE_COLORS[0];
 
     const data = [
         {time: {year: 2018, month: 1, day: 1}, value: 27.58405298746434},
@@ -135,11 +133,12 @@
     ];
 
     class VertLinePaneRenderer implements ISeriesPrimitivePaneRenderer {
-        _x: Coordinate | null = null;
-        _options: VertLineOptions;
-        constructor(x: Coordinate | null, options: VertLineOptions) {
+        private _source: VertLine;
+        private _x: Coordinate | null = null;
+
+        constructor(source: VertLine, x: Coordinate | null) {
+            this._source = source;
             this._x = x;
-            this._options = options;
         }
         draw(target: CanvasRenderingTarget2D) {
             target.useBitmapCoordinateSpace(scope => {
@@ -148,9 +147,9 @@
                 const position = positionsLine(
                     this._x,
                     scope.horizontalPixelRatio,
-                    this._options.width
+                    this._source.options().width
                 );
-                ctx.fillStyle = this._options.color;
+                ctx.fillStyle = this._source.options().color;
                 ctx.fillRect(
                     position.position,
                     0,
@@ -163,51 +162,55 @@
     class VertLinePaneView implements ISeriesPrimitivePaneView {
         _source: VertLine;
         _x: Coordinate | null = null;
-        _options: VertLineOptions;
 
-        constructor(source: VertLine, options: VertLineOptions) {
+        constructor(source: VertLine) {
             this._source = source;
-            this._options = options;
         }
         update() {
-            const timeScale = this._source._chart.timeScale();
+            const chart = this._source.chart();
+            if (chart === null) {
+                return;
+            }
+            const timeScale = chart.timeScale();
             this._x = timeScale.timeToCoordinate(this._source._time);
         }
         renderer() {
-            return new VertLinePaneRenderer(this._x, this._options);
+            return new VertLinePaneRenderer(this._source, this._x);
         }
     }
 
     class VertLineTimeAxisView implements ISeriesPrimitiveAxisView {
         _source: VertLine;
         _x: Coordinate | null = null;
-        _options: VertLineOptions;
 
-        constructor(source: VertLine, options: VertLineOptions) {
+        constructor(source: VertLine) {
             this._source = source;
-            this._options = options;
         }
         update() {
-            const timeScale = this._source._chart.timeScale();
+            const chart = this._source.chart();
+            if (chart === null) {
+                return;
+            }
+            const timeScale = chart.timeScale();
             this._x = timeScale.timeToCoordinate(this._source._time);
         }
         visible() {
-            return this._options.showLabel;
+            return this._source.options().showLabel;
         }
         tickVisible() {
-            return this._options.showLabel;
+            return this._source.options().showLabel;
         }
         coordinate() {
             return this._x ?? 0;
         }
         text() {
-            return this._options.labelText;
+            return this._source.options().labelText;
         }
         textColor() {
-            return this._options.labelTextColor;
+            return this._source.options().labelTextColor;
         }
         backColor() {
-            return this._options.labelBackgroundColor;
+            return this._source.options().labelBackgroundColor;
         }
     }
 
@@ -220,47 +223,73 @@
         showLabel: boolean;
     }
 
-    const defaultOptions: VertLineOptions = {
-        color: 'green',
-        labelText: '',
-        width: 3,
-        labelBackgroundColor: 'green',
-        labelTextColor: 'white',
-        showLabel: false,
-    };
+    class VertLine implements IReactiveSeriesPrimitive<Partial<VertLineOptions>, Time> {
+        private static _defaultOptions: VertLineOptions = {
+            color: 'green',
+            labelText: '',
+            width: 3,
+            labelBackgroundColor: 'green',
+            labelTextColor: 'white',
+            showLabel: false,
+        }
+        private _chart: IChartApi | null = null;
+        private _series: ISeriesApi<SeriesType> | null = null;
+        private _requestUpdate = () => {};
 
-    class VertLine implements ISeriesPrimitive<Time> {
-        _chart: IChartApi;
-        _series: ISeriesApi<SeriesType>;
+        private _options: VertLineOptions = VertLine._defaultOptions;
+
         _time: Time;
         _paneViews: VertLinePaneView[];
         _timeAxisViews: VertLineTimeAxisView[];
 
-        constructor(
-            chart: IChartApi,
-            series: ISeriesApi<SeriesType>,
-            time: Time,
-            options?: Partial<VertLineOptions>
-        ) {
-            const vertLineOptions: VertLineOptions = {
-                ...defaultOptions,
-                ...options,
-            };
-            this._chart = chart;
-            this._series = series;
+        constructor(time: Time) {
             this._time = time;
-            this._paneViews = [new VertLinePaneView(this, vertLineOptions)];
-            this._timeAxisViews = [new VertLineTimeAxisView(this, vertLineOptions)];
+            this._paneViews = [new VertLinePaneView(this)];
+            this._timeAxisViews = [new VertLineTimeAxisView(this)];
         }
+
+        applyOptions(options: Partial<VertLineOptions>) {
+            this._options = { ...this._options, ...options };
+            this._requestUpdate();
+        }
+
+        attached(context: SeriesAttachedParameter) {
+            this._chart = context.chart;
+            this._series = context.series;
+
+            this._requestUpdate = context.requestUpdate;
+        }
+
+        detached() {
+            this._series = null;
+            this._chart = null;
+
+            this._requestUpdate = () => {};
+        }
+
         updateAllViews() {
             this._paneViews.forEach(pw => pw.update());
             this._timeAxisViews.forEach(tw => tw.update());
         }
+
         timeAxisViews() {
             return this._timeAxisViews;
         }
+
         paneViews() {
             return this._paneViews;
+        }
+
+        chart() {
+            return this._chart;
+        }
+
+        series() {
+            return this._series;
+        }
+
+        options() {
+            return this._options;
         }
     }
 

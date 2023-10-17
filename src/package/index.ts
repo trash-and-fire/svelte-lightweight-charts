@@ -22,5 +22,5 @@ export type {$$PROPS as CustomSeriesProps} from './components/custom-series.inte
 export type {$$PROPS as PriceLineProps} from './components/price-line.interface.js';
 export type {$$PROPS as PriceScaleProps} from './components/price-scale.interface.js';
 export type {$$PROPS as TimeScaleProps, $$EVENTS as TimeScaleEventArgs, $$EVENTS_DETAIL as TimeScaleEventDetails} from './components/time-scale.interface.js';
-export type {$$PROPS as SeriesPrimitiveProps} from './components/series-primitive.interface.js';
+export type {$$PROPS as SeriesPrimitiveProps, IReactiveSeriesPrimitive} from './components/series-primitive.interface.js';
 export type {Reference} from './internal/utils.js';

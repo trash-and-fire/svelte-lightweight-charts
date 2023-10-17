@@ -112,14 +112,18 @@ export function usePriceScaleEffect(callback: () => [params: PriceScaleParams, r
     });
 }
 
-export function useSeriesPrimitiveEffect<S extends SeriesType, T = Time>(callback: () => [params: SeriesPrimitiveParams<T>]): void {
-    let subject: SeriesPrimitiveActionResult<T> | null = null;
+export function useSeriesPrimitiveEffect<
+    S extends SeriesType,
+    O = object,
+    T = Time
+>(callback: () => [params: SeriesPrimitiveParams<O, T>]): void {
+    let subject: SeriesPrimitiveActionResult<O, T> | null = null;
 
     const api = context<ISeriesApi<S>>();
 
     onMount(() => {
         const [params] = callback();
-        subject = seriesPrimitive<S, T>(api as unknown as ISeriesApi<S, T>, params);
+        subject = seriesPrimitive<O, S, T>(api as unknown as ISeriesApi<S, T>, params);
 
         return () => {
             subject?.destroy();

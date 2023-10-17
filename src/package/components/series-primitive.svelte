@@ -6,6 +6,7 @@
     import {useSeriesPrimitiveEffect} from './internal/utils.js';
 
     export let view: $$PROPS['view'];
+    export let options: $$PROPS['options'];
 
-    useSeriesPrimitiveEffect(() => [{ view }]);
+    useSeriesPrimitiveEffect(() => [{ view, options }]);
 </script>

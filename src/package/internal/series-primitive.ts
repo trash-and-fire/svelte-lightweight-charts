@@ -1,25 +1,37 @@
-import type {ISeriesApi, ISeriesPrimitive, SeriesType, Time} from 'lightweight-charts';
+import type {ISeriesPrimitive, ISeriesApi, SeriesType, Time} from 'lightweight-charts';
 import type {ActionResult} from './utils.js';
 
-export interface SeriesPrimitiveParams<T = Time> {
-    view: ISeriesPrimitive<T>;
+export interface IReactiveSeriesPrimitive<O, T = Time> extends ISeriesPrimitive<T> {
+    applyOptions(options: O): void;
 }
 
-export type SeriesPrimitiveActionResult<T = Time> = ActionResult<SeriesPrimitiveParams<T>>;
+export interface SeriesPrimitiveParams<O, T = Time> {
+    view: IReactiveSeriesPrimitive<O, T>;
+    options: O;
+}
 
-export function seriesPrimitive<S extends SeriesType, T = Time>(
+export type SeriesPrimitiveActionResult<O, T = Time> = ActionResult<SeriesPrimitiveParams<O, T>>;
+
+export function seriesPrimitive<O, S extends SeriesType, T = Time>(
     target: ISeriesApi<S, T>,
-    params: SeriesPrimitiveParams<T>
-): SeriesPrimitiveActionResult<T> {
-    let { view } = params;
+    params: SeriesPrimitiveParams<O, T>
+): SeriesPrimitiveActionResult<O, T> {
+    let { view, options } = params;
+
+    view.applyOptions(options);
     target.attachPrimitive(view);
 
     return {
-        update(nextParams: SeriesPrimitiveParams<T>): void {
+        update(nextParams: SeriesPrimitiveParams<O, T>): void {
             if (nextParams.view !== view) {
                 target.detachPrimitive(view);
                 view = nextParams.view;
+                options = nextParams.options;
+                view.applyOptions(options);
                 target.attachPrimitive(view);
+            } else {
+                options = nextParams.options;
+                view.applyOptions(options);
             }
         },
         destroy(): void {
